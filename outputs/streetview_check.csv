@@ -1,0 +1,26 @@
+spot,kind,events,n,lat,lon,max_g,speed_kmh,road,heading,reported,nearest_report_m,report_title,report_state,report_url,report_any_date_m
+S1,Hotspot,"24, 28, 29",3,51.75221978337339,-1.237661933074836,2.68,14.333333333333334,Other roads,285.8266940639371,True,6.1,Pothole,Fixed,https://www.fixmystreet.com/report/8666347,6.1
+S2,Hotspot,"13, 14, 15",3,51.74980920128422,-1.2301709978818804,1.48,21.866666666666664,Morrell Avenue,266.72687729268466,False,112.6,14 inch pot hole,Fixed,https://www.fixmystreet.com/report/9012527,68.5
+S3,Hotspot,"35, 36, 37",3,51.75695388980794,-1.2355731966835508,1.3,20.566666666666666,Marston Road,354.3440212368154,False,138.0,More than one deep pothole,Closed,https://www.fixmystreet.com/report/8787376,83.2
+S4,Hotspot,"6, 7, 8",3,51.751620926707325,-1.2228911647834273,1.17,19.533333333333335,Other roads,226.45207240717497,False,118.2,Pothole / uneven surface,Fixed,https://www.fixmystreet.com/report/8744515,5.5
+S5,Hotspot,"33, 34",2,51.7564355827392,-1.2354958319839522,1.76,20.8,Marston Road,355.0549711612217,False,121.0,Marston Road condition,Closed,https://www.fixmystreet.com/report/9608286,23.4
+S6,Hotspot,"25, 26",2,51.752561943235996,-1.2388917179992167,1.37,13.6,Other roads,293.42740008197734,False,72.8,Pothole,Fixed,https://www.fixmystreet.com/report/8666347,6.5
+S7,Hotspot,"1, 2",2,51.75384121506065,-1.2176549741678682,1.36,11.55,Other roads,334.02219578383176,False,27.1,Raised manhole flooding,Closed,https://www.fixmystreet.com/report/8852037,24.8
+S8,Hotspot,"16, 17",2,51.7497401330608,-1.231358557137175,1.31,21.65,Morrell Avenue,265.41450528509233,False,178.3,14 inch pot hole,Fixed,https://www.fixmystreet.com/report/9012527,42.1
+S9,Hotspot,"9, 10",2,51.751194876944496,-1.2235604078800386,1.24,19.85,Other roads,224.07360567356557,False,115.1,Series of potholes on old roadworks,Fixed,https://www.fixmystreet.com/report/9236232,6.4
+S10,Hotspot,"18, 19",2,51.749829691213506,-1.2338690270688621,1.18,21.4,Morrell Avenue,285.25478971819996,False,75.1,Road surface broken and needs resurfacing,Closed,https://www.fixmystreet.com/report/9415948,52.7
+S11,Hotspot,"3, 4",2,51.753330351195984,-1.218483591111153,1.13,19.3,Old Road,248.4415924938493,False,58.1,Raised manhole flooding,Closed,https://www.fixmystreet.com/report/8852037,13.1
+S12,Single impact,23,1,51.75156952663946,-1.2378192089469702,2.8,9.2,Other roads,52.168631049246926,False,45.7,Collapsed area of road,Closed,https://www.fixmystreet.com/report/8336423,8.2
+S13,Single impact,31,1,51.75470103763641,-1.23580140537978,2.24,16.9,Marston Road,9.52477183526804,False,60.1,Marston Road condition,Closed,https://www.fixmystreet.com/report/9608286,10.2
+S14,Single impact,39,1,51.759168624513904,-1.23562779513637,2.03,20.0,Marston Road,356.06475553178456,False,141.3,Large pothole at the junction of Hugh Allen Crescent and Edgeway Road,Fixed,https://www.fixmystreet.com/report/9020598,21.5
+S15,Single impact,5,1,51.7521074370008,-1.222086608518066,1.73,20.0,Other roads,225.40809486364677,False,51.6,Pothole / uneven surface,Fixed,https://www.fixmystreet.com/report/8744515,33.8
+S16,Single impact,32,1,51.75520978637085,-1.235669712519639,1.39,19.0,Marston Road,7.88409718232657,True,5.2,Marston Road condition,Closed,https://www.fixmystreet.com/report/9608286,5.2
+S17,Single impact,20,1,51.75012863915077,-1.2352058676463005,1.23,20.0,Morrell Avenue,307.6836153938981,False,73.3,Road surface broken and needs resurfacing,Closed,https://www.fixmystreet.com/report/9415948,10.6
+S18,Single impact,38,1,51.757797501885406,-1.235513517490059,1.19,17.9,Marston Road,12.7185378645392,False,87.0,More than one deep pothole,Closed,https://www.fixmystreet.com/report/8787376,15.4
+S19,Single impact,11,1,51.75014716838469,-1.226823461024636,1.19,21.6,Morrell Avenue,250.99461688774966,False,115.2,Deep pothole outside 172 Divinity Re,Fixed,https://www.fixmystreet.com/report/8659259,72.0
+S20,Single impact,27,1,51.75241642291463,-1.238293871120706,1.17,17.4,Other roads,111.14865471984757,False,30.7,Pothole,Fixed,https://www.fixmystreet.com/report/8666347,8.0
+S21,Single impact,30,1,51.7529169640461,-1.2366042759566822,1.16,18.5,Marston Road,27.424590666219046,False,81.5,Potholes in cycle/bus lane on way into Oxford,Closed,https://www.fixmystreet.com/report/8679960,20.7
+S22,Single impact,21,1,51.75030652753228,-1.2355719762270885,1.13,19.2,Morrell Avenue,304.1627902575725,False,68.4,Potholes Cross St opposite Walters Row Carpark,Closed,https://www.fixmystreet.com/report/8668106,22.3
+S23,Single impact,22,1,51.75094304267101,-1.2369713473198365,1.12,19.5,Morrell Avenue,297.0990277028542,False,65.2,"Broken up, holey asphalt end of Morrell Avenue",Closed,https://www.fixmystreet.com/report/9052222,13.2
+S24,Single impact,40,1,51.75973989786405,-1.23571121993432,1.06,17.8,Marston Road,2.9631248790852283,False,95.1,Large pothole at the junction of Hugh Allen Crescent and Edgeway Road,Fixed,https://www.fixmystreet.com/report/9020598,7.8
+S25,Single impact,12,1,51.750044973330496,-1.2274405939782975,1.04,21.5,Morrell Avenue,259.56799139711524,False,131.3,14 inch pot hole,Fixed,https://www.fixmystreet.com/report/9012527,39.4

@@ -1,0 +1,605 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Street View Spot Check</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{--bg:#fafaf8;--card:#fff;--ink:#222;--muted:#6b6b6b;--line:#e3e2de;--blue:#2a78d6;--navy:#0d366b}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:0 auto;padding:26px 16px 60px}
+h1{font-size:24px;margin:0 0 4px} .sub{color:var(--muted);margin:0 0 14px}
+.note{background:#eef4fc;border-left:3px solid var(--blue);padding:10px 14px;border-radius:4px;margin:0 0 16px}
+#map{height:380px;border:1px solid var(--line);border-radius:8px;margin:0 0 10px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0 18px}
+.progress{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:0 0 12px}
+.card header{display:flex;gap:10px;align-items:center} .card h3{margin:0;font-size:16px}
+.badge{display:inline-block;min-width:34px;text-align:center;border-radius:12px;padding:1px 8px;color:#fff;font-weight:600;font-size:13px}
+.badge.strong{background:var(--navy)} .badge.moderate{background:var(--blue)}
+.facts{margin:6px 0;font-size:14px} .coords{color:var(--muted);font-size:13px;margin-left:4px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.btn{display:inline-block;padding:6px 12px;border:1px solid var(--line);border-radius:6px;color:var(--ink);text-decoration:none;background:#fff;font-size:14px}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+button.btn{cursor:pointer}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:6px}
+.form label{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.form .wide{grid-column:1/-1}
+select,input{font:inherit;color:var(--ink);padding:5px 7px;border:1px solid var(--line);border-radius:5px;background:#fff}
+.card.done{border-left:4px solid #1baf7a}
+a{color:#1c5cab}
+</style></head><body><main>
+<h1>Street View spot check</h1>
+<p class="sub">iPhone 11 Pro Max, 2026-10-03_17-30-29 · 25 spots: 11 hotspots (repeated impacts) and
+14 single impacts · S-numbers are strongest-first within each group</p>
+<p class="note"><b>How to use.</b> Click <i>Open 360° Street View</i>: Google Maps opens at the spot, facing your
+direction of travel and looking down at the road; drag to look around. Record what you see and the imagery date
+shown in Street View (imagery may be older or newer than your ride, and potholes appear and get repaired).
+Entries are saved in this browser as you type. When done, click <i>Export CSV</i> and save the file as
+<code>data/streetview_observations.csv</code>. Mapillary is an open alternative where Google imagery is missing.</p>
+<div id="map" role="img" aria-label="Map of the spots"></div>
+<div class="toolbar">
+  <button class="btn primary" id="export" type="button">Export CSV</button>
+  <span class="progress" id="progress"></span>
+</div>
+
+  <article class="card" id="S1" data-spot="S1">
+    <header>
+      <span class="badge strong">S1</span>
+      <h3>Hotspot · Other roads</h3>
+    </header>
+    <p class="facts">3 impacts (events 24, 28, 29) · strongest <b>2.68 g</b> · ~14 km/h ·
+      facing 286° (direction of travel)</p>
+    <p class="facts">Reported nearby (6 m): <a href="https://www.fixmystreet.com/report/8666347" target="_blank" rel="noopener">Pothole</a> · status now: Fixed</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.752220,-1.237662&heading=286&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.752220,-1.237662" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.752220&lng=-1.237662&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75222, -1.23766</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S2" data-spot="S2">
+    <header>
+      <span class="badge moderate">S2</span>
+      <h3>Hotspot · Morrell Avenue</h3>
+    </header>
+    <p class="facts">3 impacts (events 13, 14, 15) · strongest <b>1.48 g</b> · ~22 km/h ·
+      facing 267° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 68 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.749809,-1.230171&heading=267&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.749809,-1.230171" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.749809&lng=-1.230171&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.74981, -1.23017</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S3" data-spot="S3">
+    <header>
+      <span class="badge moderate">S3</span>
+      <h3>Hotspot · Marston Road</h3>
+    </header>
+    <p class="facts">3 impacts (events 35, 36, 37) · strongest <b>1.30 g</b> · ~21 km/h ·
+      facing 354° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 83 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.756954,-1.235573&heading=354&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.756954,-1.235573" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.756954&lng=-1.235573&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75695, -1.23557</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S4" data-spot="S4">
+    <header>
+      <span class="badge moderate">S4</span>
+      <h3>Hotspot · Other roads</h3>
+    </header>
+    <p class="facts">3 impacts (events 6, 7, 8) · strongest <b>1.17 g</b> · ~20 km/h ·
+      facing 226° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 6 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.751621,-1.222891&heading=226&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.751621,-1.222891" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.751621&lng=-1.222891&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75162, -1.22289</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S5" data-spot="S5">
+    <header>
+      <span class="badge strong">S5</span>
+      <h3>Hotspot · Marston Road</h3>
+    </header>
+    <p class="facts">2 impacts (events 33, 34) · strongest <b>1.76 g</b> · ~21 km/h ·
+      facing 355° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 23 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.756436,-1.235496&heading=355&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.756436,-1.235496" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.756436&lng=-1.235496&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75644, -1.23550</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S6" data-spot="S6">
+    <header>
+      <span class="badge moderate">S6</span>
+      <h3>Hotspot · Other roads</h3>
+    </header>
+    <p class="facts">2 impacts (events 25, 26) · strongest <b>1.37 g</b> · ~14 km/h ·
+      facing 293° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 6 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.752562,-1.238892&heading=293&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.752562,-1.238892" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.752562&lng=-1.238892&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75256, -1.23889</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S7" data-spot="S7">
+    <header>
+      <span class="badge moderate">S7</span>
+      <h3>Hotspot · Other roads</h3>
+    </header>
+    <p class="facts">2 impacts (events 1, 2) · strongest <b>1.36 g</b> · ~12 km/h ·
+      facing 334° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 25 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.753841,-1.217655&heading=334&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.753841,-1.217655" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.753841&lng=-1.217655&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75384, -1.21765</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S8" data-spot="S8">
+    <header>
+      <span class="badge moderate">S8</span>
+      <h3>Hotspot · Morrell Avenue</h3>
+    </header>
+    <p class="facts">2 impacts (events 16, 17) · strongest <b>1.31 g</b> · ~22 km/h ·
+      facing 265° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 42 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.749740,-1.231359&heading=265&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.749740,-1.231359" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.749740&lng=-1.231359&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.74974, -1.23136</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S9" data-spot="S9">
+    <header>
+      <span class="badge moderate">S9</span>
+      <h3>Hotspot · Other roads</h3>
+    </header>
+    <p class="facts">2 impacts (events 9, 10) · strongest <b>1.24 g</b> · ~20 km/h ·
+      facing 224° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 6 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.751195,-1.223560&heading=224&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.751195,-1.223560" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.751195&lng=-1.223560&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75119, -1.22356</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S10" data-spot="S10">
+    <header>
+      <span class="badge moderate">S10</span>
+      <h3>Hotspot · Morrell Avenue</h3>
+    </header>
+    <p class="facts">2 impacts (events 18, 19) · strongest <b>1.18 g</b> · ~21 km/h ·
+      facing 285° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 53 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.749830,-1.233869&heading=285&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.749830,-1.233869" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.749830&lng=-1.233869&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.74983, -1.23387</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S11" data-spot="S11">
+    <header>
+      <span class="badge moderate">S11</span>
+      <h3>Hotspot · Old Road</h3>
+    </header>
+    <p class="facts">2 impacts (events 3, 4) · strongest <b>1.13 g</b> · ~19 km/h ·
+      facing 248° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 13 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.753330,-1.218484&heading=248&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.753330,-1.218484" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.753330&lng=-1.218484&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75333, -1.21848</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S12" data-spot="S12">
+    <header>
+      <span class="badge strong">S12</span>
+      <h3>Single impact · Other roads</h3>
+    </header>
+    <p class="facts">Impact event 23 · strongest <b>2.80 g</b> · ~9 km/h ·
+      facing 52° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 8 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.751570,-1.237819&heading=52&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.751570,-1.237819" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.751570&lng=-1.237819&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75157, -1.23782</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S13" data-spot="S13">
+    <header>
+      <span class="badge strong">S13</span>
+      <h3>Single impact · Marston Road</h3>
+    </header>
+    <p class="facts">Impact event 31 · strongest <b>2.24 g</b> · ~17 km/h ·
+      facing 10° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 10 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.754701,-1.235801&heading=10&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.754701,-1.235801" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.754701&lng=-1.235801&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75470, -1.23580</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S14" data-spot="S14">
+    <header>
+      <span class="badge strong">S14</span>
+      <h3>Single impact · Marston Road</h3>
+    </header>
+    <p class="facts">Impact event 39 · strongest <b>2.03 g</b> · ~20 km/h ·
+      facing 356° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 22 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.759169,-1.235628&heading=356&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.759169,-1.235628" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.759169&lng=-1.235628&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75917, -1.23563</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S15" data-spot="S15">
+    <header>
+      <span class="badge strong">S15</span>
+      <h3>Single impact · Other roads</h3>
+    </header>
+    <p class="facts">Impact event 5 · strongest <b>1.73 g</b> · ~20 km/h ·
+      facing 225° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 34 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.752107,-1.222087&heading=225&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.752107,-1.222087" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.752107&lng=-1.222087&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75211, -1.22209</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S16" data-spot="S16">
+    <header>
+      <span class="badge moderate">S16</span>
+      <h3>Single impact · Marston Road</h3>
+    </header>
+    <p class="facts">Impact event 32 · strongest <b>1.39 g</b> · ~19 km/h ·
+      facing 8° (direction of travel)</p>
+    <p class="facts">Reported nearby (5 m): <a href="https://www.fixmystreet.com/report/9608286" target="_blank" rel="noopener">Marston Road condition</a> · status now: Closed</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.755210,-1.235670&heading=8&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.755210,-1.235670" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.755210&lng=-1.235670&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75521, -1.23567</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S17" data-spot="S17">
+    <header>
+      <span class="badge moderate">S17</span>
+      <h3>Single impact · Morrell Avenue</h3>
+    </header>
+    <p class="facts">Impact event 20 · strongest <b>1.23 g</b> · ~20 km/h ·
+      facing 308° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 11 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.750129,-1.235206&heading=308&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.750129,-1.235206" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.750129&lng=-1.235206&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75013, -1.23521</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S18" data-spot="S18">
+    <header>
+      <span class="badge moderate">S18</span>
+      <h3>Single impact · Marston Road</h3>
+    </header>
+    <p class="facts">Impact event 38 · strongest <b>1.19 g</b> · ~18 km/h ·
+      facing 13° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 15 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.757798,-1.235514&heading=13&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.757798,-1.235514" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.757798&lng=-1.235514&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75780, -1.23551</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S19" data-spot="S19">
+    <header>
+      <span class="badge moderate">S19</span>
+      <h3>Single impact · Morrell Avenue</h3>
+    </header>
+    <p class="facts">Impact event 11 · strongest <b>1.19 g</b> · ~22 km/h ·
+      facing 251° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 72 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.750147,-1.226823&heading=251&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.750147,-1.226823" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.750147&lng=-1.226823&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75015, -1.22682</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S20" data-spot="S20">
+    <header>
+      <span class="badge moderate">S20</span>
+      <h3>Single impact · Other roads</h3>
+    </header>
+    <p class="facts">Impact event 27 · strongest <b>1.17 g</b> · ~17 km/h ·
+      facing 111° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 8 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.752416,-1.238294&heading=111&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.752416,-1.238294" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.752416&lng=-1.238294&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75242, -1.23829</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S21" data-spot="S21">
+    <header>
+      <span class="badge moderate">S21</span>
+      <h3>Single impact · Marston Road</h3>
+    </header>
+    <p class="facts">Impact event 30 · strongest <b>1.16 g</b> · ~18 km/h ·
+      facing 27° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 21 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.752917,-1.236604&heading=27&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.752917,-1.236604" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.752917&lng=-1.236604&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75292, -1.23660</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S22" data-spot="S22">
+    <header>
+      <span class="badge moderate">S22</span>
+      <h3>Single impact · Morrell Avenue</h3>
+    </header>
+    <p class="facts">Impact event 21 · strongest <b>1.13 g</b> · ~19 km/h ·
+      facing 304° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 22 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.750307,-1.235572&heading=304&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.750307,-1.235572" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.750307&lng=-1.235572&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75031, -1.23557</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S23" data-spot="S23">
+    <header>
+      <span class="badge moderate">S23</span>
+      <h3>Single impact · Morrell Avenue</h3>
+    </header>
+    <p class="facts">Impact event 22 · strongest <b>1.12 g</b> · ~20 km/h ·
+      facing 297° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 13 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.750943,-1.236971&heading=297&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.750943,-1.236971" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.750943&lng=-1.236971&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75094, -1.23697</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S24" data-spot="S24">
+    <header>
+      <span class="badge moderate">S24</span>
+      <h3>Single impact · Marston Road</h3>
+    </header>
+    <p class="facts">Impact event 40 · strongest <b>1.06 g</b> · ~18 km/h ·
+      facing 3° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 8 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.759740,-1.235711&heading=3&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.759740,-1.235711" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.759740&lng=-1.235711&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75974, -1.23571</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+  <article class="card" id="S25" data-spot="S25">
+    <header>
+      <span class="badge moderate">S25</span>
+      <h3>Single impact · Morrell Avenue</h3>
+    </header>
+    <p class="facts">Impact event 12 · strongest <b>1.04 g</b> · ~22 km/h ·
+      facing 260° (direction of travel)</p>
+    <p class="facts"><b>No FixMyStreet report</b> within 25 m in the year before the ride (any date: nearest 39 m)</p>
+    <p class="btns">
+      <a class="btn primary" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=51.750045,-1.227441&heading=260&pitch=-25&fov=80" target="_blank" rel="noopener">Open 360° Street View</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=51.750045,-1.227441" target="_blank" rel="noopener">Google Maps</a>
+      <a class="btn" href="https://www.mapillary.com/app/?lat=51.750045&lng=-1.227441&z=19" target="_blank" rel="noopener">Mapillary</a>
+      <span class="coords">51.75004, -1.22744</span>
+    </p>
+    <div class="form">
+      <label>What is visible <select data-field="observation"><option></option><option>Pothole</option><option>Crack / broken surface</option><option>Patched or repaired surface</option><option>Drain or manhole cover</option><option>Kerb / dropped kerb</option><option>Speed hump / raised table</option><option>Nothing visible</option><option>No imagery here</option></select></label>
+      <label>Imagery date <input data-field="imagery_date" placeholder="e.g. Jun 2025"></label>
+      <label class="wide">Notes <input data-field="notes" placeholder="size, lane position, anything else"></label>
+    </div>
+  </article>
+<p class="sub">Generated by scripts/streetview_page.py. Map tiles © Esri, © OpenStreetMap contributors.
+Contains exact ride coordinates: keep local unless sharing is intended.</p>
+</main>
+<script>
+const SPOTS = [{"spot": "S1", "lat": 51.75222, "lon": -1.237662, "kind": "Hotspot", "g": 2.68, "reported": true, "events": "24, 28, 29", "road": "Other roads"}, {"spot": "S2", "lat": 51.749809, "lon": -1.230171, "kind": "Hotspot", "g": 1.48, "reported": false, "events": "13, 14, 15", "road": "Morrell Avenue"}, {"spot": "S3", "lat": 51.756954, "lon": -1.235573, "kind": "Hotspot", "g": 1.3, "reported": false, "events": "35, 36, 37", "road": "Marston Road"}, {"spot": "S4", "lat": 51.751621, "lon": -1.222891, "kind": "Hotspot", "g": 1.17, "reported": false, "events": "6, 7, 8", "road": "Other roads"}, {"spot": "S5", "lat": 51.756436, "lon": -1.235496, "kind": "Hotspot", "g": 1.76, "reported": false, "events": "33, 34", "road": "Marston Road"}, {"spot": "S6", "lat": 51.752562, "lon": -1.238892, "kind": "Hotspot", "g": 1.37, "reported": false, "events": "25, 26", "road": "Other roads"}, {"spot": "S7", "lat": 51.753841, "lon": -1.217655, "kind": "Hotspot", "g": 1.36, "reported": false, "events": "1, 2", "road": "Other roads"}, {"spot": "S8", "lat": 51.74974, "lon": -1.231359, "kind": "Hotspot", "g": 1.31, "reported": false, "events": "16, 17", "road": "Morrell Avenue"}, {"spot": "S9", "lat": 51.751195, "lon": -1.22356, "kind": "Hotspot", "g": 1.24, "reported": false, "events": "9, 10", "road": "Other roads"}, {"spot": "S10", "lat": 51.74983, "lon": -1.233869, "kind": "Hotspot", "g": 1.18, "reported": false, "events": "18, 19", "road": "Morrell Avenue"}, {"spot": "S11", "lat": 51.75333, "lon": -1.218484, "kind": "Hotspot", "g": 1.13, "reported": false, "events": "3, 4", "road": "Old Road"}, {"spot": "S12", "lat": 51.75157, "lon": -1.237819, "kind": "Single impact", "g": 2.8, "reported": false, "events": "23", "road": "Other roads"}, {"spot": "S13", "lat": 51.754701, "lon": -1.235801, "kind": "Single impact", "g": 2.24, "reported": false, "events": "31", "road": "Marston Road"}, {"spot": "S14", "lat": 51.759169, "lon": -1.235628, "kind": "Single impact", "g": 2.03, "reported": false, "events": "39", "road": "Marston Road"}, {"spot": "S15", "lat": 51.752107, "lon": -1.222087, "kind": "Single impact", "g": 1.73, "reported": false, "events": "5", "road": "Other roads"}, {"spot": "S16", "lat": 51.75521, "lon": -1.23567, "kind": "Single impact", "g": 1.39, "reported": true, "events": "32", "road": "Marston Road"}, {"spot": "S17", "lat": 51.750129, "lon": -1.235206, "kind": "Single impact", "g": 1.23, "reported": false, "events": "20", "road": "Morrell Avenue"}, {"spot": "S18", "lat": 51.757798, "lon": -1.235514, "kind": "Single impact", "g": 1.19, "reported": false, "events": "38", "road": "Marston Road"}, {"spot": "S19", "lat": 51.750147, "lon": -1.226823, "kind": "Single impact", "g": 1.19, "reported": false, "events": "11", "road": "Morrell Avenue"}, {"spot": "S20", "lat": 51.752416, "lon": -1.238294, "kind": "Single impact", "g": 1.17, "reported": false, "events": "27", "road": "Other roads"}, {"spot": "S21", "lat": 51.752917, "lon": -1.236604, "kind": "Single impact", "g": 1.16, "reported": false, "events": "30", "road": "Marston Road"}, {"spot": "S22", "lat": 51.750307, "lon": -1.235572, "kind": "Single impact", "g": 1.13, "reported": false, "events": "21", "road": "Morrell Avenue"}, {"spot": "S23", "lat": 51.750943, "lon": -1.236971, "kind": "Single impact", "g": 1.12, "reported": false, "events": "22", "road": "Morrell Avenue"}, {"spot": "S24", "lat": 51.75974, "lon": -1.235711, "kind": "Single impact", "g": 1.06, "reported": false, "events": "40", "road": "Marston Road"}, {"spot": "S25", "lat": 51.750045, "lon": -1.227441, "kind": "Single impact", "g": 1.04, "reported": false, "events": "12", "road": "Morrell Avenue"}];
+const KEY = "streetview-check-v1";
+function load() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
+function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
+let data = load();
+function refresh() {
+  let done = 0;
+  document.querySelectorAll(".card").forEach(c => {
+    const v = data[c.dataset.spot] || {};
+    const isDone = !!v.observation;
+    c.classList.toggle("done", isDone); if (isDone) done++;
+  });
+  document.getElementById("progress").textContent = done + " of " + SPOTS.length + " spots recorded";
+}
+document.querySelectorAll(".card").forEach(c => {
+  const id = c.dataset.spot;
+  c.querySelectorAll("[data-field]").forEach(el => {
+    const f = el.dataset.field;
+    if (data[id] && data[id][f]) el.value = data[id][f];
+    el.addEventListener("input", () => {
+      data[id] = data[id] || {}; data[id][f] = el.value; save(data); refresh();
+    });
+  });
+});
+refresh();
+document.getElementById("export").addEventListener("click", () => {
+  const cols = ["spot","kind","events","road","lat","lon","max_g","reported_on_fixmystreet","observation","imagery_date","notes"];
+  const esc = s => '"' + String(s ?? "").replace(/"/g, '""') + '"';
+  const lines = [cols.join(",")].concat(SPOTS.map(s => {
+    const v = data[s.spot] || {};
+    return [s.spot, s.kind, s.events, s.road, s.lat, s.lon, s.g, s.reported, v.observation, v.imagery_date, v.notes].map(esc).join(",");
+  }));
+  const blob = new Blob([lines.join("\n")], {type: "text/csv"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "streetview_observations.csv"; document.body.appendChild(a); a.click(); a.remove();
+});
+try {
+  const map = L.map("map");
+  const esri = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_";
+  L.tileLayer(esri + "Base/MapServer/tile/{z}/{y}/{x}", {maxNativeZoom: 16, maxZoom: 19,
+    attribution: "Tiles © Esri — Esri, HERE, Garmin, © OpenStreetMap contributors"}).addTo(map);
+  L.tileLayer(esri + "Reference/MapServer/tile/{z}/{y}/{x}", {maxNativeZoom: 16, maxZoom: 19}).addTo(map);
+  const pts = [];
+  SPOTS.forEach(s => {
+    const hot = s.kind === "Hotspot";
+    const m = L.circleMarker([s.lat, s.lon], {radius: hot ? 9 : 6, color: "#fff", weight: 2,
+      fillColor: s.g >= 1.5 ? "#0d366b" : "#2a78d6", fillOpacity: 0.95}).addTo(map);
+    m.bindTooltip(s.spot + (hot ? " (hotspot)" : ""), {permanent: hot, direction: "top", offset: [0, -6]});
+    m.on("click", () => document.getElementById(s.spot).scrollIntoView({behavior: "smooth", block: "start"}));
+    pts.push([s.lat, s.lon]);
+  });
+  map.fitBounds(pts, {padding: [25, 25]});
+} catch (e) {
+  document.getElementById("map").textContent = "Map unavailable (no internet connection?). The links below still work.";
+}
+</script>
+</body></html>

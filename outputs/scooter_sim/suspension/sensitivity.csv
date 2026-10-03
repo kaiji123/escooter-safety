@@ -1,0 +1,37 @@
+setting,config,first_fall_mm_1000mm_20kmh,speed_loss_pct_60x600_20kmh
+baseline,10/10 in,90,27.6
+baseline,12/10 in,90,25.5
+baseline,12/12 in,90,28.7
+baseline,14/10 in,100,23.2
+stiffer tyre (tau 0.015 s),10/10 in,90,30.2
+stiffer tyre (tau 0.015 s),12/10 in,90,25.1
+stiffer tyre (tau 0.015 s),12/12 in,90,25.7
+stiffer tyre (tau 0.015 s),14/10 in,90,26.3
+softer tyre (tau 0.035 s),10/10 in,80,27.4
+softer tyre (tau 0.035 s),12/10 in,90,23.5
+softer tyre (tau 0.035 s),12/12 in,90,23.7
+softer tyre (tau 0.035 s),14/10 in,90,20.6
+weaker bracing (1000 N m/rad),10/10 in,90,27.8
+weaker bracing (1000 N m/rad),12/10 in,90,26.4
+weaker bracing (1000 N m/rad),12/12 in,90,24.7
+weaker bracing (1000 N m/rad),14/10 in,90,21.3
+stronger bracing (3000 N m/rad),10/10 in,90,28.1
+stronger bracing (3000 N m/rad),12/10 in,90,25.4
+stronger bracing (3000 N m/rad),12/12 in,90,25.5
+stronger bracing (3000 N m/rad),14/10 in,100,22.2
+softer fork (15 kN/m),10/10 in,80,26.5
+softer fork (15 kN/m),12/10 in,90,25.8
+softer fork (15 kN/m),12/12 in,90,24.6
+softer fork (15 kN/m),14/10 in,90,22.1
+stiffer fork (40 kN/m),10/10 in,90,32.7
+stiffer fork (40 kN/m),12/10 in,90,26.1
+stiffer fork (40 kN/m),12/12 in,90,26.9
+stiffer fork (40 kN/m),14/10 in,100,21.3
+less fork damping (ratio 0.15),10/10 in,80,24.8
+less fork damping (ratio 0.15),12/10 in,80,24.0
+less fork damping (ratio 0.15),12/12 in,80,25.4
+less fork damping (ratio 0.15),14/10 in,80,22.4
+more fork damping (ratio 0.5),10/10 in,90,31.1
+more fork damping (ratio 0.5),12/10 in,90,25.5
+more fork damping (ratio 0.5),12/12 in,100,25.4
+more fork damping (ratio 0.5),14/10 in,100,22.4

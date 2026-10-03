@@ -1,0 +1,13 @@
+model,length_mm,depth_mm,handlebar_peak_g,within_1_to_3_g
+no suspension,300,20,4.89,False
+no suspension,300,30,6.54,False
+no suspension,300,40,6.54,False
+no suspension,600,20,7.78,False
+no suspension,600,30,9.74,False
+no suspension,600,40,9.82,False
+with front suspension,300,20,1.88,True
+with front suspension,300,30,2.37,True
+with front suspension,300,40,2.37,True
+with front suspension,600,20,5.68,False
+with front suspension,600,30,5.11,False
+with front suspension,600,40,4.2,False

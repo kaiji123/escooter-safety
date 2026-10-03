@@ -1,0 +1,92 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FixMyStreet Comparison</title>
+<style>
+:root{--bg:#fafaf8;--card:#fff;--ink:#222;--muted:#6b6b6b;--line:#e3e2de;--accent:#2a78d6}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:880px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:26px;margin:0 0 4px} h2{font-size:19px;margin:36px 0 10px}
+.sub{color:var(--muted);margin:0 0 20px}
+.note{background:#eef4fc;border-left:3px solid var(--accent);padding:10px 14px;border-radius:4px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.tile .v{font-size:24px;font-weight:650} .tile .k{color:var(--muted);font-size:13px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card)}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600} td{font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto} ul{padding-left:20px} li{margin:4px 0} a{color:#1c5cab}
+</style></head><body><main>
+<h1>Measured impacts vs FixMyStreet reports</h1>
+<p class="sub">iPhone 11 Pro Max, 2026-10-03_17-30-29 · FixMyStreet data fetched 03 Oct 2026 ·
+<a href="fms_map.html">Open the comparison map</a></p>
+
+
+<h2>Overview</h2>
+<p><b>What was compared.</b> The 40 impacts my handlebar-mounted phone measured on this ride
+(jolts of 1 g or more while moving) were checked against FixMyStreet, the public website
+where people report road problems to the council. Only road-surface reports (potholes, carriageway defects,
+manholes, drain covers) made in the 365 days before the ride were used.</p>
+<p><b>What was found.</b></p>
+<ul>
+<li><b>38 of 40 impacts</b> had no FixMyStreet report within 25 m, including
+<b>all 6</b> of the strong ones (≥ 1.5 g).</li>
+<li><b>10 of 11 hotspots</b> (places hit repeatedly) had never been reported in that year.</li>
+<li>The only reported hotspot (3 impacts, up to 2.68 g, on a road outside the study roads) sits 6 m from a pothole report made January 2026 and now marked “Fixed”; it was still producing strong impacts at the time of the ride, so the repair may have failed or a separate defect is there.</li>
+<li>Of the 10 recent reports along the route, only 2 had an impact measured nearby;
+all are now closed or fixed, so many were probably repaired before the ride.</li>
+</ul>
+<p><b>What it means.</b> The road hazards a scooter rider actually feels are largely missing from the
+public reporting system, so FixMyStreet alone underestimates the risk on these roads. Measured impacts were
+reported no more often than random points along the route (5% vs
+14%); with 40 impacts from one ride this shows the gap, not a firm rate.</p>
+
+<p class="note"><b>How to read the details.</b> An impact counts as <i>reported</i> when a FixMyStreet
+road-surface report (pothole, carriageway defect, manhole, drain ironwork) made in the 365 days before
+the ride lies within 25 m, whatever its status now. Older reports are left out of the main
+comparison because they are so dense (back to 2009) that almost any point on the route is near one.
+The <i>baseline</i> is the same rate for every point along the ridden route: what chance alone would give.</p>
+
+<h2>Headline figures</h2>
+<div class="tiles"><div class="tile"><div class="v">38 of 40</div><div class="k">impacts with no recent report within 25 m</div></div><div class="tile"><div class="v">6 of 6</div><div class="k">strong impacts (≥ 1.5 g) unreported</div></div><div class="tile"><div class="v">10 of 11</div><div class="k">hotspots with no recent report</div></div><div class="tile"><div class="v">2 of 10</div><div class="k">recent reports on route where an impact was measured</div></div></div>
+<p>5% of impacts had a recent report within 25 m, against
+14% of all points along the route. In other words, the places where the scooter
+was jolted were <b>no more likely to have been reported</b> than the route in general. With only 40 impacts,
+the difference between these two rates should not be read as meaningful in either direction.</p>
+
+<h2>Sensitivity: matching radius and report age</h2>
+<p>All-time columns show why old reports were excluded: with every report since 2009, impacts and random
+route points match at nearly the same, very high rate.</p>
+<div class="scroll"><table><thead><tr><th>Matching radius (m)</th><th>Impacts reported</th><th>% impacts reported</th><th>% route points (baseline)</th><th>% impacts, any date</th><th>% route points, any date</th></tr></thead><tbody><tr><td>15.0</td><td>2.0</td><td>5%</td><td>8%</td><td>42%</td><td>52%</td></tr><tr><td>25.0</td><td>2.0</td><td>5%</td><td>14%</td><td>62%</td><td>70%</td></tr><tr><td>50.0</td><td>7.0</td><td>18%</td><td>28%</td><td>72%</td><td>86%</td></tr></tbody></table></div>
+
+<h2>By road</h2>
+<div class="scroll"><table><thead><tr><th>Road</th><th>Impacts</th><th>Reported</th><th>Not reported</th><th>Reports on route</th><th>…with impact measured</th></tr></thead><tbody><tr><td>Marston Road</td><td>11</td><td>1</td><td>10</td><td>3</td><td>1</td></tr><tr><td>Morrell Avenue</td><td>12</td><td>0</td><td>12</td><td>2</td><td>0</td></tr><tr><td>Old Road</td><td>2</td><td>0</td><td>2</td><td>1</td><td>0</td></tr><tr><td>Other roads</td><td>15</td><td>1</td><td>14</td><td>4</td><td>1</td></tr></tbody></table></div>
+
+<h2>Hotspots</h2>
+<p>The repeated-impact locations from the statistics report.</p>
+<div class="scroll"><table><thead><tr><th>Hotspot</th><th>Road</th><th>Impacts</th><th>Event IDs</th><th>Max g</th><th>Reported</th><th>Nearest report (m)</th></tr></thead><tbody><tr><td>21</td><td>Other roads</td><td>3</td><td>24, 28, 29</td><td>2.68</td><td>yes</td><td>6</td></tr><tr><td>15</td><td>Morrell Avenue</td><td>3</td><td>13, 14, 15</td><td>1.48</td><td>NO</td><td>113</td></tr><tr><td>10</td><td>Marston Road</td><td>3</td><td>35, 36, 37</td><td>1.30</td><td>NO</td><td>138</td></tr><tr><td>3</td><td>Other roads</td><td>3</td><td>6, 7, 8</td><td>1.17</td><td>NO</td><td>118</td></tr><tr><td>11</td><td>Marston Road</td><td>2</td><td>33, 34</td><td>1.76</td><td>NO</td><td>121</td></tr><tr><td>20</td><td>Other roads</td><td>2</td><td>25, 26</td><td>1.37</td><td>NO</td><td>73</td></tr><tr><td>2</td><td>Other roads</td><td>2</td><td>1, 2</td><td>1.36</td><td>NO</td><td>27</td></tr><tr><td>16</td><td>Morrell Avenue</td><td>2</td><td>16, 17</td><td>1.31</td><td>NO</td><td>178</td></tr><tr><td>4</td><td>Other roads</td><td>2</td><td>9, 10</td><td>1.24</td><td>NO</td><td>115</td></tr><tr><td>17</td><td>Morrell Avenue</td><td>2</td><td>18, 19</td><td>1.18</td><td>NO</td><td>75</td></tr><tr><td>1</td><td>Old Road</td><td>2</td><td>3, 4</td><td>1.13</td><td>NO</td><td>58</td></tr></tbody></table></div>
+
+<h2>Measured but not reported</h2>
+<p>The original finding: impacts with no road-surface report within 25 m, strongest first.</p>
+<div class="scroll"><table><thead><tr><th>#</th><th>Road</th><th>Peak g</th><th>km/h</th><th>Nearest report (m)</th><th>Lat</th><th>Lon</th></tr></thead><tbody><tr><td>23</td><td>Other roads</td><td>2.80</td><td>9.2</td><td>46</td><td>51.75157</td><td>-1.23782</td></tr><tr><td>24</td><td>Other roads</td><td>2.68</td><td>14.6</td><td>27</td><td>51.75218</td><td>-1.23757</td></tr><tr><td>31</td><td>Marston Road</td><td>2.24</td><td>16.9</td><td>60</td><td>51.75470</td><td>-1.23580</td></tr><tr><td>39</td><td>Marston Road</td><td>2.03</td><td>20.0</td><td>141</td><td>51.75917</td><td>-1.23563</td></tr><tr><td>34</td><td>Marston Road</td><td>1.76</td><td>20.8</td><td>145</td><td>51.75654</td><td>-1.23552</td></tr><tr><td>5</td><td>Other roads</td><td>1.73</td><td>20.0</td><td>52</td><td>51.75211</td><td>-1.22209</td></tr><tr><td>15</td><td>Morrell Avenue</td><td>1.48</td><td>22.3</td><td>126</td><td>51.74980</td><td>-1.23027</td></tr><tr><td>25</td><td>Other roads</td><td>1.37</td><td>17.0</td><td>73</td><td>51.75256</td><td>-1.23887</td></tr><tr><td>2</td><td>Other roads</td><td>1.36</td><td>11.6</td><td>53</td><td>51.75395</td><td>-1.21776</td></tr><tr><td>16</td><td>Morrell Avenue</td><td>1.31</td><td>21.7</td><td>178</td><td>51.74975</td><td>-1.23117</td></tr><tr><td>36</td><td>Marston Road</td><td>1.30</td><td>20.6</td><td>153</td><td>51.75691</td><td>-1.23557</td></tr><tr><td>13</td><td>Morrell Avenue</td><td>1.27</td><td>21.0</td><td>113</td><td>51.74982</td><td>-1.23002</td></tr><tr><td>17</td><td>Morrell Avenue</td><td>1.25</td><td>21.6</td><td>203</td><td>51.74973</td><td>-1.23155</td></tr><tr><td>9</td><td>Other roads</td><td>1.24</td><td>19.8</td><td>142</td><td>51.75128</td><td>-1.22341</td></tr><tr><td>33</td><td>Marston Road</td><td>1.23</td><td>20.8</td><td>121</td><td>51.75633</td><td>-1.23547</td></tr><tr><td>20</td><td>Morrell Avenue</td><td>1.23</td><td>20.0</td><td>73</td><td>51.75013</td><td>-1.23521</td></tr><tr><td>14</td><td>Morrell Avenue</td><td>1.22</td><td>22.3</td><td>123</td><td>51.74981</td><td>-1.23022</td></tr><tr><td>11</td><td>Morrell Avenue</td><td>1.19</td><td>21.6</td><td>115</td><td>51.75015</td><td>-1.22682</td></tr><tr><td>38</td><td>Marston Road</td><td>1.19</td><td>17.9</td><td>87</td><td>51.75780</td><td>-1.23551</td></tr><tr><td>19</td><td>Morrell Avenue</td><td>1.18</td><td>21.6</td><td>75</td><td>51.74984</td><td>-1.23393</td></tr><tr><td>27</td><td>Other roads</td><td>1.17</td><td>17.4</td><td>31</td><td>51.75242</td><td>-1.23829</td></tr><tr><td>37</td><td>Marston Road</td><td>1.17</td><td>20.0</td><td>138</td><td>51.75708</td><td>-1.23558</td></tr><tr><td>8</td><td>Other roads</td><td>1.17</td><td>21.1</td><td>139</td><td>51.75156</td><td>-1.22300</td></tr><tr><td>30</td><td>Marston Road</td><td>1.16</td><td>18.5</td><td>82</td><td>51.75292</td><td>-1.23660</td></tr><tr><td>10</td><td>Other roads</td><td>1.13</td><td>19.9</td><td>115</td><td>51.75111</td><td>-1.22371</td></tr><tr><td>4</td><td>Old Road</td><td>1.13</td><td>19.0</td><td>67</td><td>51.75331</td><td>-1.21857</td></tr><tr><td>21</td><td>Morrell Avenue</td><td>1.13</td><td>19.2</td><td>68</td><td>51.75031</td><td>-1.23557</td></tr><tr><td>7</td><td>Other roads</td><td>1.13</td><td>19.3</td><td>129</td><td>51.75162</td><td>-1.22289</td></tr><tr><td>22</td><td>Morrell Avenue</td><td>1.12</td><td>19.5</td><td>65</td><td>51.75094</td><td>-1.23697</td></tr><tr><td>26</td><td>Other roads</td><td>1.10</td><td>10.2</td><td>76</td><td>51.75257</td><td>-1.23891</td></tr><tr><td>35</td><td>Marston Road</td><td>1.07</td><td>21.1</td><td>156</td><td>51.75687</td><td>-1.23557</td></tr><tr><td>40</td><td>Marston Road</td><td>1.06</td><td>17.8</td><td>95</td><td>51.75974</td><td>-1.23571</td></tr><tr><td>3</td><td>Old Road</td><td>1.04</td><td>19.6</td><td>58</td><td>51.75335</td><td>-1.21839</td></tr><tr><td>12</td><td>Morrell Avenue</td><td>1.04</td><td>21.5</td><td>131</td><td>51.75004</td><td>-1.22744</td></tr><tr><td>6</td><td>Other roads</td><td>1.03</td><td>18.2</td><td>118</td><td>51.75169</td><td>-1.22278</td></tr><tr><td>1</td><td>Other roads</td><td>1.02</td><td>11.5</td><td>27</td><td>51.75373</td><td>-1.21755</td></tr><tr><td>18</td><td>Morrell Avenue</td><td>1.01</td><td>21.2</td><td>82</td><td>51.74982</td><td>-1.23380</td></tr><tr><td>29</td><td>Other roads</td><td>1.01</td><td>13.5</td><td>28</td><td>51.75220</td><td>-1.23754</td></tr></tbody></table></div>
+
+<h2>Measured and reported</h2>
+<div class="scroll"><table><thead><tr><th>#</th><th>Road</th><th>Peak g</th><th>Distance (m)</th><th>Report</th><th>Status</th><th>Reported on</th></tr></thead><tbody><tr><td>28</td><td>Other roads</td><td>1.34</td><td>6</td><td>Pothole</td><td>Fixed</td><td>11 Jan 2026</td></tr><tr><td>32</td><td>Marston Road</td><td>1.39</td><td>5</td><td>Marston Road condition</td><td>Closed</td><td>12 Jun 2026</td></tr></tbody></table></div>
+
+<h2>Reports on the route</h2>
+<p>10 recent reports lie within 15 m of the route (966 road-surface
+reports of any date in the wider ride area). Current status (today, not at ride time):</p>
+<div class="scroll"><table><thead><tr><th>Current status</th><th>Reports</th></tr></thead><tbody><tr><td>Closed</td><td>8</td></tr><tr><td>Fixed</td><td>2</td></tr></tbody></table></div>
+<div class="scroll"><table><thead><tr><th>Category</th><th>Reports</th></tr></thead><tbody><tr><td>Pothole</td><td>7</td></tr><tr><td>Potholes and maintenance</td><td>1</td></tr><tr><td>Roads and Carriageways</td><td>1</td></tr><tr><td>Damaged Gully or Catchpit Ironwork</td><td>1</td></tr></tbody></table></div>
+
+<h2>Limitations</h2>
+<ul>
+<li>FixMyStreet only covers reports made through FixMyStreet and its council versions; problems
+reported to the council by phone or other channels are missing.</li>
+<li>Report status is as of the fetch date. A report closed or fixed before the ride may not match
+the surface the rider met; one opened after the ride cannot have been known at the time.</li>
+<li>“Not reported” means no report within the matching radius, not that nobody ever reported it.</li>
+<li>Impacts include kerbs, drain covers and speed humps; not every unreported impact is a defect.</li>
+<li>One ride, one rider; see the statistics report for the impact method and its limits.</li>
+</ul>
+<p class="sub">Generated by scripts/fms_compare.py. Report data: FixMyStreet by mySociety.</p>
+</main></body></html>
