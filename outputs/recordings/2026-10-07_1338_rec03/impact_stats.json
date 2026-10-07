@@ -1,0 +1,29 @@
+{
+  "ride": {
+    "recording": "iPhone 11 Pro Max, 2026-10-07_12-38-34 UTC",
+    "duration_min": 11.403264302571614,
+    "moving_min": 6.266666666666667,
+    "distance_km": 1.7114344234877057,
+    "mean_moving_speed_kmh": 16.386074267435482
+  },
+  "summary": {
+    "n_impacts": 21,
+    "per_km": 12.270408793814271,
+    "per_moving_min": 3.351063829787234,
+    "metres_between": 81.49687730893837,
+    "median_g": 1.67,
+    "q1_g": 1.13,
+    "q3_g": 1.85,
+    "max_g": 6.28,
+    "n_ge_1_5": 11,
+    "n_ge_2": 5,
+    "n_wobble": 8,
+    "n_ge_1_5_and_wobble": 4,
+    "spearman_rho": -0.6790124890200594,
+    "spearman_p": 0.00071274489498069
+  },
+  "wobble_ratio": 1.5,
+  "road_match_m": 20.0,
+  "hotspot_radius_m": 30.0,
+  "threshold_g": 1.0
+}

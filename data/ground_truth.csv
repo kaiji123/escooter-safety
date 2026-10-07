@@ -1,0 +1,5 @@
+recording,event,local_time,precision,source,notes
+2026-10-03_1830_rec01,no_walking,,whole recording,rider 2026-10-07,"no walking anywhere in the recording"
+2026-10-07_1037_rec02,walking_start,2026-10-07 10:47:06,approximate (about a minute),rider recollection 2026-10-07,"""after 10 minutes"" of a recording that started 10:37:06"
+2026-10-07_1037_rec02,rental_end,2026-10-07 10:46:00,minute (shown as 10:46; true time 10:46:00-10:46:59),Voi app ride history (read by the rider) 2026-10-07,"end of the Voi rental, not the start of walking"
+2026-10-07_1338_rec03,no_walking,,whole recording,rider 2026-10-07,"no walking anywhere in the recording"

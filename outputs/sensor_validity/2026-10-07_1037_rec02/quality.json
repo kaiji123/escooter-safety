@@ -1,0 +1,116 @@
+{
+  "Accelerometer": {
+    "rows": 211262,
+    "duration_s": 2118.5,
+    "rate_hz": 99.72,
+    "dt_median_ms": 10.028,
+    "dt_p1_ms": 10.027,
+    "dt_p99_ms": 10.03,
+    "gaps": 0,
+    "max_gap_s": 0.012,
+    "non_monotonic": 0,
+    "duplicates": 0,
+    "clock_vs_elapsed_max_ms": 0.0
+  },
+  "AccelerometerUncalibrated": {
+    "rows": 211265,
+    "duration_s": 2118.5,
+    "rate_hz": 99.72,
+    "dt_median_ms": 10.028,
+    "dt_p1_ms": 10.027,
+    "dt_p99_ms": 10.03,
+    "gaps": 0,
+    "max_gap_s": 0.012,
+    "non_monotonic": 0,
+    "duplicates": 0,
+    "clock_vs_elapsed_max_ms": 0.0
+  },
+  "Gravity": {
+    "rows": 211262,
+    "duration_s": 2118.5,
+    "rate_hz": 99.72,
+    "dt_median_ms": 10.028,
+    "dt_p1_ms": 10.027,
+    "dt_p99_ms": 10.03,
+    "gaps": 0,
+    "max_gap_s": 0.012,
+    "non_monotonic": 0,
+    "duplicates": 0,
+    "clock_vs_elapsed_max_ms": 0.0
+  },
+  "Gyroscope": {
+    "rows": 211262,
+    "duration_s": 2118.5,
+    "rate_hz": 99.72,
+    "dt_median_ms": 10.028,
+    "dt_p1_ms": 10.027,
+    "dt_p99_ms": 10.03,
+    "gaps": 0,
+    "max_gap_s": 0.012,
+    "non_monotonic": 0,
+    "duplicates": 0,
+    "clock_vs_elapsed_max_ms": 0.0
+  },
+  "GyroscopeUncalibrated": {
+    "rows": 211264,
+    "duration_s": 2118.5,
+    "rate_hz": 99.72,
+    "dt_median_ms": 10.028,
+    "dt_p1_ms": 10.027,
+    "dt_p99_ms": 10.03,
+    "gaps": 0,
+    "max_gap_s": 0.01,
+    "non_monotonic": 0,
+    "duplicates": 0,
+    "clock_vs_elapsed_max_ms": 0.0
+  },
+  "Location": {
+    "rows": 1160,
+    "duration_s": 2113.2,
+    "rate_hz": 0.55,
+    "dt_median_ms": 1000.028,
+    "dt_p1_ms": 1000.006,
+    "dt_p99_ms": 12000.497,
+    "gaps": 144,
+    "max_gap_s": 14.997,
+    "non_monotonic": 0,
+    "duplicates": 0,
+    "clock_vs_elapsed_max_ms": 0.0
+  },
+  "accel_raw_vs_fused": {
+    "pairs": 211261,
+    "residual_median_g": 0.0071,
+    "residual_p95_g": 0.0924
+  },
+  "gravity_norm": {
+    "mean": 9.80665,
+    "sd": 1e-06,
+    "note": "fixed by sensor fusion; not an accuracy test"
+  },
+  "at_rest": {
+    "method": "quietest 5% of 4 s windows",
+    "windows": 26,
+    "user_acc_sd_ms2_median": 0.0123,
+    "gyro_sd_rads_median": 0.0035,
+    "raw_acc_norm_mean_g": 0.9944,
+    "raw_acc_norm_sd_g": 0.0009,
+    "gyro_cal_minus_uncal_mean_rads": [
+      0.0021,
+      0.0049,
+      -0.0018
+    ]
+  },
+  "gps": {
+    "fixes": 1160,
+    "invalid_speed_share": 0.133,
+    "hacc_median_m": 11.3,
+    "hacc_p90_m": 15.5,
+    "speed_reported_vs_position_median_abs_ms": 0.64,
+    "speed_pairs_compared": 479,
+    "gps_valid_speed_rows": 1006,
+    "stationary_scatter_median_m": 0.1,
+    "stationary_scatter_p90_m": 1.7
+  },
+  "start_local": "2026-10-07 10:37:06",
+  "duration_min": 35.3
+}

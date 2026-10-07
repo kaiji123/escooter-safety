@@ -29,9 +29,17 @@ benefit of larger wheels.
   not a validation; describe it that way.
 - OpenSCAD/Blender only for design figures; they are not evidence of stability.
 
-**Part C: what should change**
-- Larger front wheel as a cost-effective design improvement, plus a call for physical
-  testing by groups with test facilities.
+**Part C: what should change** (argument decided 2026-10-07; full version in
+DOCUMENTATION.md section 12, use it for the paper's intro and conclusion)
+- Thesis: London requires front >= 11 in (TfL 2022), national trial rules set no minimum,
+  so older smaller-fronted models (Voiager 5, reported 10 in) stay in service outside
+  London (Oxford; Essex 2025). The model suggests a larger front delays falls -> extend a
+  front-wheel minimum to all trials. Plus a call for physical testing.
+- Say "outside London", not "rural"; name examples, never claim fleet numbers.
+- Voiager 5 sizes: use the reported 10/10 as a stated assumption (user's decision; no
+  company email for now).
+- OPEN: which Voi model runs in London. If it's the Voiager 5, the 10 in reports and the
+  thesis must be revisited (DOCUMENTATION.md 12.4).
 - Only rental scooters in official trials are legal on UK roads (private e-scooters only
   on private land with permission), so operators and DfT trial rules set the design of
   every legal e-scooter. Recommendations therefore go to a small number of actors.
@@ -79,6 +87,37 @@ sizes over a pothole-shaped step, phone recording. Not part of the current paper
 - Soft-edge results: falls 10/10 8->4 from sharp to 100 mm edges; larger front helps at
   every edge width; 12/10 ~= 12/12 throughout.
 
+### Road bump results (`--bumps [--suspension]`, outputs/scooter_sim/[suspension/]bumps/; done 2026-10-07)
+EXPLORATORY, unvalidated (no bumps measured on the ride). Report as model observations
+with uncertainties (DOCUMENTATION.md 6.8), never as findings about real scooters.
+- Sharp-edged bumps (defects: proud covers, patches, lifted slabs; legal humps may not
+  have vertical faces > 6 mm) 20-100 mm x 300/600/1000 mm; round-top humps (3.7 m UK
+  standard per TAL 2/96; 600 mm car-park bump) on the profile contact only.
+- No fork: more model falls on sharp bumps than same-size potholes (10/10 22 vs 15 of
+  81); fewer with larger fronts (22/13/14/4); rear size alone changed nothing.
+- With fork: falls 1/2/1/2, only 300 mm at 15 km/h, all met after the rear-wheel strike;
+  in a small check larger rears raised falling height 5-15 mm (10/14 none). Treat as an
+  open question that the front-only hypothesis may not cover every obstacle, NOT as
+  "bigger rear wheels are more stable". No bump sensitivity runs yet.
+- Round-top humps: 0 falls anywhere. Contact models agree on 91-95% of bump falls (vs
+  100% potholes); bump jolts unvalidated. Roadblocks: SIMULATION_METHODS.md 5.1.
+- Bump clips are in the same `animations.html` (BUMP_ANIMATION_SETS; `--bumps --animate`
+  reuses existing GIFs).
+
+### Sensor Logger validity (SENSOR_VALIDITY.md; done 2026-10-07; exploratory)
+- Motion sensors 99.72 Hz, no gaps/timestamp faults in any recording. True rest only in
+  rec02: noise ~0.001 g, static magnitude 0.994 g. Other recordings' noise = upper bounds.
+- rec02 sustained walking from 10:46:47 (first step; 275 s, 2.04 steps/s). References
+  (data/ground_truth.csv, 1-min precision): user "after 10 minutes" (-19 s) and Voi app
+  rental end 10:46 (riding ends 10:45:54; order consistent). Minute-level agreement only.
+  The 8 s burst at 10:45:58 resembles the false positives; not treated as walking start.
+- rec01/rec03 confirmed no walking: 0 walking bouts; 6 s / 8 s isolated labels (0.7%/1.2%),
+  all after the ride ended. Thresholds were NOT changed after seeing this.
+- Of 1,126 GPS-riding windows (>= 12 km/h), none met the walking criteria.
+- GPS reported speed under-reads walking (3.0 vs >= 4.6 km/h from positions), sometimes
+  riding (4/6 segments, 0.2-3.2 km/h); 12 s GPS lag at walk onset. May affect the 7 km/h
+  impact gate (not quantified).
+
 ### Simulation results with suspension (outputs/scooter_sim/suspension/)
 - Falls in main sweep (81 runs each): 10/10 9, 12/10 6, 12/12 6, 14/10 1 (vs 15/14/14/11
   without suspension). Suspension itself is a big factor: recommend it with wheel size.
@@ -110,7 +149,10 @@ sizes over a pothole-shaped step, phone recording. Not part of the current paper
       facing direction of travel, record form, Export CSV -> data/streetview_observations.csv), incl. hotspot 21: hit 3 times at up to
       2.68 g although a pothole 6 m away was marked "Fixed" in Jan 2026
 - [ ] Proper literature search (Google Scholar; papers citing the Imperial 2022 study)
-- [ ] Write the paper together
+- [ ] Write the paper together. Started 2026-10-07: `paper/part_b_methods_results.md`
+      (Part B methods + results, Pandoc citations from references.bib; every number taken
+      from outputs/, source file noted in HTML comments). Next: Part A methods/results,
+      then intro/discussion from DOCUMENTATION.md section 12.
 
 The user has said measuring potholes on foot is too much work; don't plan around
 fieldwork measurements. Rides and desk work are fine.
@@ -128,6 +170,7 @@ fieldwork measurements. Rides and desk work are fine.
 
 ## Documentation
 - `DOCUMENTATION.md`: full record of the project and results.
+- `SENSOR_VALIDITY.md`: methods/results/limitations of the Sensor Logger check (paper-ready).
 - `REFERENCES.md` + `references.bib`: master bibliography (papers, software with versions,
   data/map services, vehicle and policy sources). Add an entry whenever a new library,
   dataset or source is used; [to verify] items must be checked before citing.
@@ -158,8 +201,12 @@ Forest Hill / Shotover; the study bounding box in `scripts/impact_report.py` exc
 
 ## Data
 - Recorded with Sensor Logger on an **iPhone 11 Pro Max** (not Android), handlebar mount.
-- Raw CSVs currently sit in the project root (one ride, 2026-10-03). Never modify them.
-  Future rides go in their own folders, e.g. `data/raw/<date>_<name>/`.
+- Raw recordings: `data/raw/<YYYY-MM-DD>_<HHMM local>_recNN/` (see `data/README.md`). Never
+  modify them. rec01 = 2026-10-03 18:30 pilot ride (moved from the root 2026-10-07, checksums
+  identical); rec02 = 2026-10-07 10:37 ride then walk; rec03 = 2026-10-07 13:38 ride. Zips as
+  received in `data/raw/archive/`. Part A results use rec01 only.
+- Sensor Logger metadata `recording time` is UTC; use the ns `time` column -> Europe/London.
+- `data/ground_truth.csv`: rider-supplied reference events (precision noted per row).
 - `Accelerometer.csv` is user acceleration with gravity removed, m/s^2, device frame;
   `Gravity.csv` is the gravity vector (same timestamps). Gyroscope ~100 Hz, GPS ~1 Hz.
   `Barometer.csv` and `Annotation.csv` are empty.
@@ -190,9 +237,22 @@ Forest Hill / Shotover; the study bounding box in `scripts/impact_report.py` exc
   configs x depths x lengths x speeds; `--animate` GIFs; `--sensitivity` (tyre,
   bracing, and fork when suspended); `--consistency` vs the measured ride. Mass, wheelbase, tyre
   compliance and rider bracing are ASSUMED. Outputs in `outputs/scooter_sim/`.
+  `--bumps` runs the road bump study (OBSTACLE/BUMP_SHAPE globals; run the main sweep
+  first, it is read in for the bump-vs-pothole comparison).
+- `scripts/sensor_validity.py`: Sensor Logger data quality (sampling, clock, raw vs fused,
+  noise in quietest 5% of windows, GPS) and walking/scooting/stationary/unclear segmentation
+  (4 s windows; step-band power share 1.2-2.8 Hz, step-lag autocorrelation, GPS speed;
+  analyst-chosen thresholds) with first-step onset refinement. All recordings in data/raw ->
+  `outputs/sensor_validity/report.html`. Methods + results: `SENSOR_VALIDITY.md`.
+- `scripts/outputs_index.py`: `outputs/index.html`, overview of all recordings. rec02/rec03
+  impact outputs are in `outputs/recordings/<recording>/` (rec01 stays in `outputs/`).
+  `impact_map.py` draws walking bouts from walking_onsets.csv (dashed orange) if present.
+- Speed gate matters: rec02's walk had 11 peaks >= 1 g (max 1.19 g), all excluded by the
+  7 km/h gate. rec02 impacts 25-37 = regular series (unchecked); rec03 6.28 g cluster is
+  ~20 m from a rec02 hotspot (51.7508, -1.2389): Street View candidate.
 - Run: `python scripts/impact_map.py` then `python scripts/impact_report.py`
   then `python scripts/fms_compare.py`
-  (defaults: `--data-dir .`, `--out-dir outputs`).
+  (defaults: `--data-dir data/raw/2026-10-03_1830_rec01`, `--out-dir outputs`).
 - Python 3.11 with pandas, numpy, scipy, matplotlib, folium.
 
 ## Conventions

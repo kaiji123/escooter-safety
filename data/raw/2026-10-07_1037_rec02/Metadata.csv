@@ -1,0 +1,2 @@
+version,device name,recording epoch time,recording time,recording timezone,platform,appVersion,device id,sensors,sampleRateMs,standardisation,platform version
+3,iPhone 11 Pro Max,1791365826473,2026-10-07_09-37-06,Europe/London,ios,1.67.1,a5efd2f1-44af-405f-bc7c-2d11d6163d02,Accelerometer|Gravity|Gyroscope|Orientation|Barometer|Location|Annotation|GyroscopeUncalibrated|AccelerometerUncalibrated,10|10|10|10|0|0||10|10,false,26.6.2

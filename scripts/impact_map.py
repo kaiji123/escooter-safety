@@ -24,9 +24,14 @@ Method
    timestamp. Fixes with poor horizontal accuracy are discarded first.
 5. Route roughness: RMS vertical acceleration in 1 s windows, used to colour
    the ridden route so continuous rough surfaces show up, not just single hits.
+6. Walking (optional overlay): walking bouts detected by scripts/sensor_validity.py
+   (outputs/sensor_validity/walking_onsets.csv, matched on the recording folder name)
+   are drawn on the map as the GPS track from the first step to the end of the bout.
+   They are shown for context only; impacts are never counted while walking because
+   of the speed gate in step 2.
 
 Usage
-    python scripts/impact_map.py --data-dir . --out-dir outputs
+    python scripts/impact_map.py --data-dir data/raw/2026-10-03_1830_rec01 --out-dir outputs
 """
 
 import argparse
@@ -59,6 +64,7 @@ SEVERITY_BANDS = [  # (lower bound in g, label, colour from one sequential blue 
     (2.0, "2.0-2.5 g", "#1c5cab"),
     (2.5, "> 2.5 g", "#0d366b"),
 ]
+WALK_COLOUR = "#eb6834"   # categorical slot 2 (orange), distinct from the blue ramp
 # Continuous ramp for route roughness (same hue family, light = smooth).
 ROUGH_RAMP = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
 
@@ -146,7 +152,25 @@ def severity_band(g):
     return band
 
 
-def build_map(rough, impacts, recording_label):
+def walking_bouts(path, recording):
+    """Walking bouts for one recording from sensor_validity.py's walking_onsets.csv:
+    list of (start_s, end_s, start_local, end_local, steps). Empty if none/no file."""
+    if path is None or not Path(path).exists():
+        return []
+    w = pd.read_csv(path)
+    if not len(w) or "recording" not in w:
+        return []
+    w = w[w["recording"] == recording]
+    out = []
+    for r in w.itertuples():
+        t0 = pd.Timestamp(r.first_step_local)
+        t1 = t0 + pd.Timedelta(seconds=float(r.bout_end_s - r.first_step_s))
+        out.append((float(r.first_step_s), float(r.bout_end_s), t0.strftime("%H:%M:%S"),
+                    t1.strftime("%H:%M:%S"), int(r.steps_in_bout)))
+    return out
+
+
+def build_map(rough, impacts, recording_label, walks=(), loc=None):
     centre = [rough["lat"].mean(), rough["lon"].mean()]
     m = folium.Map(location=centre, zoom_start=15, tiles=None, control_scale=True)
     # Esri Light Gray Canvas (base + street-name overlay). Chosen because it serves
@@ -195,16 +219,39 @@ def build_map(rough, impacts, recording_label):
         ).add_to(hits)
     hits.add_to(m)
 
+    # Walking bouts (detected from the sensors), drawn over the grey "not moving" route.
+    if walks and loc is not None:
+        walk_fg = folium.FeatureGroup(name="Walking (detected)")
+        for k, (a, b, la, lb, steps) in enumerate(walks):
+            g = loc[(loc["seconds_elapsed"] >= a) & (loc["seconds_elapsed"] <= b)]
+            if len(g) < 2:
+                continue
+            tip = f"Walking (detected from sensors): {la}-{lb}, {steps} steps"
+            folium.PolyLine(g[["latitude", "longitude"]].to_numpy(), color=WALK_COLOUR,
+                            weight=5, opacity=0.95, dash_array="8 6", tooltip=tip).add_to(walk_fg)
+            folium.CircleMarker(location=[g["latitude"].iloc[0], g["longitude"].iloc[0]],
+                                radius=6, color="#ffffff", weight=2, fill=True,
+                                fill_color=WALK_COLOUR, fill_opacity=1,
+                                tooltip=f"Walk {'starts' if k == 0 else 'resumes'} {la}").add_to(walk_fg)
+            folium.CircleMarker(location=[g["latitude"].iloc[-1], g["longitude"].iloc[-1]],
+                                radius=4, color=WALK_COLOUR, weight=2, fill=True,
+                                fill_color="#ffffff", fill_opacity=1,
+                                tooltip=f"Walk bout ends {lb}").add_to(walk_fg)
+        walk_fg.add_to(m)
+
     legend_rows = "".join(
         f'<div><span style="display:inline-block;width:12px;height:12px;border-radius:50%;'
         f'background:{c};border:2px solid #fff;box-shadow:0 0 0 1px #999;margin-right:6px;'
         f'vertical-align:middle"></span>{lab}</div>'
         for _, lab, c in SEVERITY_BANDS)
+    walk_row = (f'<div style="margin-top:6px"><span style="display:inline-block;width:22px;'
+                f'border-top:4px dashed {WALK_COLOUR};margin-right:6px;vertical-align:middle"></span>'
+                f'Walking (detected from sensors; first step {walks[0][2]})</div>') if walks else ""
     legend = f"""
     <div style="position:fixed;bottom:24px;left:12px;z-index:9999;background:#fff;
          padding:10px 12px;border-radius:6px;font:13px/1.5 sans-serif;color:#222;
          box-shadow:0 1px 4px rgba(0,0,0,.3)">
-      <b>Impact events (peak vertical accel.)</b>{legend_rows}
+      <b>Impact events (peak vertical accel.)</b>{legend_rows}{walk_row}
       <div style="color:#666;margin-top:4px">{len(impacts)} events &ge; {THRESHOLD_G:g} g,
       speed &ge; {MIN_SPEED_MS * 3.6:.0f} km/h<br>{recording_label}</div>
     </div>"""
@@ -242,7 +289,7 @@ def plot_trace(t, a_vert, speed, impacts, path):
 def analyse(data_dir, threshold_g=THRESHOLD_G):
     """Run steps 1-5 on one recording; shared by this script and impact_report.py."""
     meta = pd.read_csv(data_dir / "Metadata.csv").iloc[0]
-    label = f"{meta['device name']}, {meta['recording time']}"
+    label = f"{meta['device name']}, {meta['recording time']} UTC"   # Sensor Logger stores UTC
 
     t, acc, grav, gyr_t, gyr, loc = load_inputs(data_dir)
     a_vert = vertical_acceleration(acc, grav)
@@ -263,9 +310,12 @@ def analyse(data_dir, threshold_g=THRESHOLD_G):
 def main():
     global THRESHOLD_G
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    ap.add_argument("--data-dir", type=Path, default=Path("."))
+    ap.add_argument("--data-dir", type=Path, default=Path("data/raw/2026-10-03_1830_rec01"))
     ap.add_argument("--out-dir", type=Path, default=Path("outputs"))
     ap.add_argument("--threshold-g", type=float, default=THRESHOLD_G)
+    ap.add_argument("--walking-bouts", type=Path,
+                    default=Path("outputs/sensor_validity/walking_onsets.csv"),
+                    help="walking bouts from sensor_validity.py, drawn on the map if present")
     args = ap.parse_args()
     THRESHOLD_G = args.threshold_g
     args.out_dir.mkdir(parents=True, exist_ok=True)
@@ -274,7 +324,8 @@ def main():
     t, a_vert, speed, loc = res["t"], res["a_vert"], res["speed"], res["loc"]
     impacts, rough, label = res["impacts"], res["rough"], res["label"]
 
-    build_map(rough, impacts, label).save(str(args.out_dir / "impact_map.html"))
+    walks = walking_bouts(args.walking_bouts, args.data_dir.name)
+    build_map(rough, impacts, label, walks, loc).save(str(args.out_dir / "impact_map.html"))
     impacts.to_csv(args.out_dir / "impacts.csv", index=False)
     plot_trace(t, a_vert, speed, impacts, args.out_dir / "impact_trace.png")
 
@@ -282,7 +333,8 @@ def main():
               "min_speed_ms": MIN_SPEED_MS, "max_gps_accuracy_m": MAX_GPS_ACC_M,
               "pre_window_s": PRE_WIN_S, "post_window_s": POST_WIN_S,
               "roughness_window_s": ROUGH_WIN_S, "n_gps_fixes_used": int(len(loc)),
-              "n_impacts": int(len(impacts))}
+              "n_impacts": int(len(impacts)),
+              "walking_bouts_on_map": [{"start": w[2], "end": w[3], "steps": w[4]} for w in walks]}
     (args.out_dir / "impacts_params.json").write_text(json.dumps(params, indent=2))
 
     print(f"{len(impacts)} impacts >= {THRESHOLD_G} g while moving")

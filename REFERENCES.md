@@ -89,6 +89,60 @@ https://odr.chalmers.se/server/api/core/bitstreams/2d2b9c13-ea55-44e3-aa07-ac1eb
 
 ---
 
+### Sensor validity and walking detection (`SENSOR_VALIDITY.md`; checked 2026-10-07)
+
+DOIs, volumes and pages checked against Crossref; content checked against abstracts or
+publisher pages, as noted. Each is cited only for what is noted here.
+
+| Key | Used for | What was checked |
+|-----|----------|------------------|
+| kwapisz2011 | Prior work: phone accelerometers distinguish walking from other activities | Crossref metadata |
+| reddy2010 | Prior work: phone GPS + accelerometer distinguish walking, biking, motorised transport (decision tree + HMM, 93.6% on 16 people) | Crossref metadata; abstract summary |
+| mizell2003 | Orientation-independent vertical acceleration by projecting onto the gravity direction (Mizell estimates gravity as a window mean; here iOS supplies it) | Crossref metadata; method as described in later citing work, **paper itself not read** |
+| moenilssen2004 | Step regularity and cadence from the autocorrelation of trunk acceleration | Crossref metadata; abstract |
+| pachi2005 | Typical walking step frequency (mean 1.8 Hz on footbridges, 2.0 Hz on shopping floors) and step length (mean 0.75 m men, 0.67 m women), 800 measurements | Publisher page and search summaries; **page numbers not verified** |
+| welch1967 | Welch power-spectrum method | Crossref metadata |
+| butterworth1930 | Butterworth filter | Journal index and secondary sources (no DOI) |
+| merry2019 | Smartphone (iPhone 6) horizontal position accuracy in an urban area, 7–13 m on average | Crossref metadata; abstract |
+| witte2004 | GPS speed accuracy (dedicated receiver on a bicycle, not a phone): 45% of values within 0.2 m/s, a further 19% within 0.4 m/s; errors grow on curved paths through a tendency to underestimate speed | Crossref metadata; full abstract (Europe PMC) |
+| apple_cmacceleration | iOS raw acceleration is reported in G (1 G = 9.81 m/s²) | Apple Developer Documentation |
+
+Butterworth, S. (1930) 'On the theory of filter amplifiers', *Experimental Wireless and
+the Wireless Engineer*, 7, pp. 536–541.
+
+Kwapisz, J.R., Weiss, G.M. and Moore, S.A. (2011) 'Activity recognition using cell phone
+accelerometers', *ACM SIGKDD Explorations Newsletter*, 12(2), pp. 74–82.
+doi:10.1145/1964897.1964918.
+
+Merry, K. and Bettinger, P. (2019) 'Smartphone GPS accuracy study in an urban
+environment', *PLOS ONE*, 14(7), e0219890. doi:10.1371/journal.pone.0219890.
+
+Mizell, D. (2003) 'Using gravity to estimate accelerometer orientation', in *Proceedings
+of the Seventh IEEE International Symposium on Wearable Computers (ISWC 2003)*,
+pp. 252–253. doi:10.1109/ISWC.2003.1241424.
+
+Moe-Nilssen, R. and Helbostad, J.L. (2004) 'Estimation of gait cycle characteristics by
+trunk accelerometry', *Journal of Biomechanics*, 37(1), pp. 121–126.
+doi:10.1016/S0021-9290(03)00233-1.
+
+Pachi, A. and Ji, T. (2005) 'Frequency and velocity of people walking', *The Structural
+Engineer*, 83(3). **[to verify: page numbers]**
+
+Reddy, S., Mun, M., Burke, J., Estrin, D., Hansen, M. and Srivastava, M. (2010) 'Using
+mobile phones to determine transportation modes', *ACM Transactions on Sensor Networks*,
+6(2), pp. 1–27. doi:10.1145/1689239.1689243.
+
+Welch, P.D. (1967) 'The use of fast Fourier transform for the estimation of power
+spectra: a method based on time averaging over short, modified periodograms', *IEEE
+Transactions on Audio and Electroacoustics*, 15(2), pp. 70–73. doi:10.1109/TAU.1967.1161901.
+
+Witte, T.H. and Wilson, A.M. (2004) 'Accuracy of non-differential GPS for the
+determination of speed over ground', *Journal of Biomechanics*, 37(12), pp. 1891–1898.
+doi:10.1016/j.jbiomech.2004.02.031.
+
+Apple Inc. (n.d.) *CMAcceleration*, Apple Developer Documentation. Available at:
+https://developer.apple.com/documentation/coremotion/cmacceleration (accessed 7 October 2026).
+
 ## 2. Software
 
 | Software | Version used | Used in |
@@ -96,7 +150,7 @@ https://odr.chalmers.se/server/api/core/bitstreams/2d2b9c13-ea55-44e3-aa07-ac1eb
 | Python | 3.11.9 | All scripts |
 | NumPy | 2.3.4 | All scripts |
 | pandas | 2.3.3 | All analysis scripts |
-| SciPy | 1.17.1 | `find_peaks` (impact detection), `linkage`/`fcluster` (hotspots), `spearmanr` |
+| SciPy | 1.17.1 | `find_peaks` (impact detection, step peaks), `linkage`/`fcluster` (hotspots), `spearmanr`, `welch`, `butter`/`sosfiltfilt` (walking detection) |
 | Matplotlib | 3.11.2 | All figures; `FuncAnimation` for the simulation animations |
 | Pillow | 12.3.0 | GIF encoding of the animations (Matplotlib `PillowWriter`) |
 | MuJoCo | 3.14.0 | Dynamics simulation |
@@ -111,9 +165,14 @@ for mobile-friendly interactive maps*, version 1.9.4. Available at: https://leaf
 Apple Inc. (n.d.) *CMDeviceMotion*, Apple Developer Documentation (properties `gravity` and
 `userAcceleration`). Available at: https://developer.apple.com/documentation/coremotion/cmdevicemotion
 
-Choi, T.H. (2026) *Sensor Logger*, version 1.67.1 [mobile app]. Apple App Store. Available
-at: https://apps.apple.com/app/id1531582925 (developer listed as "Choi Tsz Hei"; check the
-preferred citation on the app's website **[to verify]**).
+Choi, K.T.H. (2026) *Sensor Logger*, version 1.67.1 (iOS) [mobile app]. Logger Labs Ltd.
+Zenodo. doi:10.5281/zenodo.20277979. Available at: https://www.tszheichoi.com/sensorlogger
+(Checked 2026-10-07: citation, DOI and author from the developer's official CITATION.cff
+and "How to Cite" section in the Awesome Sensor Logger repository,
+https://github.com/tszheichoi/awesome-sensor-logger; App Store seller "Logger Labs LTD",
+copyright "Tsz Hei Choi", https://apps.apple.com/gb/app/sensor-logger/id1531582925.
+The developer asks papers to state the app version and platform in the methods: iOS,
+1.67.1, iPhone 11 Pro Max, iOS 26.6.2.)
 
 Clark, A. et al. (2026) *Pillow (PIL fork)*, version 12.3.0. Available at:
 https://python-pillow.org
@@ -197,6 +256,22 @@ https://www.gov.uk/government/publications/e-scooter-trials-guidance-for-local-a
 Department for Transport (2026) *E-scooter trials: guidance for users*, updated 7 July.
 Available at: https://www.gov.uk/guidance/e-scooter-trials-guidance-for-users
 
+Electrive (2025) 'Voi presents new electric scooter and two e-bikes', *electrive.com*,
+18 March. Available at:
+https://www.electrive.com/2025/03/18/voi-presents-new-electric-scooter-and-two-e-bikes/
+
+Morley, R. (2024) 'Voi's new e-bike offers automatic gear changes and there's a new
+e-scooter too', *ebiketips (road.cc)*, 10 April. Available at:
+https://ebiketips.road.cc/content/news/vois-new-e-bike-offers-automatic-gear-changes-and-theres-a-new-e-scooter-too-5267
+
+Transport for London (2023) 'TfL awards contracts to Dott, Lime and Voi to run the next
+phase of London's rental e-scooter trial' [press release], July. Available at:
+https://tfl.gov.uk/info-for/media/press-releases/2023/july/tfl-awards-contracts-to-dott-lime-and-voi-to-run-the-next-phase-of-london-s-rental-e-scooter-trial
+
+VNV Global AB (2023) 'VNV Global's portfolio company Voi wins e-scooter tender in London'
+[press release], 5 July. Available at:
+https://storage.mfn.se/5e105080-042c-419c-83f0-a36340ad0e0e/vnv-globals-portfolio-company-voi-wins-e-scooter-tender-in-london.pdf
+
 Future Transport News (n.d.) [Voiager 5 launch article, cited in DOCUMENTATION.md 6.1]
 **[to verify: title and URL not recorded]**
 
@@ -223,6 +298,21 @@ https://storage.mfn.se/d6c2e21d-02ff-400d-8d7a-ca158fbdeb4c/voi-expands-its-vehi
 
 Zag Daily (2022) 'Voi releases next-generation e-scooter the Voiager 5', 15 March.
 Available at: https://zagdaily.com/tech/voi-releases-next-generation-e-scooter-the-voiager-5/
+
+**Road humps (bump simulations, checked 2026-10-07):**
+
+Department of Transport (1996a) *75mm High Road Humps*, Traffic Advisory Leaflet 2/96,
+April. Available at: https://tsrgd.co.uk/pdf/tal/1996/tal-2-96.pdf (states the round-top
+humps studied were "a standard 3.7m long"; mirror of the DfT leaflet)
+
+Department of Transport (1996b) *Highways (Road Humps) Regulations 1996*, Traffic Advisory
+Leaflet 7/96, June. Available at: https://tsrgd.co.uk/pdf/tal/1996/tal-7-96.pdf (humps
+"should be able to be negotiated by both cyclist and motorcyclists quite safely"; humps on
+strategic routes normally not above 75 mm; cushion side ramps not steeper than 1:4)
+
+*The Highways (Road Humps) Regulations 1999* (SI 1999/1025), regulation 4. Available at:
+https://www.legislation.gov.uk/uksi/1999/1025/regulation/4/made (length >= 900 mm along
+the carriageway; highest point 25-100 mm; no vertical face above 6 mm)
 
 ---
 

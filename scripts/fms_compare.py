@@ -27,7 +27,7 @@ Matching
   ROUTE_RADIUS_M of the ridden GPS track. Report dates are submission dates.
 
 Usage
-    python scripts/fms_compare.py --data-dir . --out-dir outputs
+    python scripts/fms_compare.py --data-dir data/raw/2026-10-03_1830_rec01 --out-dir outputs
 """
 
 import argparse
@@ -481,7 +481,7 @@ the surface the rider met; one opened after the ride cannot have been known at t
 
 def main():
     ap = argparse.ArgumentParser(description="Compare measured impacts with FixMyStreet reports")
-    ap.add_argument("--data-dir", type=Path, default=Path("."))
+    ap.add_argument("--data-dir", type=Path, default=Path("data/raw/2026-10-03_1830_rec01"))
     ap.add_argument("--out-dir", type=Path, default=Path("outputs"))
     ap.add_argument("--fms-cache", type=Path, default=Path("data/fixmystreet/reports.csv"))
     ap.add_argument("--roads-cache", type=Path, default=Path("data/osm_study_roads.json"))

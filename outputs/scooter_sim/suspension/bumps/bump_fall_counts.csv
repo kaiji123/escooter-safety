@@ -1,0 +1,45 @@
+case,length_mm,config,runs,falls,stalled
+pothole,300,10/10,27,0,0
+pothole,300,12/10,27,0,0
+pothole,300,12/12,27,0,0
+pothole,300,14/10,27,0,0
+pothole,600,10/10,27,3,3
+pothole,600,12/10,27,2,2
+pothole,600,12/12,27,2,2
+pothole,600,14/10,27,0,0
+pothole,1000,10/10,27,6,4
+pothole,1000,12/10,27,4,0
+pothole,1000,12/12,27,4,1
+pothole,1000,14/10,27,1,0
+round-top hump,600,10/10,27,0,0
+round-top hump,600,12/10,27,0,0
+round-top hump,600,12/12,27,0,0
+round-top hump,600,14/10,27,0,0
+round-top hump,3700,10/10,27,0,0
+round-top hump,3700,12/10,27,0,0
+round-top hump,3700,12/12,27,0,0
+round-top hump,3700,14/10,27,0,0
+sharp bump,300,10/10,27,1,0
+sharp bump,300,12/10,27,2,1
+sharp bump,300,12/12,27,1,0
+sharp bump,300,14/10,27,2,1
+sharp bump,600,10/10,27,0,0
+sharp bump,600,12/10,27,0,0
+sharp bump,600,12/12,27,0,0
+sharp bump,600,14/10,27,0,0
+sharp bump,1000,10/10,27,0,0
+sharp bump,1000,12/10,27,0,0
+sharp bump,1000,12/12,27,0,0
+sharp bump,1000,14/10,27,0,0
+sharp bump (profile contact),300,10/10,27,3,0
+sharp bump (profile contact),300,12/10,27,2,1
+sharp bump (profile contact),300,12/12,27,2,0
+sharp bump (profile contact),300,14/10,27,2,1
+sharp bump (profile contact),600,10/10,27,1,0
+sharp bump (profile contact),600,12/10,27,0,0
+sharp bump (profile contact),600,12/12,27,0,0
+sharp bump (profile contact),600,14/10,27,0,0
+sharp bump (profile contact),1000,10/10,27,1,0
+sharp bump (profile contact),1000,12/10,27,0,0
+sharp bump (profile contact),1000,12/12,27,0,0
+sharp bump (profile contact),1000,14/10,27,0,0

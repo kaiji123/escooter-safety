@@ -15,7 +15,9 @@ Bodies (all move in the x-z plane)
 No motor (the rider coasts through the pothole), no steering, no suspension: this is
 a worst case for the pitch-over mechanism only. Steering loss is NOT modelled.
 
-Road: flat, with a rectangular, sharp-edged pothole (depth d, length w along travel).
+Road: flat, with a rectangular, sharp-edged pothole (depth d, length w along travel),
+or with OBSTACLE = "bump" a raised bump instead: sharp-edged box, or round-top arc hump
+(BUMP_SHAPE; arc needs the profile contact). See SIMULATION_METHODS.md 3.15.
 Contact: MuJoCo soft contact; the solref time constant stands in for tyre compliance.
 
 Outcomes per run
@@ -34,6 +36,7 @@ Parameter values marked ASSUMED are not published by Voi.
 Usage
     python scripts/scooter_sim.py                   # full sweep -> outputs/scooter_sim/
     python scripts/scooter_sim.py --animate         # also write GIFs of example runs
+    python scripts/scooter_sim.py --bumps [--suspension]   # road bump study
 """
 
 import argparse
@@ -112,6 +115,16 @@ TYRE_STIFFNESS = 80000.0     # N/m, "profile" only: ~6.5 mm static deflection on
 TYRE_DAMPING = 500.0         # N s/m, "profile" only: light, as for a pneumatic tyre, ASSUMED
 PROFILE_DX = 0.0005          # m, sampling of the road profile
 
+# ---- Obstacle: a pothole (below the road) or a bump (above it) ----
+# For a bump, simulate()'s depth_mm is the bump HEIGHT and length_mm its length along
+# travel. Shapes:
+#   "box": sharp-edged rectangular bump (raised patch or utility cover, lifted slab, tree
+#          root ridge); either contact model, and EDGE_WIDTH ramps with "profile".
+#   "arc": round-top hump, a circular arc from x0 to x1 (UK round-top road hump, short
+#          car-park speed bump); "profile" contact only.
+OBSTACLE = "pothole"         # "pothole" or "bump"
+BUMP_SHAPE = "box"
+
 
 def wheel_mass(d_in):
     """Wheel mass (kg): fixed, or proportional to diameter when SCALE_WHEEL_MASS."""
@@ -120,12 +133,24 @@ def wheel_mass(d_in):
 
 
 def road_geoms(x0, x1, depth):
-    """Road with a sharp-edged rectangular pothole from x0 to x1 (three boxes).
+    """Road with a sharp-edged rectangular pothole from x0 to x1 (three boxes), or, if
+    OBSTACLE == "bump", a flat road with a box of height `depth` on top from x0 to x1.
 
     Rounded edges were tried (separate primitives, then a single convex mesh) and
     dropped: both gave numerical artefacts (stiffened multi-contacts; results changing
     with mesh resolution without converging). See SIMULATION_METHODS.md.
     """
+    if OBSTACLE == "bump":
+        if BUMP_SHAPE != "box":
+            if CONTACT_MODEL != "profile":
+                raise ValueError("MuJoCo contact supports box bumps only; use CONTACT_MODEL='profile'")
+            # Wheels use the profile; the boxes only catch the deck, whose clearance
+            # (>= 140 mm) exceeds every arc hump modelled (<= 100 mm): a flat road.
+            return f'    <geom name="road" type="box" pos="{(x1 + 20) / 2} 0 -0.25" size="{(x1 + 40) / 2} 1 0.25"/>'
+        return "\n".join("    " + x for x in (
+            f'<geom name="road" type="box" pos="{(x1 + 20) / 2} 0 -0.25" size="{(x1 + 40) / 2} 1 0.25"/>',
+            f'<geom name="bump" type="box" pos="{(x0 + x1) / 2} 0 {depth / 2}" '
+            f'size="{(x1 - x0) / 2} 1 {depth / 2}"/>'))
     return "\n".join("    " + x for x in (
         f'<geom name="road_in"  type="box" pos="{(x0 - 10) / 2} 0 -0.25" size="{(x0 + 10) / 2} 1 0.25"/>',
         f'<geom name="hole"     type="box" pos="{(x0 + x1) / 2} 0 {-depth - 0.25}" '
@@ -136,7 +161,10 @@ def road_geoms(x0, x1, depth):
 def road_profile(x0, x1, depth, edge_width=None, dx=None):
     """Road surface as sampled points (x, z), sorted by x, for the "profile" contact.
 
-    The pothole runs from x0 to x1 (top opening) with depth `depth`. Each edge falls
+    The pothole runs from x0 to x1 (top opening) with depth `depth`; for a bump
+    (OBSTACLE == "bump") the same shape is raised by `depth` instead, or, with
+    BUMP_SHAPE == "arc", the bump is a circular arc of height `depth` over x0..x1.
+    Each edge falls
     over a horizontal width b = edge_width with a raised-cosine shape (smooth, slope
     zero at top and bottom, steepest mid-way: max slope = pi*d/(2b)). b = 0 gives the
     original sharp, vertical edges; vertical wall points are then added so the wheel
@@ -148,15 +176,21 @@ def road_profile(x0, x1, depth, edge_width=None, dx=None):
     x = np.arange(-3.0, x1 + 40.0, dx)   # from behind the start to well past the run's end
     z = np.zeros_like(x)
     inside = (x > x0) & (x < x1)
-    z[inside] = -depth
+    off = depth if OBSTACLE == "bump" else -depth    # height of the obstacle's surface
+    if OBSTACLE == "bump" and BUMP_SHAPE == "arc":
+        half, xc = (x1 - x0) / 2, (x0 + x1) / 2
+        rho = (half ** 2 + depth ** 2) / (2 * depth)  # radius of the arc
+        z[inside] = np.sqrt(rho ** 2 - (x[inside] - xc) ** 2) - (rho - depth)
+        return x, z
+    z[inside] = off
     if b > 0:
         e_in = (x >= x0) & (x <= x0 + b)
-        z[e_in] = -depth * (1 - np.cos(np.pi * (x[e_in] - x0) / b)) / 2
+        z[e_in] = off * (1 - np.cos(np.pi * (x[e_in] - x0) / b)) / 2
         e_out = (x >= x1 - b) & (x <= x1)
-        z[e_out] = -depth * (1 - np.cos(np.pi * (x1 - x[e_out]) / b)) / 2
+        z[e_out] = off * (1 - np.cos(np.pi * (x1 - x[e_out]) / b)) / 2
         return x, z
-    # Sharp edges: add the corners exactly and points down each vertical wall.
-    wz = np.arange(0.0, -depth - 1e-12, -dx)
+    # Sharp edges: add the corners exactly and points along each vertical wall.
+    wz = np.arange(0.0, off - 1e-12 * np.sign(off), dx * np.sign(off))
     wx = np.concatenate([np.full_like(wz, x0), np.full_like(wz, x1)])
     wz = np.concatenate([wz, wz])
     x, z = np.concatenate([x, wx]), np.concatenate([z, wz])
@@ -316,9 +350,12 @@ def simulate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, record=False
     qx, qp, qa = (model.joint(n).qposadr[0] for n in ("x", "pitch", "ankle"))
 
     t_log, ax_log, vx_log, pitch_log, lean_log, frames = [], [], [], [], [], []
-    phase_log, near_pitch, near_lean, rear_z = [], [], [], []
+    phase_log, near_pitch, near_lean, rear_z, rear_x = [], [], [], [], []
     rb = model.body("rear_wheel").id
     rear_z_rest = data.xpos[rb][2]
+    # Bumps: horizontal distance at which a wheel of radius Rr first touches the bump's
+    # leading face (step of height `depth`); used for phases and fall attribution.
+    rear_reach = np.sqrt(Rr ** 2 - (Rr - min(depth, Rr)) ** 2)
     vx_min = v
     n_steps = int(t_end / TIMESTEP)
     for k in range(n_steps):
@@ -336,11 +373,18 @@ def simulate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, record=False
             # Phase by the far edge, where the impacts happen: "front" until the front
             # wheel is half a wheelbase past it (front wheel's climb-out and its
             # aftermath), then "rear" (the rear wheel's climb-out).
-            front_x = data.qpos[qx] + WHEELBASE / 2
-            phase_log.append("front" if front_x < POTHOLE_X + length + WHEELBASE / 2 else "rear")
+            # Bumps: "rear" from the moment the rear tyre reaches the bump, since the
+            # rear wheel's strike on the leading face is the second impact.
+            if OBSTACLE == "bump":
+                rear_on = data.xpos[rb][0] + rear_reach >= POTHOLE_X
+                phase_log.append("rear" if rear_on else "front")
+            else:
+                front_x = data.qpos[qx] + WHEELBASE / 2
+                phase_log.append("front" if front_x < POTHOLE_X + length + WHEELBASE / 2 else "rear")
             near_pitch.append(pitch_log[-1])
             near_lean.append(lean_log[-1])
             rear_z.append(data.xpos[rb][2])
+            rear_x.append(data.xpos[rb][0])
         front_x = data.qpos[qx] + WHEELBASE / 2
         if (record and k % int(0.01 / TIMESTEP) == 0
                 and POTHOLE_X - 1.0 < front_x < POTHOLE_X + length + WHEELBASE + 1.5):
@@ -362,6 +406,11 @@ def simulate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, record=False
         "handlebar_peak_g": round(np.abs(a_phone).max() / G, 2),
         "stalled": stalled,
         "fall": bool(lean_max > FALL_LEAN_DEG or pitch_max > FALL_PITCH_DEG or stalled),
+        # Backward (nose-up / rider leaning back) extremes: not fall criteria, recorded
+        # to check that bumps don't cause a backward failure the criteria would miss.
+        "rider_lean_back_max_deg": round(-min(lean_log), 2),
+        "chassis_pitch_up_max_deg": round(-min(pitch_log), 2),
+        "obstacle": OBSTACLE if OBSTACLE == "pothole" else f"bump_{BUMP_SHAPE}",
     }
     # Per-phase outcomes: what the front wheel's crossing does vs the rear wheel's.
     ph = np.array(phase_log)
@@ -375,8 +424,14 @@ def simulate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, record=False
     bad = (la > FALL_LEAN_DEG) | (pa > FALL_PITCH_DEG) | (vxa < STALL_MS)
     if bad.any():
         i_fall = bad.argmax()
-        rz_before = np.array(rear_z[: i_fall + 1])
-        fell_at = "rear" if rear_z_rest - rz_before.min() > 0.005 else "front"
+        if OBSTACLE == "bump":
+            # A bump: "rear" only if the rear tyre had reached the bump's leading face
+            # (horizontal reach of a wheel of radius Rr to a step of height h) before
+            # the fall; the front impact lifts the rear rather than dropping it.
+            fell_at = "rear" if max(rear_x[: i_fall + 1]) + rear_reach >= POTHOLE_X else "front"
+        else:
+            rz_before = np.array(rear_z[: i_fall + 1])
+            fell_at = "rear" if rear_z_rest - rz_before.min() > 0.005 else "front"
     for name in ("front", "rear"):
         m = ph == name
         if m.any():
@@ -387,6 +442,11 @@ def simulate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, record=False
         else:
             out[f"{name}_speed_loss_pct"] = out[f"{name}_peak_g"] = out[f"{name}_lean_max_deg"] = np.nan
     out["fall_phase"] = fell_at if out["fall"] else ""
+    # How it fell: "stall" = the wheel could not get over the edge and the scooter
+    # stopped (kerb strike) without the rider/scooter passing the angle limits first;
+    # "pitch-over" = the lean or pitch limit was passed.
+    out["fall_type"] = ("" if not out["fall"] else "pitch-over"
+                        if lean_max > FALL_LEAN_DEG or pitch_max > FALL_PITCH_DEG else "stall")
     # Rear wheel: lifted off the road by the front impact (scooter pitching about the
     # front wheel), and how far it dipped into the pothole itself.
     rz = np.array(rear_z)
@@ -415,7 +475,8 @@ def _style(ax):
     ax.set_axisbelow(True)
 
 
-def fig_metric(df, metric, ylabel, path, threshold=None, speed=20.0):
+def fig_metric(df, metric, ylabel, path, threshold=None, speed=20.0, noun="pothole",
+               xlabel="Pothole depth (mm)"):
     """Metric vs depth, one panel per pothole length, one line per configuration."""
     fig, axes = plt.subplots(1, len(LENGTHS_MM), figsize=(10.5, 3.4), sharey=True)
     sub = df[df["speed_kmh"] == speed]
@@ -431,8 +492,8 @@ def fig_metric(df, metric, ylabel, path, threshold=None, speed=20.0):
                     label="Fall" if (k == "10/10" and w == LENGTHS_MM[-1]) else None)
         if threshold is not None:
             ax.axhline(threshold, color="#999999", lw=0.9, ls=":")
-        ax.set_title(f"{w} mm long pothole", fontsize=9.5, color=INK, loc="left")
-        ax.set_xlabel("Pothole depth (mm)")
+        ax.set_title(f"{w} mm long {noun}", fontsize=9.5, color=INK, loc="left")
+        ax.set_xlabel(xlabel)
         _style(ax)
     axes[0].set_ylabel(ylabel)
     axes[0].legend(frameon=False, fontsize=8, loc="upper left")
@@ -477,7 +538,8 @@ def animate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, path):
         if CONTACT_MODEL == "profile":
             ax.plot(prof_x, prof_z, color="#8a8984", lw=2)
         else:
-            ax.plot([-2, x0, x0, x1, x1, x1 + 4], [0, 0, -d, -d, 0, 0], color="#8a8984", lw=2)
+            off = d if OBSTACLE == "bump" else -d
+            ax.plot([-2, x0, x0, x1, x1, x1 + 4], [0, 0, off, off, 0, 0], color="#8a8984", lw=2)
         for name, R in (("front_wheel", Rf), ("rear_wheel", Rr)):
             c = data.xpos[model.body(name).id]
             ax.add_patch(plt.Circle((c[0], c[2]), R, fill=False, color="#2a78d6", lw=2))
@@ -497,9 +559,11 @@ def animate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, path):
         ax.set_ylim(-0.25, 2.0)
         ax.set_aspect("equal")
         ax.axis("off")
-        ax.set_title(f"{d_front_in}/{d_rear_in} in wheels · {depth_mm} mm × {length_mm} mm pothole\n"
+        what = ("pothole" if OBSTACLE == "pothole" else "round-top hump" if BUMP_SHAPE == "arc"
+                else "bump")
+        ax.set_title(f"{d_front_in}/{d_rear_in} in wheels · {depth_mm} mm × {length_mm} mm {what}\n"
                      f"{speed_kmh:g} km/h · {'front suspension · ' if SUSPENSION else ''}"
-                     f"{(f'{EDGE_WIDTH * 1000:.0f} mm sloped edges · ' if EDGE_WIDTH > 0 else 'sharp edges · ') if CONTACT_MODEL == 'profile' else ''}"
+                     f"{(f'{EDGE_WIDTH * 1000:.0f} mm sloped edges · ' if EDGE_WIDTH > 0 else 'sharp edges · ') if CONTACT_MODEL == 'profile' and not (OBSTACLE == 'bump' and BUMP_SHAPE == 'arc') else ''}"
                      f"{'FALL' if out['fall'] else 'no fall'} · 4× slow motion",
                      fontsize=9, color=INK, loc="left")
 
@@ -593,20 +657,36 @@ def consistency(out_dir):
 def write_animation_page(path, sections):
     """Self-contained HTML page of the simulation GIFs (embedded), in sections.
 
-    sections: list of (heading, description, clips); clips: list of (f, r, gif, res, note).
+    sections: list of (heading, description, clips, obstacle); clips: list of
+    (f, r, gif, res, note); obstacle: "pothole" or "bump" (captions).
     """
     import base64
     import html as _html
     blocks = []
-    for heading, desc, clips in sections:
+    for heading, desc, clips, obstacle in sections:
         cards = []
         for f, r, gif, res, note in clips:
             b64 = base64.b64encode(gif.read_bytes()).decode()
-            verdict = ("<b>Falls</b>: pitches forward over the front wheel" if res["fall"]
-                       else "<b>No fall</b>")
-            rear = ("rear wheel lifted clear of the pothole" if res["rear_lift_mm"] > 20
-                    and res["rear_drop_mm"] < 10 else
-                    f"rear wheel dips {res['rear_drop_mm']:.0f} mm into the pothole")
+            verdict = ("<b>No fall</b>" if not res["fall"] else
+                       "<b>Falls</b>: rear wheel strikes the edge, scooter pitches forward"
+                       if obstacle == "bump" and res["fall_phase"] == "rear"
+                       else "<b>Falls</b>: pitches forward over the front wheel")
+            if obstacle == "bump":
+                rl = res["rear_speed_loss_pct"]
+                rear = ("" if rl != rl else f"rear-wheel strike {rl:.0f}%") + \
+                    f"{'' if rl != rl else ' · '}handlebar peak {res['handlebar_peak_g']:.1f} g"
+                cards.append(f"""
+        <figure>
+          <img src="data:image/gif;base64,{b64}" alt="Side-view simulation, {f}/{r} inch wheels">
+          <figcaption><b>{f}/{r} in</b> (front/rear) · {verdict}<br>
+          Speed lost: front-wheel strike {res['front_speed_loss_pct']:.0f}% · {rear}
+          {f'<br><span class="hint">{_html.escape(note)}</span>' if note else ''}</figcaption>
+        </figure>""")
+                continue
+            else:
+                rear = ("rear wheel lifted clear of the pothole" if res["rear_lift_mm"] > 20
+                        and res["rear_drop_mm"] < 10 else
+                        f"rear wheel dips {res['rear_drop_mm']:.0f} mm into the pothole")
             cards.append(f"""
         <figure>
           <img src="data:image/gif;base64,{b64}" alt="Side-view simulation, {f}/{r} inch wheels">
@@ -621,7 +701,7 @@ def write_animation_page(path, sections):
 <div class="grid">{''.join(cards)}</div>""")
     path.write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pothole Simulation Animations</title>
+<title>Pothole and Bump Animations</title>
 <style>
 body{{margin:0;background:#fafaf8;color:#222;font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}}
 main{{max-width:1150px;margin:0 auto;padding:28px 16px 48px}}
@@ -632,8 +712,8 @@ figure{{margin:0;background:#fff;border:1px solid #e3e2de;border-radius:8px;padd
 img{{width:100%;height:auto;display:block}} figcaption{{font-size:14px;margin-top:6px}}
 .note{{color:#6b6b6b;font-size:13.5px;margin-top:26px}}
 </style></head><body><main>
-<h1>E-scooter pothole simulations</h1>
-<p class="sub">MuJoCo side-view model · sharp-edged rectangular potholes · coasting · 76 kg rider ·
+<h1>E-scooter pothole and road bump simulations</h1>
+<p class="sub">MuJoCo side-view model · potholes, then road bumps further down · coasting · 76 kg rider ·
 all clips 4× slower than real time, looping</p>
 {''.join(blocks)}
 <p class="note">Orange: rider (pinned at the feet, braced by a spring). Black: deck and stem. Blue: wheels.
@@ -676,12 +756,22 @@ ANIMATION_SETS = [
 ]
 
 
-def build_animations(out_dir):
-    """Render every ANIMATION_SETS entry. A case may be (front, rear, note) for MuJoCo's
-    contact with sharp edges, or (front, rear, note, edge_mm) for the profile contact
-    with sloped edges of that width (0 = sharp)."""
-    global SUSPENSION, CONTACT_MODEL, EDGE_WIDTH
-    keep = (SUSPENSION, CONTACT_MODEL, EDGE_WIDTH)
+def _clip(gif, f, r, d, w, s, reuse):
+    """Render one GIF, or with reuse=True keep an existing GIF and only re-run the
+    simulation for its caption (same settings, so the same result)."""
+    if reuse and gif.exists():
+        return simulate(f, r, d, w, s)
+    return animate(f, r, d, w, s, gif)
+
+
+def build_animations(out_dir, reuse=False):
+    """Render every ANIMATION_SETS entry (potholes), then every BUMP_ANIMATION_SETS
+    entry, into one page, animations.html. A pothole case may be (front, rear, note) for
+    MuJoCo's contact with sharp edges, or (front, rear, note, edge_mm) for the profile
+    contact with sloped edges of that width (0 = sharp)."""
+    global SUSPENSION, CONTACT_MODEL, EDGE_WIDTH, OBSTACLE, BUMP_SHAPE
+    keep = (SUSPENSION, CONTACT_MODEL, EDGE_WIDTH, OBSTACLE, BUMP_SHAPE)
+    OBSTACLE = "pothole"
     sections = []
     for heading, desc, d, w, s, cases, susp in ANIMATION_SETS:
         SUSPENSION = susp
@@ -693,10 +783,16 @@ def build_animations(out_dir):
             EDGE_WIDTH = 0.0 if edge is None else edge / 1000
             tag = ("_susp" if susp else "") + ("" if edge is None else f"_edge{edge}")
             gif = out_dir / f"anim_{f}_{r}_{d}x{w}mm_{s:g}kmh{tag}.gif"
-            res = animate(f, r, d, w, s, gif)
-            clips.append((f, r, gif, res, note))
-        sections.append((heading, desc, clips))
-    SUSPENSION, CONTACT_MODEL, EDGE_WIDTH = keep
+            clips.append((f, r, gif, _clip(gif, f, r, d, w, s, reuse), note))
+        sections.append((heading, desc, clips, "pothole"))
+    for heading, desc, h, w, s, shape, contact, cases, susp in BUMP_ANIMATION_SETS:
+        SUSPENSION, CONTACT_MODEL, EDGE_WIDTH, OBSTACLE, BUMP_SHAPE = susp, contact, 0.0, "bump", shape
+        clips = []
+        for f, r, note in cases:
+            gif = out_dir / f"anim_bump_{shape}_{f}_{r}_{h}x{w}mm_{s:g}kmh{'_susp' if susp else ''}.gif"
+            clips.append((f, r, gif, _clip(gif, f, r, h, w, s, reuse), note))
+        sections.append((heading, desc, clips, "bump"))
+    SUSPENSION, CONTACT_MODEL, EDGE_WIDTH, OBSTACLE, BUMP_SHAPE = keep
     write_animation_page(out_dir / "animations.html", sections)
 
 
@@ -856,6 +952,177 @@ def edge_study(out_dir, processes=4):
     return df, thr, falls
 
 
+# ---- Road bumps: raised obstacles instead of potholes ----
+# (name, shape, contact model, lengths in mm). Heights are DEPTHS_MM (20-100 mm).
+#   sharp bump:  raised patch, lifted slab or utility cover, tree-root ridge; same lengths
+#                as the potholes so the two can be compared directly. MuJoCo contact =
+#                the main model; the profile contact on the same bumps is a cross-check.
+#   round-top:   circular-arc humps. 600 mm = short "speed bump" of the car-park kind;
+#                3700 mm = a common UK round-top road hump length. Profile contact only.
+BUMP_CASES = [
+    ("sharp bump", "box", "mujoco", LENGTHS_MM),
+    ("sharp bump (profile contact)", "box", "profile", LENGTHS_MM),
+    ("round-top hump", "arc", "profile", [600, 3700]),
+]
+# Rear-size check: short sharp bumps, where (with the front fork) the falls come from the
+# rear wheel's strike. Finer 5 mm height steps; rear-larger configurations included.
+BUMP_REAR_CONFIGS = [(10, 10), (12, 10), (14, 10), (10, 12), (12, 12), (10, 14), (14, 14)]
+BUMP_REAR_HEIGHTS_MM = list(range(50, 101, 5))
+BUMP_COLS = {"pothole": "#b5b4ae", "sharp bump": "#0d366b",
+             "sharp bump (profile contact)": "#5598e7", "round-top hump": "#eb6834"}
+
+
+def _bump_worker(job):
+    """One bump run in a worker process (settings passed explicitly)."""
+    (f, r, h, w, s), (name, shape, contact), settings = job
+    g = globals()
+    for k, v in settings.items():
+        g[k] = v
+    g["OBSTACLE"], g["BUMP_SHAPE"], g["CONTACT_MODEL"], g["EDGE_WIDTH"] = "bump", shape, contact, 0.0
+    res = simulate(f, r, h, w, s)
+    res["case"] = name
+    return res
+
+
+def bump_study(out_dir, processes=4):
+    """Sweep bump height, length and speed for every wheel configuration and bump case,
+    and compare with the pothole sweep in the same output folder (sim_results.csv)."""
+    from multiprocessing import Pool
+    settings = {"SUSPENSION": SUSPENSION, "TYRE_STIFFNESS": TYRE_STIFFNESS,
+                "TYRE_DAMPING": TYRE_DAMPING, "PROFILE_DX": PROFILE_DX}
+    jobs = [((f, r, h, w, s), (name, shape, contact), settings)
+            for name, shape, contact, lengths in BUMP_CASES for _, f, r in CONFIGS
+            for h in DEPTHS_MM for w in lengths for s in SPEEDS_KMH]
+    with Pool(processes) as pool:
+        rows = []
+        for i, res in enumerate(pool.imap(_bump_worker, jobs, chunksize=8), 1):
+            rows.append(res)
+            if i % 100 == 0:
+                print(f"  {i}/{len(jobs)} runs")
+    df = pd.DataFrame(rows).rename(columns={"depth_mm": "height_mm"})
+    df["config"] = df["front_in"].astype(str) + "/" + df["rear_in"].astype(str)
+    df.to_csv(out_dir / "bump_results.csv", index=False)
+    cfgs = [f"{f}/{r}" for _, f, r in CONFIGS]
+
+    # Pothole sweep from the same model (if it has been run), for comparison.
+    pot = None
+    if (out_dir.parent / "sim_results.csv").exists():
+        pot = pd.read_csv(out_dir.parent / "sim_results.csv")
+        pot["config"] = pot["front_in"].astype(str) + "/" + pot["rear_in"].astype(str)
+        pot = pot.rename(columns={"depth_mm": "height_mm"}).assign(case="pothole")
+
+    # Lowest falling height per case, configuration, length and speed (pothole alongside).
+    both = pd.concat([df, pot]) if pot is not None else df
+    thr = (both[both["fall"]].groupby(["case", "length_mm", "speed_kmh", "config"])["height_mm"]
+           .min().unstack("config"))
+    idx = [(c, w, s) for c, w in [(n, w) for n, _, _, ls in BUMP_CASES for w in ls]
+           + ([("pothole", w) for w in LENGTHS_MM] if pot is not None else []) for s in SPEEDS_KMH]
+    thr = thr.reindex(pd.MultiIndex.from_tuples(idx, names=["case", "length_mm", "speed_kmh"]))
+    thr = thr.reindex(columns=cfgs)
+    thr.to_csv(out_dir / "bump_fall_thresholds.csv")
+
+    # Fall counts and how they happened, per case and length.
+    cnt = (both.groupby(["case", "length_mm", "config"])
+           .agg(runs=("fall", "size"), falls=("fall", "sum"),
+                stalled=("stalled", "sum"))
+           .reset_index())
+    cnt.to_csv(out_dir / "bump_fall_counts.csv", index=False)
+
+    # Figures for the main (MuJoCo-contact) sharp bumps, in the style of the pothole ones.
+    main = df[df["case"] == "sharp bump"].rename(columns={"height_mm": "depth_mm"})
+    fig_metric(main, "speed_loss_pct", "Forward speed lost (%)", out_dir / "fig_bump_speed_loss.png",
+               noun="sharp bump", xlabel="Bump height (mm)")
+    fig_metric(main, "handlebar_peak_g", "Peak handlebar vertical accel. (g)",
+               out_dir / "fig_bump_handlebar_g.png", noun="sharp bump", xlabel="Bump height (mm)")
+
+    # Figure: falls per configuration for each obstacle, sharp bump vs pothole of the
+    # same size, plus round-top humps.
+    groups = ([("pothole", w) for w in LENGTHS_MM] if pot is not None else []) + \
+        [("sharp bump", w) for w in LENGTHS_MM] + [("round-top hump", w) for w in (600, 3700)]
+    fig, ax = plt.subplots(figsize=(11, 3.8))
+    bw = 0.2
+    for gi, (case, w) in enumerate(groups):
+        for i, c in enumerate(cfgs):
+            row = cnt[(cnt["case"] == case) & (cnt["length_mm"] == w) & (cnt["config"] == c)]
+            n = int(row["falls"].iloc[0]) if len(row) else 0
+            ax.bar(gi + (i - 1.5) * bw, n, width=bw - 0.03, color=RAMP[c],
+                   label=c if gi == 0 else None)
+    n_runs = len(DEPTHS_MM) * len(SPEEDS_KMH)
+    ax.set_xticks(range(len(groups)), [f"{c}\n{w} mm" for c, w in groups], fontsize=8)
+    ax.set_ylabel(f"Falls (of {n_runs} runs each)")
+    ax.legend(frameon=False, fontsize=8, title="front/rear (in)", title_fontsize=8)
+    ax.set_title(f"Same depth/height range (20-100 mm) and speeds (15-25 km/h)"
+                 f"{' · front suspension' if SUSPENSION else ' · no suspension'}",
+                 fontsize=9, color=MUTED, loc="left")
+    _style(ax)
+    fig.tight_layout()
+    fig.savefig(out_dir / "fig_bump_falls.png", dpi=150)
+    plt.close(fig)
+
+    # Figure: bump vs pothole of the same size, 10/10 and 14/10, 20 km/h, speed lost.
+    if pot is not None:
+        fig, axes = plt.subplots(1, len(LENGTHS_MM), figsize=(10.5, 3.4), sharey=True)
+        for ax, w in zip(axes, LENGTHS_MM):
+            for c in ("10/10", "12/10", "14/10"):
+                for case, ls in (("sharp bump", "-"), ("pothole", ":")):
+                    s_ = both[(both["case"] == case) & (both["config"] == c) & (both["length_mm"] == w)
+                              & (both["speed_kmh"] == 20.0)].sort_values("height_mm")
+                    ax.plot(s_["height_mm"], s_["speed_loss_pct"], color=RAMP[c], lw=2 if ls == "-" else 1.4,
+                            ls=ls, label=f"{c} {case}")
+                    fl = s_[s_["fall"]]
+                    ax.plot(fl["height_mm"], fl["speed_loss_pct"], ls="none", marker="X", ms=8,
+                            color=RAMP[c], markeredgecolor="white")
+            ax.set_title(f"{w} mm long", fontsize=9.5, color=INK, loc="left")
+            ax.set_xlabel("Bump height / pothole depth (mm)")
+            _style(ax)
+        axes[0].set_ylabel("Forward speed lost (%)")
+        axes[0].legend(frameon=False, fontsize=7.5, loc="upper left")
+        fig.suptitle("20 km/h · solid = sharp bump, dotted = pothole · X = fall",
+                     fontsize=9, color=MUTED, x=0.01, ha="left")
+        fig.tight_layout()
+        fig.savefig(out_dir / "fig_bump_vs_pothole.png", dpi=150)
+        plt.close(fig)
+
+    # Rear-size check (300 mm sharp bump, MuJoCo contact): lowest falling height.
+    jobs = [((f, r, h, 300, sp), ("sharp bump", "box", "mujoco"), settings)
+            for f, r in BUMP_REAR_CONFIGS for h in BUMP_REAR_HEIGHTS_MM for sp in SPEEDS_KMH]
+    with Pool(processes) as pool:
+        rr = pd.DataFrame(pool.map(_bump_worker, jobs, chunksize=8)).rename(columns={"depth_mm": "height_mm"})
+    rr["config"] = rr["front_in"].astype(str) + "/" + rr["rear_in"].astype(str)
+    rr.to_csv(out_dir / "bump_rear_check.csv", index=False)
+    rear = (rr[rr["fall"]].groupby(["speed_kmh", "config"])["height_mm"].min().unstack("config")
+            .reindex(index=SPEEDS_KMH, columns=[f"{f}/{r}" for f, r in BUMP_REAR_CONFIGS]))
+    rear.to_csv(out_dir / "bump_rear_check_thresholds.csv")
+    return df, thr, cnt, rear
+
+
+# Bump sections of animations.html: (heading, description, height_mm, length_mm, speed,
+# shape, contact, [(front, rear, note)], suspension). Rendered by build_animations().
+BUMP_ANIMATION_SETS = [
+    ("Road bump: sharp-edged, no suspension (exploratory)",
+     "90 mm high, 600 mm long idealised sharp-edged bump, 20 km/h, rigid fork. In this run the 10/10 "
+     "model meets the fall criteria after the front-wheel strike; the 12 and 14 in front-wheel models "
+     "do not.",
+     90, 600, 20.0, "box", "mujoco", [(10, 10, "Current wheel sizes"), (12, 10, "Larger front wheel"),
+                                      (14, 10, "Larger front wheel")], False),
+    ("Road bump with the modelled front spring: falls after the rear-wheel strike (exploratory)",
+     "90 mm high, 300 mm short idealised sharp-edged bump, 15 km/h, front suspension. In these runs the "
+     "fall criteria are met after the rigid rear wheel strikes the edge. The 10/14 run does not meet "
+     "them; this is one of very few such cases and is an open question, not a result about rear wheel "
+     "size.",
+     90, 300, 15.0, "box", "mujoco", [(10, 10, "Voiager 5 (current)"), (14, 10, "Larger front wheel only"),
+                                      (10, 14, "Larger rear wheel only")], True),
+    ("Round-top road hump (3.7 m long, 75 mm high)",
+     "Circular-arc hump of the standard UK round-top length, 20 km/h, front suspension. No modelled "
+     "round-top hump run up to 100 mm met the fall criteria.",
+     75, 3700, 20.0, "arc", "profile", [(10, 10, "Voiager 5 (current)")], True),
+    ("Short round speed bump (600 mm long, 100 mm high)",
+     "Short circular-arc bump, 15 km/h, front suspension. Fall criteria not met; large modelled speed "
+     "loss. Modelled jolt sizes for bumps are not validated.",
+     100, 600, 15.0, "arc", "profile", [(10, 10, "Voiager 5 (current)"), (14, 10, "Larger front wheel")], True),
+]
+
+
 def main():
     ap = argparse.ArgumentParser(description="MuJoCo e-scooter pothole simulation")
     ap.add_argument("--out-dir", type=Path, default=Path("outputs/scooter_sim"))
@@ -868,10 +1135,15 @@ def main():
                     help="model the front spring fork; outputs go to <out-dir>/suspension")
     ap.add_argument("--consistency", action="store_true",
                     help="only run the consistency check against the measured ride")
+    ap.add_argument("--bumps", action="store_true",
+                    help="road bump study: sharp bumps and round-top humps "
+                         "(outputs in <out-dir>[/suspension]/bumps); with --animate, only "
+                         "add the bump clips to <out-dir>/animations.html")
     ap.add_argument("--edges", action="store_true",
                     help="soft-edged pothole study with the profile contact "
                          "(outputs in <out-dir>[/suspension]/soft_edges)")
     args = ap.parse_args()
+    base_dir = args.out_dir           # animations.html lives here, whatever the study
     if args.consistency:
         args.out_dir.mkdir(parents=True, exist_ok=True)
         c = consistency(args.out_dir)
@@ -882,6 +1154,22 @@ def main():
         SUSPENSION = True
         args.out_dir = args.out_dir / "suspension"
     args.out_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.bumps:
+        bdir = args.out_dir / "bumps"
+        bdir.mkdir(exist_ok=True)
+        if args.animate:   # add the bump clips to animations.html, keeping existing GIFs
+            build_animations(base_dir, reuse=True)
+            return
+        df, thr, cnt, rear = bump_study(bdir)
+        pd.set_option("display.width", 200)
+        print("Falls per case, length and configuration:\n",
+              cnt.pivot_table(index=["case", "length_mm"], columns="config",
+                              values=["falls", "stalled"]).to_string())
+        print("\nLowest falling height/depth (mm):\n", thr.dropna(how="all").to_string())
+        print("\nRear-size check, 300 mm sharp bump, lowest falling height (mm; NaN = none "
+              "up to 100):\n", rear.to_string())
+        return
 
     if args.edges:
         edir = args.out_dir / "soft_edges"
@@ -932,7 +1220,7 @@ def main():
     thr.to_csv(args.out_dir / "fall_thresholds.csv")
 
     if args.animate:
-        build_animations(args.out_dir)
+        build_animations(base_dir)
 
     pd.set_option("display.width", 180)
     print("\nShallowest depth (mm) that causes a fall (NaN = no fall up to 100 mm):")

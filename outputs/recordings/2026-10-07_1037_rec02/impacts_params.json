@@ -1,0 +1,30 @@
+{
+  "recording": "iPhone 11 Pro Max, 2026-10-07_09-37-06 UTC",
+  "threshold_g": 1.0,
+  "min_gap_s": 0.5,
+  "min_speed_ms": 2.0,
+  "max_gps_accuracy_m": 20.0,
+  "pre_window_s": [
+    -2.5,
+    -0.5
+  ],
+  "post_window_s": [
+    0.1,
+    1.5
+  ],
+  "roughness_window_s": 1.0,
+  "n_gps_fixes_used": 1151,
+  "n_impacts": 39,
+  "walking_bouts_on_map": [
+    {
+      "start": "10:46:47",
+      "end": "10:51:21",
+      "steps": 562
+    },
+    {
+      "start": "10:51:25",
+      "end": "10:52:02",
+      "steps": 69
+    }
+  ]
+}

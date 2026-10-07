@@ -1,0 +1,5 @@
+recording,event,reference,precision,source,detected,result,difference_s
+2026-10-03_1830_rec01,no_walking,,whole recording,rider 2026-10-07,6 s labelled walking after smoothing (0.7% of 821 windows; 9 before smoothing); 0 walking bouts >= 10 s; 0 walking windows at GPS >= 8 km/h,"false-positive windows only, no false bout",
+2026-10-07_1037_rec02,walking_start,2026-10-07 10:47:06,approximate (about a minute),rider recollection 2026-10-07,2026-10-07 10:46:47.04,difference within the reference's precision,-19.0
+2026-10-07_1037_rec02,rental_end,2026-10-07 10:46:00,minute (shown as 10:46; true time 10:46:00-10:46:59),Voi app ride history (read by the rider) 2026-10-07,last scooting segment ends 10:45:54; next walking bout first step 10:46:47.04,order consistent: riding ends before the rental-end minute closes and walking starts after it opens (10:46:00-10:47:00),
+2026-10-07_1338_rec03,no_walking,,whole recording,rider 2026-10-07,8 s labelled walking after smoothing (1.2% of 681 windows; 9 before smoothing); 0 walking bouts >= 10 s; 0 walking windows at GPS >= 8 km/h,"false-positive windows only, no false bout",

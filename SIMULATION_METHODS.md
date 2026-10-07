@@ -327,6 +327,43 @@ contact), not against the MuJoCo-contact results.
 
 ---
 
+### 3.15 Road bumps (`OBSTACLE = "bump"`, `--bumps`)
+
+The same model can cross a raised obstacle instead of a pothole. `simulate()`'s depth
+argument is then the bump **height** and the length is the bump's length along travel.
+Two shapes (`BUMP_SHAPE`):
+
+- **`"box"`: sharp-edged rectangular bump.** Vertical faces up and down. With MuJoCo's
+  contact (the main model) this is a box geom on a continuous flat road; with the profile
+  contact (section 3.14) the profile is raised instead of lowered, with points up each
+  vertical face. Represents surface **defects**: a raised patch or reinstatement, a
+  utility cover proud of the surface, a lifted slab edge, a tree-root ridge. Legal UK road
+  humps may not have a vertical face above 6 mm (Highways (Road Humps) Regulations 1999,
+  reg. 4), so this shape is not a legal road hump.
+- **`"arc"`: round-top hump.** A circular arc of height h over the length L (radius
+  rho = (L²/4 + h²)/2h). Profile contact only, since MuJoCo's own contact cannot follow
+  curved surfaces reliably (section 3.13). 3700 mm long = the standard UK round-top road
+  hump (DfT Traffic Advisory Leaflet 2/96); 600 mm = a short car-park style bump, below
+  the 900 mm legal minimum for road humps on the highway. With the profile contact the
+  MuJoCo road boxes only catch the deck; for the arc they are a flat road, because the
+  deck clearance (>= 140 mm) exceeds every hump height modelled (<= 100 mm).
+
+**Phases and fall attribution for bumps.** The pothole rules (section 3.10, 3.11) do not
+transfer: the rear wheel climbs a bump rather than dipping into it, and the time-based
+split put the rear wheel's strike into the "front" phase on bumps of 600 mm or more.
+For bumps, the "rear" phase starts, and a fall is credited to the rear wheel, once the
+rear wheel has reached the bump's leading face: its centre is within
+sqrt(R² − (R − h)²) of the face (the horizontal reach of a wheel of radius R to a step
+of height h).
+
+**Extra outputs (all runs).** `rider_lean_back_max_deg` and `chassis_pitch_up_max_deg`
+(backward extremes; not fall criteria, recorded to check that a bump does not cause a
+backward failure the forward criteria would miss: the maximum in any bump run was 6°),
+`obstacle`, and `fall_type` (`"stall"` if the scooter stopped without passing an angle
+limit, else `"pitch-over"`). In practice every stalled run went on to pitch past 30°, so
+`fall_type` was always "pitch-over"; the counts use the `stalled` flag (front or rear
+wheel stopped dead at some point) instead.
+
 ## 4. Experiments
 
 ### 4.1 Main sweep (`python scripts/scooter_sim.py`)
@@ -444,6 +481,52 @@ not changed from its pre-set 500 N·s/m.
 
 ---
 
+### 4.9 Road bumps (`--bumps`, `--bumps --suspension`)
+
+Cases (`BUMP_CASES`), each × the four configurations × heights 20–100 mm (10 mm steps) ×
+15/20/25 km/h, run over 4 processor cores:
+
+| Case | Shape | Contact | Lengths (mm) | Runs |
+|---|---|---|---|---|
+| sharp bump (main) | box | MuJoCo | 300, 600, 1000 (same as the potholes) | 324 |
+| sharp bump, cross-check | box | profile | 300, 600, 1000 | 324 |
+| round-top hump | arc | profile | 600, 3700 | 216 |
+
+plus a **rear-size check** (`BUMP_REAR_CONFIGS`): 300 mm sharp bump, MuJoCo contact,
+heights 50–100 mm in 5 mm steps, 3 speeds, configurations 10/10, 12/10, 14/10, 10/12,
+12/12, 10/14, 14/14 (231 runs). It was added after the few suspended-model bump falls
+were all met after the rear wheel's strike (DOCUMENTATION.md 6.8). It is a small,
+exploratory check (one length; differences near the 5 mm grid resolution), not a test of
+whether rear size improves stability.
+
+Run without and with the front fork (1095 runs each). The pothole sweep in the parent
+folder (`sim_results.csv`) is read in for the bump-vs-pothole comparison, so run the main
+sweep first. Outputs in `outputs/scooter_sim/bumps/` and
+`outputs/scooter_sim/suspension/bumps/`: `bump_results.csv`, `bump_fall_thresholds.csv`
+(lowest falling height, potholes alongside), `bump_fall_counts.csv`,
+`bump_rear_check.csv`, `bump_rear_check_thresholds.csv`, `fig_bump_falls.png`,
+`fig_bump_vs_pothole.png`, `fig_bump_speed_loss.png`, `fig_bump_handlebar_g.png`.
+
+**Contact-model cross-check.** On sharp bumps the two contact models gave the same fall /
+no-fall outcome in 295/324 runs without the fork and 307/324 with it (potholes: 30/30 in
+the original check). The disagreements go both ways (without fork: 25 MuJoCo-only falls,
+4 profile-only; with fork: 6 and 11). A likely reason, not verified: the profile contact
+has no tangential (friction) force, which matters when a wheel climbs a vertical face
+but not when it drops into a hole. Bump fall counts are therefore less certain than
+pothole ones; read them as comparisons between wheel configurations.
+
+**Jolt sizes are not validated for bumps.** Sharp bumps give large simulated handlebar
+peaks even with the fork (10/10, 600 mm, 20 km/h: 3.6 g at 20 mm, 8.4 g at 40 mm), above
+the measured 1–2.8 g. The ride did not label bumps, so there is nothing to compare with.
+
+### 4.10 Animation page
+
+`animations.html` holds the pothole clips (`ANIMATION_SETS`) and, below them, the bump
+clips (`BUMP_ANIMATION_SETS`). `python scripts/scooter_sim.py --bumps --animate`
+renders only missing GIFs (existing ones are reused; their captions come from re-running
+the same simulation) and rewrites the page; `--animate` re-renders everything. The page
+embeds every GIF and is about 15 MB.
+
 ## 5. Development history and calibration decisions
 
 The model was developed iteratively. Each change below was made in response to a
@@ -461,10 +544,30 @@ specific check, not to steer the results towards a desired answer.
 | 8. Rounded edges | Jolts rose instead of falling; mesh version did not converge | Feature dropped from MuJoCo's contact (section 3.13) |
 | 10. Custom profile contact | Needed to simulate potholes without hard edges | Own tyre–road contact against a road profile (section 3.14). A first flat-road test showed a false 5.8 g jolt: the profile ended before the run did, so the wheel dropped off its end; profile extended to 40 m past the pothole. Then validated (rest state, flat road, cross-check, convergence) before use |
 | 9. Vehicle confirmed | The user confirmed SZ22 is a Voiager 5 | 10 in front wheel and front spring confirmed; the suspension model is the more faithful one. Rear wheel size still assumed (10 in) |
+| 11. Road bumps | Bumps added (section 3.15). Roadblocks and fixes are listed in section 5.1 | Position-based phases and fall attribution for bumps; arc humps on the profile contact only; rear-size check added |
 
 The earliest stiff-contact runs happened to reproduce the Imperial study's pattern (no
 fall at 30 mm, fall at 60 mm). The model was **not** tuned towards that pattern; after
 the tyre correction the 60 × 600 mm case no longer falls at 20 km/h.
+
+### 5.1 Road bumps: struggles and roadblocks (2026-10-07)
+
+Recorded so the paper's methods and any reviewer questions can be answered honestly.
+
+| # | Roadblock | What happened | Resolution / status |
+|---|---|---|---|
+| 1 | Curved humps with MuJoCo's contact | MuJoCo's own collision only handles the sharp box reliably (rounded shapes failed before, section 3.13) | Round-top humps run on the profile contact only; sharp bumps on both. The arc case has no MuJoCo cross-check |
+| 2 | Pothole fall attribution doesn't transfer | "Rear-caused" meant "rear wheel dipped into the pothole", which a bump never causes | Bump rule: rear wheel had reached the bump's leading face before the fall (section 3.15) |
+| 3 | Phase split mislabelled the rear strike | The time-based split (front wheel half a wheelbase past the far edge) put the rear wheel's strike into the "front" phase for 600/1000 mm bumps | Position-based split for bumps; both bump studies rerun. Fall outcomes were unaffected, only per-phase columns |
+| 4 | "Stall" fall type never fired | Every run where a wheel stopped dead went on to pitch past 30°, so all falls were labelled "pitch-over" | Counts use the `stalled` flag instead; `fall_type` kept but documented as uninformative here |
+| 5 | Plot crash after the first full sweep | The bump results rename `depth_mm` to `height_mm`, and the shared figure function expected `depth_mm`; the sweep finished, then the figure step failed | Renamed for the figure call; sweep rerun (~5 min) |
+| 6 | Contact models disagree more on bumps | 91–95% agreement on fall outcomes vs 100% for potholes, in both directions | Reported as an uncertainty (section 4.9); comparisons between wheel sizes used, not absolute counts |
+| 7 | A pattern that does not fit the working hypothesis | With the front fork, the few bump falls (1–2 per configuration, 300 mm bump, 15 km/h) were all met after the **rear** wheel's strike; in a small follow-up check, larger rear wheels raised the falling height by 5–15 mm (10/14: none up to 100 mm), front size did not | Reported as found, as an exploratory pattern and open question, not as a finding (DOCUMENTATION.md 6.8). Not tuned away. Would need bump sensitivity runs and a wider sweep before any statement about rear size |
+| 8 | Jolt sizes can't be checked | Simulated bump jolts (3–15 g) are above the measured range, and the ride has no bump labels | Bump jolts not used as results; a labelled ride would be needed to check them |
+| 12 | No bump sensitivity analysis | The fork changes bump outcomes far more than pothole outcomes (10/10: 22 -> 1 falls), but fork, tyre and bracing parameters were not varied for bumps | Open; listed as an uncertainty |
+| 9 | Source for the hump profile | The 3.7 m round-top length was not in the first leaflet checked (TAL 7/96) | Found in TAL 2/96 ("a standard 3.7m long"); the 1999 Regulations (length >= 900 mm, 25–100 mm high, no vertical face > 6 mm) checked on legislation.gov.uk. Added to REFERENCES.md |
+| 10 | Tooling (no effect on results) | Shell heredocs on Windows mangled `\n` and `·` in code patches (syntax error, failed matches); a `multiprocessing` check run from stdin hung for 10 min because Windows worker processes must re-import the script from a file | Patches written as UTF-8 files; the check moved into `scooter_sim.py` as the rear-size check |
+| 11 | Rebuilding the animation page | Adding bump clips to the existing page would have re-rendered all pothole GIFs | `reuse` option: existing GIFs kept, captions recomputed from the same simulation |
 
 ---
 
@@ -527,6 +630,9 @@ python scripts/scooter_sim.py --suspension                 # main sweep with fro
 python scripts/scooter_sim.py --suspension --sensitivity   # incl. fork stiffness/damping settings
 python scripts/scooter_sim.py --suspension --ratio         # ratio study with front fork
 python scripts/scooter_sim.py --suspension --edges         # soft-edged potholes (profile contact, 1296 runs, 4 cores)
+python scripts/scooter_sim.py --bumps                      # road bumps, no fork (1095 runs, 4 cores) -> .../bumps/
+python scripts/scooter_sim.py --bumps --suspension         # road bumps with front fork -> .../suspension/bumps/
+python scripts/scooter_sim.py --bumps --animate            # add the bump clips to animations.html
 ```
 
 To change a scenario, edit the constants at the top of `scooter_sim.py` (`CONFIGS`,
@@ -548,6 +654,8 @@ open in an image viewer before rerunning, or saving it will fail.
 | `outputs/scooter_sim/consistency.csv`, `fig_consistency.png` | Consistency check |
 | `outputs/scooter_sim/suspension/...` | The same outputs (sweep, sensitivity, ratio study) with front suspension |
 | `outputs/scooter_sim/suspension/soft_edges/...` | Soft-edged pothole study (results, fall depths, fall counts, figure) |
+| `outputs/scooter_sim/bumps/...`, `outputs/scooter_sim/suspension/bumps/...` | Road bump study without / with the front fork (section 4.9) |
+| `outputs/scooter_sim/anim_bump_*.gif` | Bump clips, shown in `animations.html` |
 
 ---
 

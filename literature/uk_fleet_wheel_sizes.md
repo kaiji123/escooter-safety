@@ -75,6 +75,18 @@ or "60/70-6.5"). If the front is larger than the rear, the simulation's "10/10 =
 baseline is wrong and the configs need relabelling (CLAUDE.md, SIMULATION_METHODS.md,
 DOCUMENTATION.md 6.6). Combine this with the planned valve check (pneumatic vs honeycomb).
 
+## 6. Added 2026-10-07: the London vs outside-London gap (Part C argument)
+- TfL (2023): London rental vehicles have "high safety standards which go beyond the
+  national standards. This includes a speed limit of 12.5mph, larger wheels and lights
+  that are always on". Contracts to Dott, Lime and Voi; Voi expected to start late
+  September 2023, max 6,600 scooters per operator (VNV Global 2023).
+- Voiager 7 (12 in front) "will be deployed over the spring in select cities in Germany,
+  Italy and Norway" (Morley 2024). Voiager 8 "to be introduced in selected cities in
+  Finland, France, Germany, Norway, Spain and Sweden" (Electrive 2025). Neither list
+  includes the UK.
+- Which Voi model runs in London: **not found**. See DOCUMENTATION.md section 12.4.
+- The argument built on this is in DOCUMENTATION.md section 12.
+
 ## Bibliography (Harvard; all accessed 7 October 2026)
 
 Beryl (2020) 'Beryl e-scooters join the family', 21 September. Available at:
@@ -183,6 +195,22 @@ Available at: https://www.transportnottingham.com/dott-e-scooters-are-now-availa
 
 Travelwest (2026) 'Dott begins massive fleet refresh in the West of England', 27 March.
 Available at: https://travelwest.info/?p=32403
+
+Electrive (2025) 'Voi presents new electric scooter and two e-bikes', *electrive.com*,
+18 March. Available at:
+https://www.electrive.com/2025/03/18/voi-presents-new-electric-scooter-and-two-e-bikes/
+
+Morley, R. (2024) 'Voi's new e-bike offers automatic gear changes and there's a new
+e-scooter too', *ebiketips (road.cc)*, 10 April. Available at:
+https://ebiketips.road.cc/content/news/vois-new-e-bike-offers-automatic-gear-changes-and-theres-a-new-e-scooter-too-5267
+
+Transport for London (2023) 'TfL awards contracts to Dott, Lime and Voi to run the next
+phase of London's rental e-scooter trial' [press release], July. Available at:
+https://tfl.gov.uk/info-for/media/press-releases/2023/july/tfl-awards-contracts-to-dott-lime-and-voi-to-run-the-next-phase-of-london-s-rental-e-scooter-trial
+
+VNV Global AB (2023) 'VNV Global's portfolio company Voi wins e-scooter tender in London'
+[press release], 5 July. Available at:
+https://storage.mfn.se/5e105080-042c-419c-83f0-a36340ad0e0e/vnv-globals-portfolio-company-voi-wins-e-scooter-tender-in-london.pdf
 
 Treiß, F. (2025) 'Voi stellt neuen E-Tretroller und zwei E-Räder vor', *electrive.net*,
 18 March. Available at:

@@ -16,7 +16,7 @@ page links to it instead. Imagery dates vary; record the date shown in Street Vi
 The page contains exact ride coordinates: keep it local unless sharing is intended.
 
 Usage
-    python scripts/streetview_page.py --data-dir . --out outputs/streetview_check.html
+    python scripts/streetview_page.py --data-dir data/raw/2026-10-03_1830_rec01 --out outputs/streetview_check.html
 """
 
 import argparse
@@ -241,7 +241,7 @@ try {{
 
 def main():
     ap = argparse.ArgumentParser(description="Street View checklist for impact spots")
-    ap.add_argument("--data-dir", type=Path, default=Path("."))
+    ap.add_argument("--data-dir", type=Path, default=Path("data/raw/2026-10-03_1830_rec01"))
     ap.add_argument("--impacts", type=Path, default=Path("outputs/impacts_vs_fms.csv"),
                     help="output of fms_compare.py (impacts with road, hotspot, FixMyStreet match)")
     ap.add_argument("--out", type=Path, default=Path("outputs/streetview_check.html"))

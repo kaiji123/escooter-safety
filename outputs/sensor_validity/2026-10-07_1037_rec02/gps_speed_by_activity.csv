@@ -1,0 +1,4 @@
+label,t_start_local,t_end_local,seconds_used,fixes,reported_median_kmh,path_kmh,straight_line_kmh,hacc_median_m,median_cadence
+scooting,10:37:43,10:40:31,137.0,138,17.92,19.46,19.16,11.0,1.61
+scooting,10:44:57,10:45:54,26.0,27,12.12,15.4,15.32,9.1,1.52
+walking,10:46:46,10:51:21,244.0,245,3.01,5.53,4.57,10.7,2.04

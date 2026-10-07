@@ -1,5 +1,5 @@
 {
-  "recording": "iPhone 11 Pro Max, 2026-10-03_17-30-29",
+  "recording": "iPhone 11 Pro Max, 2026-10-03_17-30-29 UTC",
   "threshold_g": 1.0,
   "min_gap_s": 0.5,
   "min_speed_ms": 2.0,
@@ -14,5 +14,6 @@
   ],
   "roughness_window_s": 1.0,
   "n_gps_fixes_used": 822,
-  "n_impacts": 40
+  "n_impacts": 40,
+  "walking_bouts_on_map": []
 }
