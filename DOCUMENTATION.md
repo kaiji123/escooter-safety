@@ -196,21 +196,28 @@ before the ride and always shows the baseline.
 
 From web searches during the session (not a full literature review):
 
-- **Imperial College e-scooter fall study** (Posirisuk, Baker & Ghajari, *Accident
-  Analysis & Prevention*, 2022): 185 simulated falls, an e-scooter with 10-inch wheels,
-  three rider sizes, five speeds, 12 pothole sizes. 3 cm potholes caused no falls;
-  6 cm and 9 cm caused falls in 75% of cases. The scooter was modelled as two rigid
-  bodies, the front wheel and the rest, joined at the axle.
-- **E-scooter versus e-bike vibration** (Italy, 2023) and **e-scooter comfort
-  vibration** (*Machines*, 2022) already exist. Comparing a scooter with a bicycle is
+- **Imperial College e-scooter fall study** (Posirisuk, Baker and Ghajari, *Accident
+  Analysis & Prevention* 167, 106567, 2022; doi:10.1016/j.aap.2022.106567): 180
+  simulations, an e-scooter with 10-inch wheels, three rider sizes (5th percentile
+  female, 50th and 95th percentile male), five speeds, 12 pothole sizes. 3 cm potholes
+  caused no falls; 6 cm caused **41 falls out of 60 cases** (paper abstract). The
+  Imperial news release gives "75 per cent" for 6 cm and 9 cm together; cite the paper
+  for numbers. The scooter was modelled as two rigid bodies, the front wheel and the
+  rest, joined at the axle.
+- **E-scooter versus e-bike vibration** (Ventura et al., *Int. J. Transportation Science
+  and Technology* 16, 2024, online 2023) and **e-scooter comfort vibration**
+  (Cano-Moreno et al., *Machines* 10(8), 688, 2022) already exist. Comparing a scooter with a bicycle is
   therefore not new on its own.
 - **What looks new here:** sudden impacts rather than comfort vibration; the
   front-wheel-only question; linking real-world data to the Imperial results; hazards
   missing from FixMyStreet; and, in future, measured versus felt risk.
 
-`notes.md` holds the user's literature notes from another chat (including a 2026
-*Machines* paper on front/rear tyre stiffness, Swifty pothole tests and patents). These
-have **not been checked against the papers** and must be verified before citing.
+`notes.md` holds the user's literature notes from another chat. Checked 2026-10-07: the
+2026 *Machines* paper exists (Vaca Michilena and Cano-Moreno, *Machines* 14(1), 120;
+front/rear tyre stiffness and **comfort**, not stability; best case slightly higher front
+pressure). Its claim that larger wheels improve stability is not in the abstract and must
+be checked in the full text. Swifty pothole tests and the patents were **not found** and
+must be located before citing (see `REFERENCES.md`).
 Mazdak Ghajari's current title should be checked on his Imperial profile (the 2022
 news release says "Dr"). Swifty sells large-wheel scooters, so its tests are not
 neutral evidence.
@@ -579,27 +586,7 @@ touched while riding.
 
 ## Sources
 
-- Posirisuk, Baker & Ghajari (2022), Computational prediction of head-ground impact
-  kinematics in e-scooter falls, *Accident Analysis & Prevention*:
-  https://www.sciencedirect.com/science/article/pii/S0001457522000033
-- Imperial College news, E-scooter simulations highlight head injury risk:
-  https://www.imperial.ac.uk/news/233378/e-scooter-simulations-highlight-head-injury-risk
-- Comparing the vibrational behavior of e-kick scooters and e-bikes: Evidence from
-  Italy: https://www.sciencedirect.com/science/article/pii/S2046043023000862
-- Analysis of E-Scooter Vibrations Risks for Riding Comfort Based on Real Measurements:
-  https://doi.org/10.3390/machines10080688
-- Voiager 5 specifications (Levy): https://fleets.levyelectric.com/vehicles/voi-voiager-5
-- Voi unveils new scooter: the Voiager 7:
-  https://startupsmagazine.co.uk/article-voi-unveils-new-scooter-voiager-7
-- Voi press release, three new models in 2026:
-  https://storage.mfn.se/d6c2e21d-02ff-400d-8d7a-ca158fbdeb4c/voi-expands-its-vehicle-family-with-three-new-models-in-2026.pdf
-- Oxfordshire County Council, E-scooter trial in Oxford:
-  https://www.oxfordshire.gov.uk/residents/roads-and-transport/connecting-oxfordshire/active-travel/e-scooter-trial
-- FixMyStreet (mySociety): https://www.fixmystreet.com
-- OpenStreetMap contributors (ODbL), via the Overpass API
-- MuJoCo: https://mujoco.org
-- Alsalkini, A. (2023). The influence of E-scooters on urban mobility and transport
-  related emissions. Master's thesis, Chalmers University of Technology:
-  https://odr.chalmers.se/server/api/core/bitstreams/2d2b9c13-ea55-44e3-aa07-ac1eb8a65968/content
-- Move Electric, Voi launches new Voiager 5 rental e-scooter:
-  https://www.moveelectric.com/e-scooters/voi-launches-new-voiager-5-rental-e-scooter-upgraded-safety-tech
+The full bibliography (papers, software with versions, data and map services, vehicle and
+policy sources) is in **`REFERENCES.md`** (Harvard) and **`references.bib`** (BibTeX).
+Part C sources are in `literature/wheel_size_industry_cases.md` and
+`literature/uk_fleet_wheel_sizes.md`. Entries marked [to verify] there still need checking.

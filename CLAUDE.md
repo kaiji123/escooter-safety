@@ -62,6 +62,8 @@ sizes over a pothole-shaped step, phone recording. Not part of the current paper
 - [x] Geometry model and figures (`scripts/wheel_geometry.py`)
 - [x] Confirm Voi model: SZ22 is a Voiager 5
 - [ ] Voiager 5 tyre type: pneumatic or honeycomb? (look for a valve) (user)
+- [ ] Voiager 5 front AND rear tyre sidewall sizes (user, parked scooter). If the front is
+      larger, the "10/10 = Voiager 5" sim baseline must be relabelled.
 - [x] Dynamics model in MuJoCo (`scripts/scooter_sim.py`, done 2026-10-03)
 - [x] Front suspension option (`--suspension`): consistency partial pass (300 mm
       potholes 1.9-2.4 g = in measured range; 600 mm 4.2-5.7 g = ~2x high). This is
@@ -120,12 +122,15 @@ fieldwork measurements. Rides and desk work are fine.
   to prevent falls (unvalidated model); anything about injury risk or other riders.
 - The 1.0 g impact threshold, severity bands and 1.5x wobble ratio are analyst choices,
   not established criteria; always say so.
-- Plain e-scooter vs bicycle vibration comparisons already exist (e.g. Italy 2023,
+- Plain e-scooter vs bicycle vibration comparisons already exist (e.g. Ventura et al. 2024 "Italy",
   ISO 2631 comfort). The new angles are discrete impacts rather than comfort vibration,
   the front-wheel-only question, unreported hazards, and measured vs felt risk.
 
 ## Documentation
 - `DOCUMENTATION.md`: full record of the project and results.
+- `REFERENCES.md` + `references.bib`: master bibliography (papers, software with versions,
+  data/map services, vehicle and policy sources). Add an entry whenever a new library,
+  dataset or source is used; [to verify] items must be checked before citing.
 - `SIMULATION_METHODS.md`: methods for both wheel models. Keep it in sync with
   `scripts/scooter_sim.py` and `scripts/wheel_geometry.py` when they change.
 
@@ -133,9 +138,18 @@ fieldwork measurements. Rides and desk work are fine.
 `notes.md` holds the user's literature notes (Posirisuk, Baker and Ghajari, Accident
 Analysis & Prevention: 10-inch wheels, no falls at 3 cm, 75% falls at 6 cm; a 2026
 Machines paper on front/rear tyre stiffness; Swifty tests; patents). These came from
-another chat and are **not yet checked against the papers**. Verify before citing.
+another chat. Checked 2026-10-07 (see REFERENCES.md): Imperial paper = 180 sims, 41/60
+falls at 6 cm ("75%" is the news release, 6+9 cm); Machines 2026 = Vaca Michilena &
+Cano-Moreno, comfort not stability. Swifty tests and patents not found; verify before citing.
 Check Mazdak Ghajari's current title on his Imperial profile (the 2022 news release says
 "Dr"). Treat Swifty as commercial, not neutral, evidence.
+`literature/wheel_size_industry_cases.md`: industry cases of bigger wheels (Voi, Lime,
+Bird, mullet MTBs, 29er, plus tyres, penny-farthing, cars) with bibliography for Part C;
+items marked [unchecked] still need verifying.
+`literature/uk_fleet_wheel_sizes.md`: UK rules and fleet models (2026-10-07). No checked
+source shows a UK model with equal wheels; Beryl (OKAI ES400, 12/9-10), Lime Gen4 and TIER
+have larger fronts; TfL London requires front >= 11 in, rear >= 9 in; DfT sets no size.
+Voiager 5 front/rear split unknown.
 
 ## Study roads
 Marston Road, Headington Road (incl. Headington Hill), Old Road (Headington) and

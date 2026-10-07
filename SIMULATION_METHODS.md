@@ -22,6 +22,13 @@ Two models were built:
 | NumPy / pandas / SciPy | 2.3.4 / 2.3.3 / 1.17.1 |
 | Matplotlib / Pillow (figures, GIFs) | 3.11.2 / 12.3.0 |
 
+Cite in the paper: MuJoCo (Todorov, Erez and Tassa 2012, plus the version), NumPy (Harris
+et al. 2020), SciPy (Virtanen et al. 2020), pandas (McKinney 2010; Zenodo DOI for the
+version), Matplotlib (Hunter 2007; `FuncAnimation` drew the animations) and Pillow (GIF
+encoding via Matplotlib's `PillowWriter`). Full entries are in `REFERENCES.md` and
+`references.bib`. The rider sizes and fall thresholds compared against come from
+Posirisuk, Baker and Ghajari (2022), doi:10.1016/j.aap.2022.106567.
+
 - Both models are deterministic: a rerun on the same machine reproduces the results
   exactly. This was checked by rerunning the full 324-run sweep and the sensitivity
   analysis into a separate folder; all outcomes were identical.
