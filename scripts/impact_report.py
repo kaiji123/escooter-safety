@@ -18,7 +18,8 @@ the study roads in Headington, containing no ride data) and cached in
 data/osm_study_roads.json so reruns are reproducible and offline.
 
 Usage
-    python scripts/impact_report.py --data-dir data/raw/2026-10-03_1830_rec01 --out-dir outputs
+    python scripts/impact_report.py --data-dir data/raw/2026-10-03_1830_rec01
+    (outputs go to outputs/recordings/<recording folder>/ unless --out-dir is given)
 """
 
 import argparse
@@ -382,10 +383,12 @@ study, not established injury or comfort criteria.</li>
 def main():
     ap = argparse.ArgumentParser(description="Impact statistics report")
     ap.add_argument("--data-dir", type=Path, default=Path("data/raw/2026-10-03_1830_rec01"))
-    ap.add_argument("--out-dir", type=Path, default=Path("outputs"))
+    ap.add_argument("--out-dir", type=Path, default=None)
     ap.add_argument("--threshold-g", type=float, default=im.THRESHOLD_G)
     ap.add_argument("--roads-cache", type=Path, default=Path("data/osm_study_roads.json"))
     args = ap.parse_args()
+    if args.out_dir is None:          # default: outputs/recordings/<recording folder>
+        args.out_dir = Path("outputs/recordings") / args.data_dir.name
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     res = im.analyse(args.data_dir, args.threshold_g)

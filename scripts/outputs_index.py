@@ -1,9 +1,9 @@
 """
 Build outputs/index.html: one overview page linking every recording's outputs.
 
-Recording 1 (the Part A pilot ride) keeps its outputs in outputs/ (the docs and paper
-draft link to them); later recordings are in outputs/recordings/<recording>/. Run after
-impact_map.py, impact_report.py and sensor_validity.py.
+Every recording's outputs are in outputs/recordings/<recording>/; the combined view of
+all recordings is in outputs/combined/. Run after impact_map.py, impact_report.py,
+sensor_validity.py and combined_outputs.py.
 
 Usage
     python scripts/outputs_index.py
@@ -15,14 +15,16 @@ from pathlib import Path
 
 OUT = Path("outputs")
 RECORDINGS = [  # (folder name, outputs folder relative to outputs/, note)
-    ("2026-10-03_1830_rec01", ".", "Part A pilot ride (Voiager 5, vehicle SZ22). No walking."),
+    ("2026-10-03_1830_rec01", "recordings/2026-10-03_1830_rec01",
+     "Part A pilot ride (Voiager 5, vehicle SZ22). No walking. Also has the FixMyStreet comparison "
+     "and the Street View check."),
     ("2026-10-07_1037_rec02", "recordings/2026-10-07_1037_rec02",
-     "Ride, Voi rental ended 10:46, then walking (shown on the map as a dashed orange line) and "
+     "Ride on Voiager 5 UPAR, Voi rental ended 10:46, then walking (shown on the map as a dashed orange line) and "
      "the phone mostly still; impact statistics count riding only (speed gate &ge; 7 km/h). Impacts 25&ndash;37 form a regular series "
      "(every ~0.6&ndash;1.2 s at ~8 km/h over ~20 m): a periodic surface or pushing with a foot "
      "is possible; not checked."),
     ("2026-10-07_1338_rec03", "recordings/2026-10-07_1338_rec03",
-     "Ride. No walking. Strongest cluster (impacts 9&ndash;13, up to 6.28 g) lies within ~20 m of a "
+     "Ride on Voiager 5 BTLZ. No walking. Strongest cluster (impacts 9&ndash;13, up to 6.28 g) lies within ~20 m of a "
      "recording 2 hotspot (51.7508, &minus;1.2389): a candidate for the Street View check."),
 ]
 
@@ -66,14 +68,31 @@ Distance and time count riding speed only. Wobble = gyro ratio &ge; 1.5 after th
 <th>Median g</th><th>Max g</th><th>&ge; 1.5 g</th><th>Wobble</th><th>Outputs</th></tr>
 {rows}
 </table></div>
-<p class="note">Three rides by one rider on one phone; vehicle IDs for recordings 2 and 3 were
-not recorded. Rates are not comparable as road-surface measures without knowing the routes,
-speeds and vehicles; Part A results so far use recording 1 only.</p>
-<h2>Across recordings</h2>
+<p class="note">Three rides by one rider on one phone, all on Voi Voiager 5 scooters (confirmed by
+Voi customer support, personal communications, 3 October 2026 for ride 1 and 8 October 2026 for rides 2 and 3), each a different scooter
+(SZ22, UPAR, BTLZ). Rates are not comparable as road-surface measures without knowing the routes,
+speeds and vehicles. Part A uses all three recordings (decided 2026-10-08), reported per ride
+and pooled.</p>
+<h2>All recordings together</h2>
 <ul>
-<li><a href="sensor_validity/report.html">Sensor Logger validity: data quality and walking vs scooting</a></li>
-<li><a href="fms_comparison.html">FixMyStreet comparison</a> and <a href="streetview_check.html">Street View check</a> (recording 1)</li>
-<li><a href="scooter_sim/animations.html">Simulation animations</a> (Part B)</li>
+<li><a href="combined/combined_map.html">Combined map</a>: every recording as a switchable layer, walking,
+and spots hit on two or more rides</li>
+<li><a href="combined/spot_links.html">Spot links</a>: every impact spot, most important first, with
+Google Street View, Google Maps and Mapillary links (dataset: <code>combined/spot_links.csv</code>)</li>
+<li><a href="combined/combined_report.html">Combined report</a>: per-recording and pooled tables, rates by
+road, hotspots across rides (with caveats: the rides are not independent)</li>
+<li><a href="sensor_validity/report.html">Sensor Logger validity</a>: data quality and walking vs scooting</li>
+</ul>
+<h2>Recording 1 only</h2>
+<ul>
+<li><a href="recordings/2026-10-03_1830_rec01/fms_comparison.html">FixMyStreet comparison</a> and
+<a href="recordings/2026-10-03_1830_rec01/fms_map.html">map</a></li>
+<li><a href="recordings/2026-10-03_1830_rec01/streetview_check.html">Street View check</a></li>
+</ul>
+<h2>Models (Part B)</h2>
+<ul>
+<li><a href="scooter_sim/animations.html">Simulation animations</a> · results in <code>scooter_sim/</code> and
+<code>wheel_model/</code></li>
 </ul>
 <p class="note">Maps and reports contain exact ride coordinates. Keep them local unless
 sharing is decided, and trim the start and end of each route first.</p>

@@ -1,7 +1,7 @@
 """
 Street View checklist for the measured impact locations.
 
-Builds outputs/streetview_check.html: one card per spot (repeated-impact hotspots
+Builds outputs/recordings/<recording>/streetview_check.html: one card per spot (repeated-impact hotspots
 first, then single impacts by strength) with
   - a link that opens Google Maps' 360-degree Street View at the spot, already facing
     the direction of travel and tilted down towards the road surface,
@@ -16,7 +16,8 @@ page links to it instead. Imagery dates vary; record the date shown in Street Vi
 The page contains exact ride coordinates: keep it local unless sharing is intended.
 
 Usage
-    python scripts/streetview_page.py --data-dir data/raw/2026-10-03_1830_rec01 --out outputs/streetview_check.html
+    python scripts/streetview_page.py --data-dir data/raw/2026-10-03_1830_rec01
+    (reads and writes outputs/recordings/<recording folder>/ unless --impacts/--out are given)
 """
 
 import argparse
@@ -242,10 +243,13 @@ try {{
 def main():
     ap = argparse.ArgumentParser(description="Street View checklist for impact spots")
     ap.add_argument("--data-dir", type=Path, default=Path("data/raw/2026-10-03_1830_rec01"))
-    ap.add_argument("--impacts", type=Path, default=Path("outputs/impacts_vs_fms.csv"),
+    ap.add_argument("--impacts", type=Path, default=None,
                     help="output of fms_compare.py (impacts with road, hotspot, FixMyStreet match)")
-    ap.add_argument("--out", type=Path, default=Path("outputs/streetview_check.html"))
+    ap.add_argument("--out", type=Path, default=None)
     args = ap.parse_args()
+    rec_out = Path("outputs/recordings") / args.data_dir.name   # default folder for this recording
+    args.impacts = args.impacts or rec_out / "impacts_vs_fms.csv"
+    args.out = args.out or rec_out / "streetview_check.html"
 
     impacts = pd.read_csv(args.impacts)
     res = im.analyse(args.data_dir)

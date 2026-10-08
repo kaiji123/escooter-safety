@@ -518,47 +518,58 @@ def fall_threshold_table(df):
     return t
 
 
+def road_line(depth_mm, length_mm):
+    """Road outline (x, z) to draw: the profile for the profile contact, else the box."""
+    d, w = depth_mm / 1000, length_mm / 1000
+    x0, x1 = POTHOLE_X, POTHOLE_X + w
+    if CONTACT_MODEL == "profile":
+        return road_profile(x0, x1, d, dx=0.005)
+    off = d if OBSTACLE == "bump" else -d
+    return np.array([-2, x0, x0, x1, x1, x1 + 4]), np.array([0, 0, off, off, 0, 0])
+
+
+def draw_scene(ax, model, data, qpos, radii, road, view=(-1.6, 1.4), lw=1.0):
+    """Side view of scooter, rider and road for one recorded state, camera centred on
+    the front wheel. lw scales line widths (smaller panels in the key-frame figures)."""
+    Rf, Rr = radii
+    data.qpos[:] = qpos
+    mujoco.mj_kinematics(model, data)
+    ax.plot(*road, color="#8a8984", lw=2 * lw)
+    for name, R in (("front_wheel", Rf), ("rear_wheel", Rr)):
+        c = data.xpos[model.body(name).id]
+        ax.add_patch(plt.Circle((c[0], c[2]), R, fill=False, color="#2a78d6", lw=2 * lw))
+    fw, rw = data.xpos[model.body("front_wheel").id], data.xpos[model.body("rear_wheel").id]
+    hb = data.site_xpos[model.site("handlebar").id]
+    ax.plot([rw[0], fw[0]], [rw[2], fw[2]], color=INK, lw=3 * lw)
+    ax.plot([fw[0], hb[0]], [fw[2], hb[2]], color=INK, lw=2 * lw)
+    rb = model.body("rider").id
+    foot = data.xpos[rb]
+    head = foot + data.xmat[rb].reshape(3, 3) @ np.array([0, 0, RIDER_HEIGHT - 0.1])
+    ax.plot([foot[0], head[0]], [foot[2], head[2]], color="#eb6834", lw=6 * lw,
+            solid_capstyle="round")
+    ax.plot([head[0], hb[0]], [foot[2] + 0.75 * (head[2] - foot[2]), hb[2]],
+            color="#eb6834", lw=2 * lw)
+    cx = fw[0]
+    ax.set_xlim(cx + view[0], cx + view[1])
+    ax.set_ylim(-0.25, 2.0)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    return fw
+
+
 def animate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, path):
     """Side-view stick animation (GIF) of one run."""
     from matplotlib.animation import FuncAnimation, PillowWriter
     out, model, frames, (Rf, Rr) = simulate(d_front_in, d_rear_in, depth_mm, length_mm,
                                             speed_kmh, record=True)
     data = mujoco.MjData(model)
-    d, w = depth_mm / 1000, length_mm / 1000
     fig, ax = plt.subplots(figsize=(7, 3.4))
-    x0, x1 = POTHOLE_X, POTHOLE_X + w
-    if CONTACT_MODEL == "profile":   # draw the actual road profile, thinned for speed
-        prof_x, prof_z = road_profile(x0, x1, d, dx=0.005)
+    road = road_line(depth_mm, length_mm)
 
     def draw(i):
         qpos, t = frames[i]
-        data.qpos[:] = qpos
-        mujoco.mj_kinematics(model, data)
         ax.clear()
-        if CONTACT_MODEL == "profile":
-            ax.plot(prof_x, prof_z, color="#8a8984", lw=2)
-        else:
-            off = d if OBSTACLE == "bump" else -d
-            ax.plot([-2, x0, x0, x1, x1, x1 + 4], [0, 0, off, off, 0, 0], color="#8a8984", lw=2)
-        for name, R in (("front_wheel", Rf), ("rear_wheel", Rr)):
-            c = data.xpos[model.body(name).id]
-            ax.add_patch(plt.Circle((c[0], c[2]), R, fill=False, color="#2a78d6", lw=2))
-        fw, rw = data.xpos[model.body("front_wheel").id], data.xpos[model.body("rear_wheel").id]
-        hb = data.site_xpos[model.site("handlebar").id]
-        ax.plot([rw[0], fw[0]], [rw[2], fw[2]], color=INK, lw=3)
-        ax.plot([fw[0], hb[0]], [fw[2], hb[2]], color=INK, lw=2)
-        rb = model.body("rider").id
-        foot = data.xpos[rb]
-        head = foot + data.xmat[rb].reshape(3, 3) @ np.array([0, 0, RIDER_HEIGHT - 0.1])
-        ax.plot([foot[0], head[0]], [foot[2], head[2]], color="#eb6834", lw=6,
-                solid_capstyle="round")
-        ax.plot([head[0], hb[0]], [foot[2] + 0.75 * (head[2] - foot[2]), hb[2]],
-                color="#eb6834", lw=2)
-        cx = fw[0]
-        ax.set_xlim(cx - 1.6, cx + 1.4)
-        ax.set_ylim(-0.25, 2.0)
-        ax.set_aspect("equal")
-        ax.axis("off")
+        draw_scene(ax, model, data, qpos, (Rf, Rr), road)
         what = ("pothole" if OBSTACLE == "pothole" else "round-top hump" if BUMP_SHAPE == "arc"
                 else "bump")
         ax.set_title(f"{d_front_in}/{d_rear_in} in wheels · {depth_mm} mm × {length_mm} mm {what}\n"
@@ -606,9 +617,14 @@ def sensitivity(out_dir):
     return df
 
 
-# ---- Consistency check against the measured ride ----
-MEASURED_G = (1.0, 2.8)       # range of impact peaks measured on the ride (detection floor 1 g)
-MEASURED_MEDIAN_G = 1.19
+# ---- Consistency check against the measured rides ----
+# Impact peaks measured on the three rides (outputs/combined/impacts_all.csv, 2026-10-08):
+# 99 of 100 between 1.0 g (detection floor) and 2.97 g, median 1.27 g; one outlier at
+# 6.28 g (recording 3, impact 9). Ride 1 alone: 1.0-2.8 g, median 1.19 g. The pass
+# criterion (roughly 1-3 g) was fixed before running and is unchanged.
+MEASURED_G = (1.0, 2.97)      # range of 99 of 100 measured impact peaks
+MEASURED_MEDIAN_G = 1.27
+MEASURED_OUTLIER_G = 6.28
 COMMON_DEPTHS_MM = [20, 30, 40]   # "common" potholes for the check, fixed before running
 COMMON_LENGTHS_MM = [300, 600]
 
@@ -635,7 +651,8 @@ def consistency(out_dir):
     fig, ax = plt.subplots(figsize=(7.2, 3.6))
     ax.axhspan(*MEASURED_G, color="#eef4fc", zorder=0)
     ax.axhline(MEASURED_MEDIAN_G, color="#86b6ef", lw=1, ls=":")
-    ax.text(0.99, MEASURED_G[1] + 0.08, "Shaded: measured on the ride (1.0-2.8 g), dotted = median",
+    ax.text(0.99, MEASURED_G[1] + 0.08, "Shaded: 99 of 100 impacts measured on three rides "
+            f"({MEASURED_G[0]:.1f}-{MEASURED_G[1]:.2f} g; one at {MEASURED_OUTLIER_G:.2f} g), dotted = median",
             transform=ax.get_yaxis_transform(), fontsize=8.5, color=MUTED, va="bottom", ha="right")
     styles = {"no suspension": ("#b5b4ae", "o"), "with front suspension": ("#2a78d6", "s")}
     xt = [f"{d} mm\n{w} mm" for w in COMMON_LENGTHS_MM for d in COMMON_DEPTHS_MM]
@@ -794,6 +811,112 @@ def build_animations(out_dir, reuse=False):
         sections.append((heading, desc, clips, "bump"))
     SUSPENSION, CONTACT_MODEL, EDGE_WIDTH, OBSTACLE, BUMP_SHAPE = keep
     write_animation_page(out_dir / "animations.html", sections)
+
+
+# ---- Key-frame figures for print: the animations as rows of still frames ----
+# Times (s) relative to the moment the front wheel reaches the pothole's far edge
+# (front-wheel centre within half a radius of the edge), the same for every row.
+KEYFRAME_TIMES = (-0.25, 0.0, 0.15, 0.3, 0.5)
+# (file stem, depth_mm, length_mm, speed_kmh, suspension, edge_mm or None, [(front, rear, label)])
+KEYFRAME_SETS = [
+    ("keyframes_susp_80x600_15kmh", 80, 600, 15.0, True, None,
+     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (12, 12, "12/12 in")]),
+    ("keyframes_susp_edge50_80x600_15kmh", 80, 600, 15.0, True, 50,
+     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (14, 10, "14/10 in")]),
+]
+# Road bumps (exploratory appendix of the paper, decided 2026-10-08). Time 0 = front wheel
+# reaching the bump's leading face; later columns, because the rear strike comes later.
+# (file stem, height_mm, length_mm, speed_kmh, suspension, shape, contact, [(front, rear, label)])
+BUMP_KEYFRAME_TIMES = (-0.2, 0.0, 0.3, 0.6, 0.9)
+BUMP_KEYFRAME_SETS = [
+    ("keyframes_bump_box_90x600_20kmh", 90, 600, 20.0, False, "box", "mujoco",
+     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (14, 10, "14/10 in")]),
+    ("keyframes_bump_box_susp_90x300_15kmh", 90, 300, 15.0, True, "box", "mujoco",
+     [(10, 10, "10/10 in\n(Voiager 5)"), (14, 10, "14/10 in"), (10, 14, "10/14 in")]),
+]
+
+
+def keyframe_figure(stem, depth_mm, length_mm, speed_kmh, cases, out_dir, times=KEYFRAME_TIMES):
+    """One row per wheel configuration, one column per moment in `times`. Time 0: the front
+    wheel reaches the pothole's far edge, or, for a bump, the bump's leading face."""
+    bump = OBSTACLE == "bump"
+    x_edge = POTHOLE_X if bump else POTHOLE_X + length_mm / 1000
+    # print size: about the text width (7 in), fonts 8 pt
+    fig, axes = plt.subplots(len(cases), len(times), figsize=(7.0, 1.2 * len(cases) + 0.35),
+                             squeeze=False)
+    rows = []
+    for i, (f, r, label) in enumerate(cases):
+        out, model, frames, radii = simulate(f, r, depth_mm, length_mm, speed_kmh, record=True)
+        data = mujoco.MjData(model)
+        fb = model.body("front_wheel").id
+        fx = []
+        for qpos, _ in frames:
+            data.qpos[:] = qpos
+            mujoco.mj_kinematics(model, data)
+            fx.append(data.xpos[fb][0])
+        fx = np.array(fx)
+        ft = np.array([t for _, t in frames])
+        qp, qa = model.joint("pitch").qposadr[0], model.joint("ankle").qposadr[0]
+        crit = [(np.degrees(q[qp]) > FALL_PITCH_DEG) or (np.degrees(q[qa]) > FALL_LEAN_DEG) for q, _ in frames]
+        if bump:   # front tyre touches the leading face: centre within the step-contact reach
+            h, R = depth_mm / 1000, radii[0]
+            k0 = int(np.argmax(fx >= x_edge - np.sqrt(R ** 2 - (R - min(h, R)) ** 2)))
+        else:
+            k0 = int(np.argmax(fx >= x_edge - radii[0] / 2))
+        t0 = ft[k0]
+        road = road_line(depth_mm, length_mm)
+        for j, dt in enumerate(times):
+            ax = axes[i, j]
+            k = int(np.argmin(np.abs(ft - (t0 + dt))))
+            ended = (t0 + dt) > ft[-1] + 0.02          # simulation stopped (fallen) before this time
+            draw_scene(ax, model, data, frames[k][0], radii, road, view=(-1.3, 1.9), lw=0.4)
+            if ended:
+                ax.text(0.5, 0.95, "last frame", transform=ax.transAxes, ha="center",
+                        fontsize=6.5, color=MUTED)
+            if i == 0:
+                ax.set_title(("front wheel\nat bump" if bump else "front wheel\nat far edge") if dt == 0
+                             else f"{dt:+.2f} s".replace("-", "−"),
+                             fontsize=8, color=INK)
+        k_fall = int(np.argmax(crit)) if any(crit) else None
+        verdict = ("no fall" if not out["fall"] else
+                   f"falls (limit\nat {ft[k_fall] - t0:+.2f} s)".replace("-", "−")
+                   if k_fall is not None else "falls")
+        axes[i, 0].text(-0.02, 0.5, f"{label}\n{verdict}", transform=axes[i, 0].transAxes,
+                        ha="right", va="center", fontsize=8, color=INK)
+        rows.append({"front_in": f, "rear_in": r, "fall": out["fall"],
+                     "fall_criterion_time_s": round(float(ft[k_fall] - t0), 2) if k_fall is not None else None,
+                     "speed_loss_pct": out["speed_loss_pct"],
+                     "chassis_pitch_max_deg": out["chassis_pitch_max_deg"],
+                     "rider_lean_max_deg": out["rider_lean_max_deg"]})
+    fig.subplots_adjust(left=0.135, right=0.995, top=0.86, bottom=0.01, wspace=0.03, hspace=0.05)
+    fig.savefig(out_dir / f"{stem}.png", dpi=220)
+    plt.close(fig)
+    return pd.DataFrame(rows)
+
+
+def build_keyframes(out_dir):
+    global SUSPENSION, CONTACT_MODEL, EDGE_WIDTH, OBSTACLE
+    keep = (SUSPENSION, CONTACT_MODEL, EDGE_WIDTH, OBSTACLE)
+    kdir = out_dir / "keyframes"
+    kdir.mkdir(exist_ok=True)
+    summary = []
+    for stem, d, w, s, susp, edge, cases in KEYFRAME_SETS:
+        SUSPENSION, OBSTACLE = susp, "pothole"
+        CONTACT_MODEL = "mujoco" if edge is None else "profile"
+        EDGE_WIDTH = 0.0 if edge is None else edge / 1000
+        res = keyframe_figure(stem, d, w, s, cases, kdir)
+        summary.append(res.assign(figure=stem))
+        print(stem); print(res.to_string(index=False))
+    global BUMP_SHAPE
+    keep_shape = BUMP_SHAPE
+    for stem, h, w, s, susp, shape, contact, cases in BUMP_KEYFRAME_SETS:
+        SUSPENSION, OBSTACLE, BUMP_SHAPE, CONTACT_MODEL, EDGE_WIDTH = susp, "bump", shape, contact, 0.0
+        res = keyframe_figure(stem, h, w, s, cases, kdir, times=BUMP_KEYFRAME_TIMES)
+        summary.append(res.assign(figure=stem))
+        print(stem); print(res.to_string(index=False))
+    BUMP_SHAPE = keep_shape
+    SUSPENSION, CONTACT_MODEL, EDGE_WIDTH, OBSTACLE = keep
+    pd.concat(summary).to_csv(kdir / "keyframes_runs.csv", index=False)
 
 
 # ---- Front/rear wheel-ratio study: what if the front wheel is much bigger? ----
@@ -1135,6 +1258,8 @@ def main():
                     help="model the front spring fork; outputs go to <out-dir>/suspension")
     ap.add_argument("--consistency", action="store_true",
                     help="only run the consistency check against the measured ride")
+    ap.add_argument("--keyframes", action="store_true",
+                    help="key-frame figures (rows of still frames) for print -> <out-dir>/keyframes")
     ap.add_argument("--bumps", action="store_true",
                     help="road bump study: sharp bumps and round-top humps "
                          "(outputs in <out-dir>[/suspension]/bumps); with --animate, only "
@@ -1154,6 +1279,10 @@ def main():
         SUSPENSION = True
         args.out_dir = args.out_dir / "suspension"
     args.out_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.keyframes:
+        build_keyframes(base_dir)
+        return
 
     if args.bumps:
         bdir = args.out_dir / "bumps"

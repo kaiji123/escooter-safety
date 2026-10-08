@@ -1,0 +1,573 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>All Recordings Combined</title>
+<style>
+body{margin:0;background:#fafaf8;color:#222;font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1150px;margin:0 auto;padding:28px 16px 48px} h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:30px 0 6px} .sub{color:#6b6b6b} a{color:#1c5cab}
+.wrap{overflow-x:auto} table.t{border-collapse:collapse;font-size:13.5px}
+table.t th,table.t td{padding:5px 9px;border-bottom:1px solid #e3e2de;text-align:left;white-space:nowrap}
+ul{padding-left:20px}
+</style></head><body><main>
+<h1>All recordings combined</h1>
+<p class="sub">3 recordings · <a href="combined_map.html">combined map</a> · <a href="spot_links.html">spot links</a>
+(run spot_links.py) · <a href="../index.html">overview</a>.
+Impacts: |vertical acceleration| &ge; 1 g at &ge; 7 km/h
+(analyst choices, not established criteria). Distance counts riding speed only.</p>
+<h2>Read with care</h2>
+<ul>
+<li>The recordings are <b>not independent</b>: one rider, one phone, overlapping roads. A spot hit on
+several rides is several measurements of one spot. Pooled rates are descriptive, not a sample estimate.</li>
+<li>All three rides were on Voi Voiager 5 scooters (confirmed by Voi customer support, personal communications, 3 October 2026 for ride 1 and 8 October 2026 for rides 2 and 3),
+so pooling does not mix models. Individual scooters may still differ
+(tyre wear and pressure, fork condition): each ride was on a different scooter (SZ22, UPAR, BTLZ).</li>
+<li>Recording 2's impacts 25&ndash;37 form a regular series (~0.6&ndash;1.2 s apart at ~8 km/h); not checked.
+They make up most of the largest pooled hotspot, which recording 3 also hit (its impacts 1&ndash;5), so a
+rough surface there is plausible, but not confirmed.</li>
+<li>Distance comes from GPS-reported speed, which under-read walking speed in the validity check
+(<a href="../sensor_validity/report.html">report</a>).</li>
+<li>Hotspots here are clustered on the pooled impacts, so their numbers differ from the per-recording reports.</li>
+</ul>
+<h2>Per recording and pooled</h2><div class="wrap"><table class="dataframe t">
+  <thead>
+    <tr style="text-align: right;">
+      <th>recording</th>
+      <th>km_ridden</th>
+      <th>min_moving</th>
+      <th>impacts</th>
+      <th>per_km</th>
+      <th>median_g</th>
+      <th>max_g</th>
+      <th>ge_1_5g</th>
+      <th>wobble</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2026-10-03_1830_rec01</td>
+      <td>2.89</td>
+      <td>9.60</td>
+      <td>40</td>
+      <td>13.80</td>
+      <td>1.19</td>
+      <td>2.80</td>
+      <td>6</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <td>2026-10-07_1037_rec02</td>
+      <td>1.48</td>
+      <td>5.90</td>
+      <td>39</td>
+      <td>26.40</td>
+      <td>1.34</td>
+      <td>2.87</td>
+      <td>15</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <td>2026-10-07_1338_rec03</td>
+      <td>1.71</td>
+      <td>6.30</td>
+      <td>21</td>
+      <td>12.30</td>
+      <td>1.67</td>
+      <td>6.28</td>
+      <td>11</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>pooled (all)</td>
+      <td>6.08</td>
+      <td>21.80</td>
+      <td>100</td>
+      <td>16.40</td>
+      <td>1.27</td>
+      <td>6.28</td>
+      <td>32</td>
+      <td>32</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2>FixMyStreet: impacts near a recent report</h2><p class="sub">Recent = road-surface report made in the 365 days before that ride, within 25 m. Each recording is compared with reports from its own route's area; the route baseline (share of all route points near a report) is on each recording's comparison page. No FixMyStreet report does not mean unreported: other channels exist.</p><div class="wrap"><table class="t"><tr><th>Recording</th><th>Impacts</th><th>Share</th><th></th></tr><tr><td>2026-10-03_1830_rec01</td><td>2 of 40</td><td>5%</td><td><a href="../recordings/2026-10-03_1830_rec01/fms_comparison.html">comparison and route baseline</a></td></tr><tr><td>2026-10-07_1037_rec02</td><td>12 of 39</td><td>31%</td><td><a href="../recordings/2026-10-07_1037_rec02/fms_comparison.html">comparison and route baseline</a></td></tr><tr><td>2026-10-07_1338_rec03</td><td>9 of 21</td><td>43%</td><td><a href="../recordings/2026-10-07_1338_rec03/fms_comparison.html">comparison and route baseline</a></td></tr></table></div>
+<h2>Impacts per km by road</h2>
+<p class="sub">Rates are left blank (&ndash;) where less than 0.2 km was ridden on that road
+(an analyst choice): a few impacts over a few metres give meaningless rates.</p>
+<div class="wrap"><table class="dataframe t">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>2026-10-03_1830_rec01 km</th>
+      <th>2026-10-03_1830_rec01 per km</th>
+      <th>2026-10-07_1037_rec02 km</th>
+      <th>2026-10-07_1037_rec02 per km</th>
+      <th>2026-10-07_1338_rec03 km</th>
+      <th>2026-10-07_1338_rec03 per km</th>
+      <th>pooled km</th>
+      <th>pooled impacts</th>
+      <th>pooled per km</th>
+    </tr>
+    <tr>
+      <th>road</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Marston Road</th>
+      <td>0.95</td>
+      <td>11.60</td>
+      <td>0.82</td>
+      <td>15.80</td>
+      <td>0.75</td>
+      <td>9.30</td>
+      <td>2.52</td>
+      <td>31</td>
+      <td>12.30</td>
+    </tr>
+    <tr>
+      <th>Headington Road</th>
+      <td>0.00</td>
+      <td>–</td>
+      <td>0.02</td>
+      <td>–</td>
+      <td>0.00</td>
+      <td>–</td>
+      <td>0.02</td>
+      <td>1</td>
+      <td>–</td>
+    </tr>
+    <tr>
+      <th>Old Road</th>
+      <td>0.24</td>
+      <td>8.20</td>
+      <td>0.00</td>
+      <td>–</td>
+      <td>0.00</td>
+      <td>–</td>
+      <td>0.24</td>
+      <td>2</td>
+      <td>8.30</td>
+    </tr>
+    <tr>
+      <th>Morrell Avenue</th>
+      <td>0.98</td>
+      <td>12.20</td>
+      <td>0.04</td>
+      <td>–</td>
+      <td>0.03</td>
+      <td>–</td>
+      <td>1.05</td>
+      <td>15</td>
+      <td>14.30</td>
+    </tr>
+    <tr>
+      <th>Other roads</th>
+      <td>0.72</td>
+      <td>21.00</td>
+      <td>0.60</td>
+      <td>36.70</td>
+      <td>0.93</td>
+      <td>15.10</td>
+      <td>2.25</td>
+      <td>51</td>
+      <td>22.70</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2>Hotspots hit on two or more recordings (10)</h2>
+<div class="wrap"><table class="dataframe t">
+  <thead>
+    <tr style="text-align: right;">
+      <th>hotspot</th>
+      <th>impacts</th>
+      <th>recordings_hitting</th>
+      <th>recordings</th>
+      <th>max_g</th>
+      <th>median_g</th>
+      <th>road</th>
+      <th>lat</th>
+      <th>lon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>19</td>
+      <td>6</td>
+      <td>3</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>2.24</td>
+      <td>1.69</td>
+      <td>Marston Road</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td>6</td>
+      <td>3</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>1.47</td>
+      <td>1.15</td>
+      <td>Marston Road</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td>19</td>
+      <td>2</td>
+      <td>2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>2.25</td>
+      <td>1.75</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>10</td>
+      <td>2</td>
+      <td>2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>6.28</td>
+      <td>1.56</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>9</td>
+      <td>2</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1037_rec02</td>
+      <td>1.79</td>
+      <td>1.23</td>
+      <td>Marston Road</td>
+      <td>51.76</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>29</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>1.85</td>
+      <td>1.15</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>1.17</td>
+      <td>1.08</td>
+      <td>Marston Road</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1338_rec03</td>
+      <td>2.80</td>
+      <td>1.96</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1037_rec02</td>
+      <td>2.03</td>
+      <td>1.65</td>
+      <td>Marston Road</td>
+      <td>51.76</td>
+      <td>-1.24</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1338_rec03</td>
+      <td>1.34</td>
+      <td>1.27</td>
+      <td>Marston Road</td>
+      <td>51.76</td>
+      <td>-1.24</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2>All hotspots (2+ impacts within 30 m)</h2>
+<div class="wrap"><table class="dataframe t">
+  <thead>
+    <tr style="text-align: right;">
+      <th>hotspot</th>
+      <th>impacts</th>
+      <th>recordings_hitting</th>
+      <th>recordings</th>
+      <th>max_g</th>
+      <th>median_g</th>
+      <th>road</th>
+      <th>lat</th>
+      <th>lon</th>
+      <th>events</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>19</td>
+      <td>6</td>
+      <td>3</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>2.24</td>
+      <td>1.69</td>
+      <td>Marston Road</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec01#31; rec02#8; rec03#17; rec03#18; rec03#19; rec03#20</td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td>6</td>
+      <td>3</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>1.47</td>
+      <td>1.15</td>
+      <td>Marston Road</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec01#30; rec02#9; rec02#10; rec02#11; rec02#12; rec03#16</td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td>19</td>
+      <td>2</td>
+      <td>2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>2.25</td>
+      <td>1.75</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec02#25; rec02#26; rec02#27; rec02#28; rec02#29; rec02#30; rec02#31; rec02#32; rec02#33; rec02#34; rec02#35; rec02#36; rec02#37; rec02#38; rec03#1; rec03#2; rec03#3; rec03#4; rec03#5</td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>10</td>
+      <td>2</td>
+      <td>2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>6.28</td>
+      <td>1.56</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec02#18; rec02#19; rec02#20; rec02#21; rec02#22; rec03#9; rec03#10; rec03#11; rec03#12; rec03#13</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>9</td>
+      <td>2</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1037_rec02</td>
+      <td>1.79</td>
+      <td>1.23</td>
+      <td>Marston Road</td>
+      <td>51.76</td>
+      <td>-1.24</td>
+      <td>rec01#33; rec01#34; rec01#35; rec01#36; rec01#37; rec02#4; rec02#5; rec02#6; rec02#7</td>
+    </tr>
+    <tr>
+      <td>29</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>1.85</td>
+      <td>1.15</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec02#23; rec02#24; rec03#7; rec03#8</td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2026-10-07_1037_rec02, 2026-10-07_1338_rec03</td>
+      <td>1.17</td>
+      <td>1.08</td>
+      <td>Marston Road</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec02#13; rec02#14; rec03#15</td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1338_rec03</td>
+      <td>2.80</td>
+      <td>1.96</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec01#23; rec03#14</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1037_rec02</td>
+      <td>2.03</td>
+      <td>1.65</td>
+      <td>Marston Road</td>
+      <td>51.76</td>
+      <td>-1.24</td>
+      <td>rec01#39; rec02#1</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2026-10-03_1830_rec01, 2026-10-07_1338_rec03</td>
+      <td>1.34</td>
+      <td>1.27</td>
+      <td>Marston Road</td>
+      <td>51.76</td>
+      <td>-1.24</td>
+      <td>rec01#38; rec03#21</td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2026-10-07_1037_rec02</td>
+      <td>2.87</td>
+      <td>1.61</td>
+      <td>Morrell Avenue</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec02#15; rec02#16; rec02#17</td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>2.68</td>
+      <td>1.34</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec01#24; rec01#28; rec01#29</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>1.48</td>
+      <td>1.27</td>
+      <td>Morrell Avenue</td>
+      <td>51.75</td>
+      <td>-1.23</td>
+      <td>rec01#13; rec01#14; rec01#15</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>1.17</td>
+      <td>1.13</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.22</td>
+      <td>rec01#6; rec01#7; rec01#8</td>
+    </tr>
+    <tr>
+      <td>24</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>1.37</td>
+      <td>1.24</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.24</td>
+      <td>rec01#25; rec01#26</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>1.36</td>
+      <td>1.19</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.22</td>
+      <td>rec01#1; rec01#2</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>1.31</td>
+      <td>1.28</td>
+      <td>Morrell Avenue</td>
+      <td>51.75</td>
+      <td>-1.23</td>
+      <td>rec01#16; rec01#17</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>1.24</td>
+      <td>1.19</td>
+      <td>Other roads</td>
+      <td>51.75</td>
+      <td>-1.22</td>
+      <td>rec01#9; rec01#10</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>1.18</td>
+      <td>1.09</td>
+      <td>Morrell Avenue</td>
+      <td>51.75</td>
+      <td>-1.23</td>
+      <td>rec01#18; rec01#19</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2026-10-03_1830_rec01</td>
+      <td>1.13</td>
+      <td>1.08</td>
+      <td>Old Road</td>
+      <td>51.75</td>
+      <td>-1.22</td>
+      <td>rec01#3; rec01#4</td>
+    </tr>
+  </tbody>
+</table></div>
+</main></body></html>

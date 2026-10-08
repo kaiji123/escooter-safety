@@ -17,27 +17,44 @@ Distance and time count riding speed only. Wobble = gyro ratio &ge; 1.5 after th
 <div class="wrap"><table>
 <tr><th>Recording</th><th>km ridden</th><th>min moving</th><th>Impacts</th><th>per km</th>
 <th>Median g</th><th>Max g</th><th>&ge; 1.5 g</th><th>Wobble</th><th>Outputs</th></tr>
-<tr><td><b>2026-10-03_1830_rec01</b><br><span class="note">Part A pilot ride (Voiager 5, vehicle SZ22). No walking.</span></td>
+<tr><td><b>2026-10-03_1830_rec01</b><br><span class="note">Part A pilot ride (Voiager 5, vehicle SZ22). No walking. Also has the FixMyStreet comparison and the Street View check.</span></td>
 <td>2.89</td><td>9.6</td><td>40</td>
 <td>13.8</td><td>1.19</td><td>2.80</td>
-<td>6</td><td>13</td><td class="links"><a href="./impact_map.html">map</a> · <a href="./impact_report.html">report</a> · <a href="./impact_trace.png">trace</a> · <a href="sensor_validity/2026-10-03_1830_rec01/fig_timeline.png">activity timeline</a></td></tr>
-<tr><td><b>2026-10-07_1037_rec02</b><br><span class="note">Ride, Voi rental ended 10:46, then walking (shown on the map as a dashed orange line) and the phone mostly still; impact statistics count riding only (speed gate &ge; 7 km/h). Impacts 25&ndash;37 form a regular series (every ~0.6&ndash;1.2 s at ~8 km/h over ~20 m): a periodic surface or pushing with a foot is possible; not checked.</span></td>
+<td>6</td><td>13</td><td class="links"><a href="recordings/2026-10-03_1830_rec01/impact_map.html">map</a> · <a href="recordings/2026-10-03_1830_rec01/impact_report.html">report</a> · <a href="recordings/2026-10-03_1830_rec01/impact_trace.png">trace</a> · <a href="sensor_validity/2026-10-03_1830_rec01/fig_timeline.png">activity timeline</a></td></tr>
+<tr><td><b>2026-10-07_1037_rec02</b><br><span class="note">Ride on Voiager 5 UPAR, Voi rental ended 10:46, then walking (shown on the map as a dashed orange line) and the phone mostly still; impact statistics count riding only (speed gate &ge; 7 km/h). Impacts 25&ndash;37 form a regular series (every ~0.6&ndash;1.2 s at ~8 km/h over ~20 m): a periodic surface or pushing with a foot is possible; not checked.</span></td>
 <td>1.48</td><td>5.9</td><td>39</td>
 <td>26.4</td><td>1.34</td><td>2.87</td>
 <td>15</td><td>11</td><td class="links"><a href="recordings/2026-10-07_1037_rec02/impact_map.html">map</a> · <a href="recordings/2026-10-07_1037_rec02/impact_report.html">report</a> · <a href="recordings/2026-10-07_1037_rec02/impact_trace.png">trace</a> · <a href="sensor_validity/2026-10-07_1037_rec02/fig_timeline.png">activity timeline</a></td></tr>
-<tr><td><b>2026-10-07_1338_rec03</b><br><span class="note">Ride. No walking. Strongest cluster (impacts 9&ndash;13, up to 6.28 g) lies within ~20 m of a recording 2 hotspot (51.7508, &minus;1.2389): a candidate for the Street View check.</span></td>
+<tr><td><b>2026-10-07_1338_rec03</b><br><span class="note">Ride on Voiager 5 BTLZ. No walking. Strongest cluster (impacts 9&ndash;13, up to 6.28 g) lies within ~20 m of a recording 2 hotspot (51.7508, &minus;1.2389): a candidate for the Street View check.</span></td>
 <td>1.71</td><td>6.3</td><td>21</td>
 <td>12.3</td><td>1.67</td><td>6.28</td>
 <td>11</td><td>8</td><td class="links"><a href="recordings/2026-10-07_1338_rec03/impact_map.html">map</a> · <a href="recordings/2026-10-07_1338_rec03/impact_report.html">report</a> · <a href="recordings/2026-10-07_1338_rec03/impact_trace.png">trace</a> · <a href="sensor_validity/2026-10-07_1338_rec03/fig_timeline.png">activity timeline</a></td></tr>
 </table></div>
-<p class="note">Three rides by one rider on one phone; vehicle IDs for recordings 2 and 3 were
-not recorded. Rates are not comparable as road-surface measures without knowing the routes,
-speeds and vehicles; Part A results so far use recording 1 only.</p>
-<h2>Across recordings</h2>
+<p class="note">Three rides by one rider on one phone, all on Voi Voiager 5 scooters (confirmed by
+Voi customer support, personal communications, 3 October 2026 for ride 1 and 8 October 2026 for rides 2 and 3), each a different scooter
+(SZ22, UPAR, BTLZ). Rates are not comparable as road-surface measures without knowing the routes,
+speeds and vehicles. Part A uses all three recordings (decided 2026-10-08), reported per ride
+and pooled.</p>
+<h2>All recordings together</h2>
 <ul>
-<li><a href="sensor_validity/report.html">Sensor Logger validity: data quality and walking vs scooting</a></li>
-<li><a href="fms_comparison.html">FixMyStreet comparison</a> and <a href="streetview_check.html">Street View check</a> (recording 1)</li>
-<li><a href="scooter_sim/animations.html">Simulation animations</a> (Part B)</li>
+<li><a href="combined/combined_map.html">Combined map</a>: every recording as a switchable layer, walking,
+and spots hit on two or more rides</li>
+<li><a href="combined/spot_links.html">Spot links</a>: every impact spot, most important first, with
+Google Street View, Google Maps and Mapillary links (dataset: <code>combined/spot_links.csv</code>)</li>
+<li><a href="combined/combined_report.html">Combined report</a>: per-recording and pooled tables, rates by
+road, hotspots across rides (with caveats: the rides are not independent)</li>
+<li><a href="sensor_validity/report.html">Sensor Logger validity</a>: data quality and walking vs scooting</li>
+</ul>
+<h2>Recording 1 only</h2>
+<ul>
+<li><a href="recordings/2026-10-03_1830_rec01/fms_comparison.html">FixMyStreet comparison</a> and
+<a href="recordings/2026-10-03_1830_rec01/fms_map.html">map</a></li>
+<li><a href="recordings/2026-10-03_1830_rec01/streetview_check.html">Street View check</a></li>
+</ul>
+<h2>Models (Part B)</h2>
+<ul>
+<li><a href="scooter_sim/animations.html">Simulation animations</a> · results in <code>scooter_sim/</code> and
+<code>wheel_model/</code></li>
 </ul>
 <p class="note">Maps and reports contain exact ride coordinates. Keep them local unless
 sharing is decided, and trim the start and end of each route first.</p>

@@ -49,10 +49,15 @@ data quality and walking detection: section 2.4 and `SENSOR_VALIDITY.md`):
 | `2026-10-07_1037_rec02` | 2026-10-07 10:37:06 | 35.3 min | Ride, then walking from ~10:46:47, then phone mostly still |
 | `2026-10-07_1338_rec03` | 2026-10-07 13:38:34 | 11.4 min | Ride |
 
-Part A results (sections 3-4) use recording 1 only. Recordings 2 and 3 have been run
-through the same impact pipeline (outputs in `outputs/recordings/<recording>/`, overview
-in `outputs/index.html`) but are not yet part of the Part A results; their vehicle IDs were
-not recorded. First look, riding only (speed gate >= 7 km/h):
+**Decision (2026-10-08): Part A uses all three recordings.** Sections 3-4 were written
+for recording 1 and still describe it in detail; results for all three are summarised
+below and in `outputs/combined/`. All three went through the same impact pipeline and
+FixMyStreet comparison (outputs in `outputs/recordings/<recording>/`, overview in
+`outputs/index.html`). All three rides were on **Voiager 5** scooters, confirmed by Voi
+customer support (personal communications, 3 October 2026 for ride 1 and 8 October 2026 for rides 2 and 3; model only, not wheel sizes);
+vehicle IDs from the Voi app: SZ22 (ride 1), UPAR (ride 2), BTLZ (ride 3), so each ride
+was on a different scooter. Riding only
+(speed gate >= 7 km/h):
 
 | Recording | km ridden | Impacts | per km | Median g | Max g |
 |---|---|---|---|---|---|
@@ -67,12 +72,35 @@ Not checked yet:
   recording 2 hotspot (51.7508, -1.2389): a candidate for the Street View check.
 - The walk in recording 2 produced 11 peaks >= 1 g; the speed gate excluded all of them.
 
+**Combined view** (`outputs/combined/`, exploratory; the rides are not independent: one
+rider, one phone, overlapping roads; all three on Voiager 5, confirmed by Voi support):
+
+- Pooled: 100 impacts over 6.08 km ridden (16.4 per km; per recording 12.3-26.4).
+- 10 spots (single-linkage clusters, 30 m) were hit on two or more rides; two on Marston
+  Road on all three: 51.75427, -1.23588 (6 impacts, max 2.24 g) and 51.75268, -1.23665
+  (6 impacts, max 1.47 g). Repeated hits on separate rides are stronger evidence of a
+  surface defect than single hits, but they come from one rider and are unchecked.
+- The largest pooled hotspot (19 impacts, 51.75024, -1.24253) includes recording 2's
+  regular series and recording 3's impacts 1-5, so a rough surface there is plausible
+  (not confirmed).
+- Per-km rates are left blank under 0.2 km ridden on a road (analyst choice).
+- `outputs/combined/spot_links.csv` (+ `.html`, `scripts/spot_links.py`): all 33 spots ranked
+  (tier 1 = hit on 2+ rides: 10; tier 2 = 2+ impacts on one ride: 10; tier 3 = single: 13)
+  with Google Street View (facing the direction of travel), Google Maps and Mapillary links,
+  built with Google's documented Maps URLs (no API key, nothing downloaded). Columns
+  imagery_date, what_visible and notes are for the check by eye; rerunning keeps them.
+  Method, recording rules (fixed categories, 15 m search area, set before checking) and
+  limitations: `SPOT_CHECK.md`.
+- Open imagery checked 2026-10-08: Panoramax has no photos in the study area; KartaView has
+  5 within 300 m of P1, from 2017 and 2021 (too old). Mapillary coverage not yet checked
+  (needs a free access token). Google Street View images can predate or postdate the ride.
+
 **Recording 1 (pilot ride)**
 
 | Item | Value |
 |---|---|
 | Date | 3 October 2026, 18:30:29 BST (Europe/London); Sensor Logger's metadata shows 17:30:29 because it is UTC |
-| Vehicle | Voi **Voiager 5**, vehicle ID SZ22 (confirmed by the rider): 10 in pneumatic front wheel, front spring |
+| Vehicle | Voi **Voiager 5**, vehicle ID SZ22 (model confirmed by Voi customer support, personal communication, 3 October 2026): reported 10 in front wheel, front spring |
 | Phone | iPhone 11 Pro Max, handlebar mount, Sensor Logger app 1.67.1 |
 | Duration | 13.7 min recorded, 9.6 min moving |
 | Distance | 2.89 km, mean moving speed 18.1 km/h |
@@ -108,7 +136,7 @@ include Headington Road.**
 | Source | Use | Stored as |
 |---|---|---|
 | OpenStreetMap (via Overpass API) | Road centrelines for the study roads | `data/osm_study_roads.json` |
-| FixMyStreet (mySociety) | Public road-surface reports in the ride area | `data/fixmystreet/reports.csv` |
+| FixMyStreet (mySociety) | Public road-surface reports in each ride's area | `data/fixmystreet/reports_<recording>.csv` (+ `.bbox.json` with the downloaded area) |
 | Voi specifications and press | Wheel sizes | Section 6.1 |
 
 Both downloads are cached so the analysis is reproducible offline. The FixMyStreet
@@ -252,6 +280,28 @@ before the ride and always shows the baseline.
   October. Either the repair failed, the pothole re-formed, or a separate defect is
   there. This should be checked on Street View.
 
+**All three rides (2026-10-08).** Each recording is compared with reports from its own
+route's area, downloaded separately: ride 1 on 2026-10-03, rides 2 and 3 on 2026-10-08,
+cached as `data/fixmystreet/reports_<recording>.csv`. Each cache has a `.bbox.json` with
+its area; ride 1's area was reconstructed from its route with the script's own fetch
+rule and matches the reports' extent exactly. The script now refuses a cache that does
+not cover the route, because ride 1's cache stopped at longitude −1.2401 while rides 2
+and 3 reach −1.250: their western parts would otherwise have had no reports and looked
+"unreported". Ride 1's comparison was re-run and is byte-identical.
+
+| Ride | Impacts within 25 m of a recent report | Route baseline (25 m) |
+|---|---|---|
+| 1 | see 4.3 above | see 4.3 above |
+| 2 | 12 of 39 (30.8%) | 32.7% |
+| 3 | 9 of 21 (42.9%) | 34.3% |
+
+Spot level (`outputs/combined/spot_links.csv`): 6 of the 10 spots hit on two or more
+rides had no recent road-surface report within 25 m, including both Marston Road spots
+hit on all three rides (nearest 60 m and 44 m). The two largest clusters had one within
+5–8 m. Spot P4 (the 6.28 g impact, hit on two rides) had a report marked "Fixed" within
+8 m; the report and repair dates should be checked before reading anything into this.
+No FixMyStreet report does not mean unreported: other channels exist.
+
 ---
 
 ## 5. Literature and context
@@ -313,7 +363,8 @@ development history, verification and how the animations were made) are in
   sidewall and have no valve; pneumatic tyres have a valve stem on the rim. With stiffer
   (solid-like) tyres the simulated jolts rise (300 mm potholes 2.6–4.5 g instead of
   1.9–2.4 g) but fall depths and the configuration ranking are unchanged.
-- The ridden vehicle, SZ22, is a **Voiager 5** (confirmed by the rider). Its 10-inch
+- The ridden vehicles are **Voiager 5** scooters (SZ22, UPAR, BTLZ), confirmed by Voi
+  customer support (personal communications, 3 October 2026 for ride 1 and 8 October 2026 for rides 2 and 3; model only). The reported 10-inch
   front wheel and front spring match the modelling baseline. The rear wheel size is not
   published and is assumed to be 10 inches.
 - Voi doesn't publish CAD models; fan-made models would be for illustration only.
@@ -552,6 +603,10 @@ with suspension remains the model for jolt sizes (section 6.6).
 
 ### 6.8 Road bumps (exploratory)
 
+**Decision (2026-10-08): not in the paper.** Kept as an exploratory record and shown with
+the simulation outputs (bump clips in `outputs/scooter_sim/animations.html`; results in
+`outputs/scooter_sim/[suspension/]bumps/`).
+
 **Status: exploratory model results, not findings about real scooters.** No bump was
 measured or labelled on the ride, and no part of the bump model has been validated
 against physical data. Everything below describes what this simulation produced under
@@ -653,16 +708,22 @@ illustrations, not evidence).
 
 ## 7. Outputs
 
+Layout (reorganised 2026-10-07; details in `outputs/README.md`): start with
+`outputs/index.html`. Each recording's outputs are in `outputs/recordings/<recording>/`;
+recording 1's moved there from the root of `outputs/` (git mv; regenerated files identical
+apart from the timestamp label now marked UTC).
+
 | File | Contents |
 |---|---|
-| `outputs/impact_map.html` | Map of the route (coloured by roughness) and impacts |
-| `outputs/impact_report.html` | Statistics report |
-| `outputs/impact_trace.png` | Vertical acceleration and speed over the ride, with detections |
-| `outputs/fig_severity_hist.png`, `fig_impacts_per_km_by_road.png`, `fig_speed_vs_severity.png` | Paper figures for Part A |
-| `outputs/impacts.csv`, `impacts_with_roads.csv`, `impacts_by_road.csv`, `impact_stats.json`, `impacts_params.json` | Data behind Part A |
-| `outputs/fms_comparison.html`, `outputs/fms_map.html` | FixMyStreet comparison page and map |
-| `outputs/streetview_check.html` (+ `.csv`) | 25 spots with 360° Street View links facing the direction of travel, FixMyStreet status and a record form (Export CSV) |
-| `outputs/impacts_vs_fms.csv`, `fms_reports_on_route.csv` | Data behind the comparison |
+| `outputs/index.html` | Overview of all recordings with links to every map, report and timeline |
+| `outputs/recordings/<recording>/impact_map.html` | Map of the route (coloured by roughness), impacts and detected walking |
+| `outputs/recordings/<recording>/impact_report.html` | Statistics report |
+| `outputs/recordings/<recording>/impact_trace.png` | Vertical acceleration and speed over the ride, with detections |
+| `outputs/recordings/<recording>/fig_*.png` | Report figures; recording 1's are the Part A paper figures |
+| `outputs/recordings/<recording>/impacts*.csv`, `impact_stats.json`, `impacts_params.json` | Data behind the reports |
+| `outputs/recordings/2026-10-03_1830_rec01/fms_comparison.html`, `fms_map.html`, `impacts_vs_fms.csv`, `fms_reports_on_route.csv` | FixMyStreet comparison (recording 1) |
+| `outputs/recordings/2026-10-03_1830_rec01/streetview_check.html` (+ `.csv`) | 25 spots with 360° Street View links facing the direction of travel, FixMyStreet status and a record form (Export CSV) |
+| `outputs/combined/` | All recordings together: `combined_map.html` (layer per recording, walking, spots hit on 2+ rides), `combined_report.html`, `impacts_all.csv`, `summary.csv`, `by_road.csv`, `hotspots_all.csv` |
 | `outputs/wheel_model/` | Geometry model figures and tables |
 | `outputs/scooter_sim/` | Simulation results, sensitivity, figures and animations |
 | `outputs/scooter_sim/animations.html` | All animations in six sections (Voiager 5 with suspension; current vs larger front wheel on 50 mm and on 100 mm soft-edged potholes; larger front wheel; much larger front than rear; the rear wheel's second jolt); opens in any browser |
@@ -670,8 +731,6 @@ illustrations, not evidence).
 | `outputs/scooter_sim/suspension/` | All simulation results with the front suspension |
 | `outputs/scooter_sim/suspension/soft_edges/` | Soft-edged pothole study (`fig_edges.png`, fall counts and depths) |
 | `outputs/sensor_validity/` | Sensor Logger data quality and walking detection (`report.html`; see `SENSOR_VALIDITY.md`) |
-| `outputs/recordings/<recording>/` | Impact map, report, trace and tables for recordings 2 and 3 (recording 1's are in `outputs/`) |
-| `outputs/index.html` | Overview of all recordings with links to every map, report and timeline |
 
 The maps and reports contain exact ride coordinates, including where the ride started
 and ended. Keep them local unless sharing is intended, and trim the start and end of
@@ -693,15 +752,17 @@ python scripts/scooter_sim.py --animate       # dynamics sweep + animations
 python scripts/scooter_sim.py --sensitivity   # sensitivity analysis
 python scripts/scooter_sim.py --ratio         # front/rear wheel-ratio study
 python scripts/sensor_validity.py            # data quality + walking detection, all recordings
-python scripts/impact_map.py --data-dir data/raw/<recording> --out-dir outputs/recordings/<recording>
-python scripts/impact_report.py --data-dir data/raw/<recording> --out-dir outputs/recordings/<recording>
+python scripts/impact_map.py --data-dir data/raw/<recording>      # -> outputs/recordings/<recording>/
+python scripts/impact_report.py --data-dir data/raw/<recording>
+python scripts/combined_outputs.py            # all recordings -> outputs/combined/
 python scripts/outputs_index.py               # outputs/index.html
 ```
 
 Run `sensor_validity.py` before `impact_map.py`: the map then draws detected walking
 bouts (`outputs/sensor_validity/walking_onsets.csv`) as a dashed orange line.
 
-Defaults are `--data-dir data/raw/2026-10-03_1830_rec01` (recording 1) and `--out-dir outputs`. Parameters are constants at the
+Defaults are `--data-dir data/raw/2026-10-03_1830_rec01` (recording 1); outputs go to
+`outputs/recordings/<recording folder>/` unless `--out-dir` is given. Parameters are constants at the
 top of each script and are documented in its header.
 
 Practical notes:
@@ -738,8 +799,10 @@ Practical notes:
 - [ ] Check whether Voiager 5 tyres are pneumatic or solid honeycomb (look for a valve).
 - [ ] **Which Voi model runs in London?** Decides the Part C argument (section 12.4).
       Desk options: news photos of Voi in London since Sept 2023; or ask Voi.
-- [ ] Street View check with `outputs/streetview_check.html` (S1 = hotspot 21); export
-      the CSV to `data/streetview_observations.csv`.
+- [ ] Street View check: use `outputs/combined/spot_links.csv` (all recordings, 33 spots, tier 1
+      first) and the rules in `SPOT_CHECK.md` section 5. The older recording-1 page
+      (`outputs/recordings/2026-10-03_1830_rec01/streetview_check.html`, S1 = hotspot 21) uses the
+      same categories.
 - [x] Add front suspension to the simulation (partial pass of the consistency check).
 - [x] Potholes without hard edges (custom profile contact, section 6.7).
 - [x] Road bumps: sharp-edged and round-top (section 6.8).
@@ -748,12 +811,14 @@ Practical notes:
 - [ ] References to the second (Sensor Logger annotation while stopped) and more walking
       episodes before stating detection rates (`SENSOR_VALIDITY.md` 8).
 - [ ] Quantify whether GPS speed under-reading affects the 7 km/h gate in impact detection.
-- [ ] Analyse recordings 2 and 3 for impacts (riding parts only); record vehicle IDs.
-- [ ] Decide whether bumps go in the paper at all; if so, as exploratory model results with
-      the 6.8 uncertainties, and the rear-wheel pattern (6.8 item 2) only as an open
-      question / limitation of the front-wheel hypothesis.
-- [ ] Optional, if bumps stay in: bump sensitivity runs (fork, tyre, bracing) and a wider
-      rear-size sweep (more bump lengths and speeds) before saying anything about rear size.
+- [x] Analyse recordings 2 and 3 for impacts (riding parts only) and FixMyStreet (2026-10-08).
+- [x] Vehicle model for all three rides: Voiager 5, confirmed by Voi customer support
+      (ride 1 on 2026-10-03; rides 2 and 3 on 2026-10-08). IDs: SZ22, UPAR (ride 2), BTLZ (ride 3).
+- [x] Decided 2026-10-08: Part A uses all three recordings; road bumps not in the paper
+      (kept as exploratory simulation outputs).
+- [ ] Write Part A (methods + results) for three rides; update sections 3-4 here too.
+- [ ] Optional, only if bumps are reconsidered: bump sensitivity runs (fork, tyre, bracing)
+      and a wider rear-size sweep.
 - [ ] Optional: label bumps on a future ride (voice note or Street View check) so bump
       jolt sizes can be compared with measurements.
 - [ ] Optional: a tyre model with enveloping (contact patch) so the soft-edge model's
@@ -814,7 +879,10 @@ not to request a company measurement for now.
 - Do not say Voi breaks any rule: outside London no wheel rule applies.
 
 ### 12.4 Open check that can change this section
-Which model Voi runs in London is not known.
+Which model Voi runs in London is not known (searched again 2026-10-08, no public source;
+see `literature/uk_fleet_wheel_sizes.md` section 6). The decisive and simpler check is the
+**front tyre size of an Oxford Voiager 5** (sidewall marking), or asking Voi support:
+if the front is 10 in, the argument holds whatever London uses.
 - If it is a newer model with a front of 11 in or more: strongest version of the argument
   (same operator, London-compliant scooter in London, older one in Oxford).
 - If it is the Voiager 5: the Voiager 5's front must measure >= 11 in, so the 10 in

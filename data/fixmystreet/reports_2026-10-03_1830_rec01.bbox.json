@@ -1,0 +1,18 @@
+{
+  "bbox": [
+    -1.2401,
+    51.7487,
+    -1.2165,
+    51.7615
+  ],
+  "fetched": "2026-10-03 20:01:44",
+  "categories": [
+    "Pothole",
+    "Potholes and maintenance",
+    "Carriageway Defect",
+    "Roads and Carriageways",
+    "Manhole",
+    "Damaged Gully or Catchpit Ironwork"
+  ],
+  "note": "reconstructed 2026-10-08 from recording 1's route with the script's fetch rule (route +/- BBOX_BUFFER_DEG); the original download did not store its area"
+}

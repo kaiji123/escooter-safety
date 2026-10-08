@@ -31,7 +31,8 @@ Method
    of the speed gate in step 2.
 
 Usage
-    python scripts/impact_map.py --data-dir data/raw/2026-10-03_1830_rec01 --out-dir outputs
+    python scripts/impact_map.py --data-dir data/raw/2026-10-03_1830_rec01
+    (outputs go to outputs/recordings/<recording folder>/ unless --out-dir is given)
 """
 
 import argparse
@@ -48,7 +49,7 @@ from scipy.signal import find_peaks
 
 G = 9.80665  # standard gravity, m/s^2
 
-# ---- Default analysis parameters (all reported in outputs/impacts_params.json) ----
+# ---- Default analysis parameters (all reported in <out-dir>/impacts_params.json) ----
 THRESHOLD_G = 1.0        # minimum |vertical accel| peak counted as an impact
 MIN_GAP_S = 0.5          # two peaks closer than this are one event
 MIN_SPEED_MS = 2.0       # ignore samples slower than ~7 km/h
@@ -170,8 +171,8 @@ def walking_bouts(path, recording):
     return out
 
 
-def build_map(rough, impacts, recording_label, walks=(), loc=None):
-    centre = [rough["lat"].mean(), rough["lon"].mean()]
+def base_map(centre):
+    """Folium map with the Esri Light Gray Canvas basemap and street-name overlay."""
     m = folium.Map(location=centre, zoom_start=15, tiles=None, control_scale=True)
     # Esri Light Gray Canvas (base + street-name overlay). Chosen because it serves
     # tiles without an API key even when this HTML is opened from disk; OSM's tile
@@ -185,6 +186,11 @@ def build_map(rough, impacts, recording_label, walks=(), loc=None):
     folium.TileLayer(tiles=esri.format(layer="Reference"), attr=esri_attr,
                      name="Street names", overlay=True, control=True,
                      max_native_zoom=16, max_zoom=19).add_to(m)
+    return m
+
+
+def build_map(rough, impacts, recording_label, walks=(), loc=None):
+    m = base_map([rough["lat"].mean(), rough["lon"].mean()])
 
     # Route, coloured by roughness. Only moving segments are coloured; stops are grey.
     cmap = folium.LinearColormap(ROUGH_RAMP, vmin=0.0,
@@ -311,13 +317,15 @@ def main():
     global THRESHOLD_G
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--data-dir", type=Path, default=Path("data/raw/2026-10-03_1830_rec01"))
-    ap.add_argument("--out-dir", type=Path, default=Path("outputs"))
+    ap.add_argument("--out-dir", type=Path, default=None)
     ap.add_argument("--threshold-g", type=float, default=THRESHOLD_G)
     ap.add_argument("--walking-bouts", type=Path,
                     default=Path("outputs/sensor_validity/walking_onsets.csv"),
                     help="walking bouts from sensor_validity.py, drawn on the map if present")
     args = ap.parse_args()
     THRESHOLD_G = args.threshold_g
+    if args.out_dir is None:          # default: outputs/recordings/<recording folder>
+        args.out_dir = Path("outputs/recordings") / args.data_dir.name
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     res = analyse(args.data_dir, THRESHOLD_G)

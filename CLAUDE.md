@@ -15,9 +15,20 @@ benefit of larger wheels.
 
 ## Paper plan
 **Part A: what riders experience on the road** (real sensor data, ridden legally on a Voi)
-- Pilot ride so far: 40 impacts over 2.9 km, hotspots, and one spot hit on three
-  separate passes (near 51.7522, -1.2377).
-- Remaining desk work: FixMyStreet comparison and a Street View check of the hotspots.
+- DECIDED 2026-10-08: Part A uses **all three recordings** (rec01-rec03): 100 impacts over
+  6.08 km ridden; per ride and pooled (pooled = descriptive; rides not independent).
+  Vehicles: all three rides on Voiager 5, confirmed by Voi customer support (personal
+  communications: rec01 on 2026-10-03, key voi2026support_rec01; rec02/rec03 on 2026-10-08,
+  key voi2026support_rec0203; model only, not wheel sizes).
+  Vehicle IDs (Voi app): rec01 SZ22, rec02 UPAR, rec03 BTLZ (given by the user 2026-10-08).
+  Three different scooters.
+- Ride 1 alone: 40 impacts over 2.9 km; one spot hit on three passes (near 51.7522, -1.2377).
+- Across rides: 10 spots hit on 2+ rides, 2 on all three (Marston Road).
+- Remaining desk work: Street View check (`outputs/combined/spot_links.csv`, SPOT_CHECK.md).
+
+**Road bumps: in the paper as Appendix D (user reversed the earlier "not in the paper"
+decision on 2026-10-08).** Exploratory only; sources SIMULATION_METHODS 3.15/4.9,
+DOCUMENTATION 6.8, bump clips in animations.html.
 
 **Part B: what a larger front wheel would change** (a model; no physical scooter needed)
 - Geometry model (next to build, in Python): how far the wheel drops into a pothole and
@@ -56,7 +67,8 @@ sizes over a pothole-shaped step, phone recording. Not part of the current paper
 - Voiager 7 (2024): 12 in front tyre, "a size increase from its predecessors"; rear not
   stated. Voi has itself moved to a larger front wheel: cite as industry precedent.
 - Voiager 9 (spring 2026): no wheel data in the press release.
-- Ridden vehicle SZ22 = Voiager 5 (confirmed by the user 2026-10-03). Wheels reported as
+- Ridden vehicle SZ22 = Voiager 5 (confirmed by Voi customer support 2026-10-03; UPAR and
+  BTLZ confirmed 2026-10-08; model only). Wheels reported as
   10 in by Levy spec and Alsalkini 2023 Chalmers thesis (Table 8; weak: cites a V3X
   video, no front/rear split; its 13 kg mass is a borrowed assumption, don't use).
   Tyre type DISPUTED (Levy: pneumatic; user-pasted summary: solid honeycomb); user to
@@ -103,6 +115,8 @@ with uncertainties (DOCUMENTATION.md 6.8), never as findings about real scooters
   100% potholes); bump jolts unvalidated. Roadblocks: SIMULATION_METHODS.md 5.1.
 - Bump clips are in the same `animations.html` (BUMP_ANIMATION_SETS; `--bumps --animate`
   reuses existing GIFs).
+- Paper figures from animations: `scooter_sim.py --keyframes` (KEYFRAME_SETS, potholes only)
+  -> outputs/scooter_sim/keyframes/ -> paper/figures/fig_b5/b6 (copied by paper_part_a.py).
 
 ### Sensor Logger validity (SENSOR_VALIDITY.md; done 2026-10-07; exploratory)
 - Motion sensors 99.72 Hz, no gaps/timestamp faults in any recording. True rest only in
@@ -145,14 +159,35 @@ with uncertainties (DOCUMENTATION.md 6.8), never as findings about real scooters
   pothole before the fall (time-based phase labels mislabelled slow pitch-overs).
 - `--animate` builds `outputs/scooter_sim/animations.html` from ANIMATION_SETS.
 - [x] FixMyStreet comparison (`scripts/fms_compare.py`, done 2026-10-03)
-- [ ] Street View check (user): use `outputs/streetview_check.html` (25 spots, 360 links
+- [ ] Street View check (user): now `outputs/combined/spot_links.csv` + rules in SPOT_CHECK.md 5.
+      Older rec01 page: `outputs/recordings/2026-10-03_1830_rec01/streetview_check.html` (25 spots, 360 links
       facing direction of travel, record form, Export CSV -> data/streetview_observations.csv), incl. hotspot 21: hit 3 times at up to
       2.68 g although a pothole 6 m away was marked "Fixed" in Jan 2026
 - [ ] Proper literature search (Google Scholar; papers citing the Imperial 2022 study)
-- [ ] Write the paper together. Started 2026-10-07: `paper/part_b_methods_results.md`
+- [ ] Write the paper together. 2026-10-08: `paper/part_a_measured_impacts.md` (section 2,
+      three rides combined, Tables 1-3, Figures 1-5 incl. speed-vs-severity scatter; LaTeX numbers figures automatically) and `paper/appendix_recordings.md`
+      (A: each ride, B: recording quality/walking, C: spot check method; results pending).
+      Figures + every quoted number: `scripts/paper_part_a.py` -> paper/figures/ and
+      part_a_numbers.json. Part B tables renumbered 4-8; key-frame Figures 5-6 added.
+      Next: intro, discussion/conclusion (after the London-model check), abstract.
+      2026-10-08: paper moved to LaTeX (plain preprint, LuaLaTeX + biblatex authoryear/Biber,
+      Libertinus fonts). Edit paper/main.tex + paper/sections/*.tex (the .tex files ARE the
+      paper; Markdown drafts archived in paper/drafts_md/, converted once with
+      scripts/md_to_latex.py). Build: `python paper/build.py` (MiKTeX in
+      %LOCALAPPDATA%/Programs/MiKTeX, auto-installs packages; reports undefined refs,
+      missing glyphs, overfull boxes). Bibliography = ../references.bib directly. Check pages
+      visually (pymupdf renders PDF pages). Figures are generated at print width (~7 in).
+      Placeholders: author name/affiliation, abstract, Introduction, Discussion, Conclusion.
+      Started 2026-10-07: `paper/part_b_methods_results.md`
       (Part B methods + results, Pandoc citations from references.bib; every number taken
       from outputs/, source file noted in HTML comments). Next: Part A methods/results,
       then intro/discussion from DOCUMENTATION.md section 12.
+      Now LaTeX in paper/ (`python paper/build.py`). User wants ALL figures and data in
+      the paper (appendix if not main text); never silently drop outputs. But tables that
+      only repeat a figure or public data are padding: propose leaving them out, explain why,
+      and let the user decide (split into main + supplement was offered, not yet decided). Appendix A: per
+      ride trace, severity, speed, impact map, FMS map; B: full sensor validity; C: spot
+      links + QR; D: bumps; E: all other model figures (`SIM_FIGURES` in paper_part_a.py).
 
 The user has said measuring potholes on foot is too much work; don't plan around
 fieldwork measurements. Rides and desk work are fine.
@@ -171,6 +206,8 @@ fieldwork measurements. Rides and desk work are fine.
 ## Documentation
 - `DOCUMENTATION.md`: full record of the project and results.
 - `SENSOR_VALIDITY.md`: methods/results/limitations of the Sensor Logger check (paper-ready).
+- `SPOT_CHECK.md`: method for checking impact spots in street-level imagery (tiers, link
+  formats, recording rules fixed before checking: categories, 15 m search area).
 - `REFERENCES.md` + `references.bib`: master bibliography (papers, software with versions,
   data/map services, vehicle and policy sources). Add an entry whenever a new library,
   dataset or source is used; [to verify] items must be checked before citing.
@@ -186,6 +223,15 @@ falls at 6 cm ("75%" is the news release, 6+9 cm); Machines 2026 = Vaca Michilen
 Cano-Moreno, comfort not stability. Swifty tests and patents not found; verify before citing.
 Check Mazdak Ghajari's current title on his Imperial profile (the 2022 news release says
 "Dr"). Treat Swifty as commercial, not neutral, evidence.
+Literature search 2026-10-08 (REFERENCES.md, "Literature search ..."): verified keys paudel2025
+(experiments: small wheels less stable; recommends >= 14 in wheels + front suspension),
+nathania2026 (review: falls most common, multifactorial), fournier2023 (curb-strike falls),
+leoni2022, eriksson2008, zang2018, cicchino2021, anke2025, lee2024fall, dft2026factsheet
+(GB 2025: 10 riders killed, ~410 serious; 28% single-vehicle; heavy under-reporting; no
+road-surface factors). Do NOT cite "67% of DC falls due to bad roads" (not in Cicchino).
+Swifty pothole tests exist (company blog): commercial, not peer reviewed.
+London Voi model: still not found 2026-10-08; decisive check = Oxford V5 front tyre size
+(sidewall) or ask Voi support (DOCUMENTATION.md 12.4).
 `literature/wheel_size_industry_cases.md`: industry cases of bigger wheels (Voi, Lime,
 Bird, mullet MTBs, 29er, plus tyres, penny-farthing, cars) with bibliography for Part C;
 items marked [unchecked] still need verifying.
@@ -204,7 +250,7 @@ Forest Hill / Shotover; the study bounding box in `scripts/impact_report.py` exc
 - Raw recordings: `data/raw/<YYYY-MM-DD>_<HHMM local>_recNN/` (see `data/README.md`). Never
   modify them. rec01 = 2026-10-03 18:30 pilot ride (moved from the root 2026-10-07, checksums
   identical); rec02 = 2026-10-07 10:37 ride then walk; rec03 = 2026-10-07 13:38 ride. Zips as
-  received in `data/raw/archive/`. Part A results use rec01 only.
+  received in `data/raw/archive/`. Part A uses all three recordings (decided 2026-10-08).
 - Sensor Logger metadata `recording time` is UTC; use the ns `time` column -> Europe/London.
 - `data/ground_truth.csv`: rider-supplied reference events (precision noted per row).
 - `Accelerometer.csv` is user acceleration with gravity removed, m/s^2, device frame;
@@ -218,15 +264,18 @@ Forest Hill / Shotover; the study bounding box in `scripts/impact_report.py` exc
   vector, peaks >= 1.0 g at >= 7 km/h, 0.5 s apart; gyro wobble ratio) and folium map.
   `analyse()` is shared with the report script.
 - `scripts/impact_report.py`: statistics report (rates, severity, wobble, by road,
-  hotspots, speed vs severity) to `outputs/impact_report.html` plus CSV/JSON/figures.
-- `scripts/streetview_page.py`: builds `outputs/streetview_check.html` from
-  `outputs/impacts_vs_fms.csv` (Google Street View pano links; no API key, so no embed).
+  hotspots, speed vs severity) to `outputs/recordings/<recording>/impact_report.html` plus CSV/JSON/figures.
+- `scripts/streetview_page.py`: builds `outputs/recordings/<recording>/streetview_check.html` from
+  that folder's `impacts_vs_fms.csv` (Google Street View pano links; no API key, so no embed).
 - `scripts/fms_compare.py`: impacts vs FixMyStreet road-surface reports
-  (`outputs/fms_comparison.html`, `outputs/fms_map.html`). Main comparison uses only
+  (`outputs/recordings/<recording>/fms_comparison.html`, `fms_map.html`). Main comparison uses only
   reports made in the 365 days before the ride, always against a route baseline:
   reports since 2009 are so dense that ~70-80% of route points are near one.
-  Reports cached in `data/fixmystreet/reports.csv` (`--refresh` to re-download; it
-  makes ~15 polite requests, for anything bigger ask mySociety for bulk data).
+  Reports cached per recording in `data/fixmystreet/reports_<recording>.csv` + `.bbox.json`
+  (area); the script refuses a cache that does not cover the route (`--refresh` to
+  download; ~15 polite requests; for anything bigger ask mySociety for bulk data).
+- Consistency check reference (scooter_sim.py MEASURED_G) = three rides: 99/100 impacts
+  1.0-2.97 g, median 1.27 g, one 6.28 g outlier. Criterion (1-3 g) unchanged; results unchanged.
 - `scripts/wheel_geometry.py`: rigid wheel crossing a sharp-edged rectangular pothole;
   drop = min(depth, sag, ballistic 0.5 g (w/v)^2), edge angle cos(theta) = (R-h)/R,
   impact velocity v sin(theta), front speed loss v sin^2(theta). Relative comparison of
@@ -244,15 +293,41 @@ Forest Hill / Shotover; the study bounding box in `scripts/impact_report.py` exc
   (4 s windows; step-band power share 1.2-2.8 Hz, step-lag autocorrelation, GPS speed;
   analyst-chosen thresholds) with first-step onset refinement. All recordings in data/raw ->
   `outputs/sensor_validity/report.html`. Methods + results: `SENSOR_VALIDITY.md`.
-- `scripts/outputs_index.py`: `outputs/index.html`, overview of all recordings. rec02/rec03
-  impact outputs are in `outputs/recordings/<recording>/` (rec01 stays in `outputs/`).
+- `scripts/paper_tables.py`: appendix summary tables from outputs/ CSVs
+  In the paper: appendix_model_tables.tex = E1-E3 (no-fork thresholds, sensitivity),
+  appendix_bump_tables.tex = D3-D4, appendix_impact_list.tex = all 100 impacts without
+  coordinates. Removed from the paper 2026-10-08 (user agreed: they repeat figures,
+  captions or public data) but still generated into paper/supplement/: FMS report list,
+  geometry/consistency/key-frame tables, ratio and soft-edge thresholds. Back matter:
+  paper/sections/06_statements.tex (ethics, data availability; DOI TBD).
+  Rerun after any scooter_sim.py run.
+- `scripts/outputs_index.py`: `outputs/index.html`, overview of all recordings.
+- `scripts/combined_outputs.py`: `outputs/combined/` (impacts_all.csv, summary, by_road with
+  rates blank < 0.2 km, hotspots_all with number of rides hitting each spot, combined map with
+  a layer per recording). Pooled numbers are descriptive: rides are not independent.
+  Two Marston Road spots hit on all 3 rides (51.75427,-1.23588; 51.75268,-1.23665).
+- `scripts/spot_links.py`: `outputs/combined/spot_links.csv/.html`, 33 spots ranked by tier
+  with Google Street View/Maps/Mapillary links (Maps URLs, no key; no scraping/downloading
+  Google imagery). Fill-in columns survive reruns. Panoramax: no coverage; KartaView: 2017/2021
+  only. This supersedes rec01's streetview_check page for new checks.
+  NO Street View screenshots in the paper or any print (Google geo guidelines, checked
+  2026-10-08); report findings + links only; images only from Mapillary (CC BY-SA) or own photos.
+  Paper Table C1 = generated spot list with clickable links (paper_part_a.py -> sections/
+  appendix_spot_links.tex, landscape, styled like spot_links.html). Spots in trimmed route
+  ends (P9, P16, P30, P31) are named only; the map also omits their circles (privacy).
+  Each row has a QR code (Street View link) for print; verify with zxing-cpp after changes
+  (all 29 decode at 150 dpi).
   `impact_map.py` draws walking bouts from walking_onsets.csv (dashed orange) if present.
 - Speed gate matters: rec02's walk had 11 peaks >= 1 g (max 1.19 g), all excluded by the
   7 km/h gate. rec02 impacts 25-37 = regular series (unchecked); rec03 6.28 g cluster is
   ~20 m from a rec02 hotspot (51.7508, -1.2389): Street View candidate.
 - Run: `python scripts/impact_map.py` then `python scripts/impact_report.py`
   then `python scripts/fms_compare.py`
-  (defaults: `--data-dir data/raw/2026-10-03_1830_rec01`, `--out-dir outputs`).
+  (defaults: `--data-dir data/raw/2026-10-03_1830_rec01`; outputs to
+  `outputs/recordings/<recording folder>/` unless `--out-dir` is given).
+- Outputs layout (`outputs/README.md`): `index.html` overview; `recordings/<recording>/` per
+  ride (rec01 moved there 2026-10-07, identical); `combined/` all rides; `sensor_validity/`;
+  `scooter_sim/`; `wheel_model/`. Nothing per-recording at the root of `outputs/`.
 - Python 3.11 with pandas, numpy, scipy, matplotlib, folium.
 
 ## Conventions

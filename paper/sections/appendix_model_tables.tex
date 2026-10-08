@@ -1,0 +1,59 @@
+\FloatBarrier
+\subsection{Summary tables}
+
+The tables below give the fall thresholds without suspension and the sensitivity analysis behind the statements in the model sections. Depths are on a 10 mm grid: ``80'' means a first fall between 70 and 80 mm. -- = no fall up to the deepest case simulated (100 mm). Rows in which no configuration fell are left out. All values come from the planar model with assumed parameters (Table~\ref{tab:4}) and compare configurations; they are not real-world thresholds.
+
+% outputs/scooter_sim/fall_thresholds.csv, sim_results.csv
+\begin{table}[htbp]
+\centering\small
+\caption{Shallowest pothole depth (mm) causing a fall, model without suspension (counterpart of Table~\ref{tab:7}).}\label{tab:Enofork}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Length, speed & 10/10 & 12/10 & 12/12 & 14/10 \\
+\midrule
+600 mm, 15 km/h & 70 & 70 & 70 & 80 \\
+1000 mm, 15 km/h & 80 & 80 & 80 & 90 \\
+1000 mm, 20 km/h & 70 & 80 & 80 & 80 \\
+1000 mm, 25 km/h & 70 & 70 & 70 & 80 \\
+\textbf{Falls (of 81 runs)} & \textbf{15} & \textbf{14} & \textbf{14} & \textbf{11} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% outputs/scooter_sim/suspension/sensitivity.csv
+\begin{table}[htbp]
+\centering\small
+\caption{Sensitivity analysis, with front suspension (main model): first fall depth (mm) on a 1000 mm pothole at 20 km/h / forward speed lost on a 60 mm deep, 600 mm pothole at 20 km/h. One parameter changed at a time from the baseline.}\label{tab:Esensfork}
+\begin{tabular}{@{}p{52mm}rrrr@{}}
+\toprule
+Setting & 10/10 & 12/10 & 12/12 & 14/10 \\
+\midrule
+baseline & 90 / 27.6\% & 90 / 25.5\% & 90 / 28.7\% & 100 / 23.2\% \\
+stiffer tyre ($\tau$ 0.015 s) & 90 / 30.2\% & 90 / 25.1\% & 90 / 25.7\% & 90 / 26.3\% \\
+softer tyre ($\tau$ 0.035 s) & 80 / 27.4\% & 90 / 23.5\% & 90 / 23.7\% & 90 / 20.6\% \\
+weaker bracing (1000 N m/rad) & 90 / 27.8\% & 90 / 26.4\% & 90 / 24.7\% & 90 / 21.3\% \\
+stronger bracing (3000 N m/rad) & 90 / 28.1\% & 90 / 25.4\% & 90 / 25.5\% & 100 / 22.2\% \\
+softer fork (15 kN/m) & 80 / 26.5\% & 90 / 25.8\% & 90 / 24.6\% & 90 / 22.1\% \\
+stiffer fork (40 kN/m) & 90 / 32.7\% & 90 / 26.1\% & 90 / 26.9\% & 100 / 21.3\% \\
+less fork damping (ratio 0.15) & 80 / 24.8\% & 80 / 24.0\% & 80 / 25.4\% & 80 / 22.4\% \\
+more fork damping (ratio 0.5) & 90 / 31.1\% & 90 / 25.5\% & 100 / 25.4\% & 100 / 22.4\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% outputs/scooter_sim/sensitivity.csv
+\begin{table}[htbp]
+\centering\small
+\caption{Sensitivity analysis, without suspension: first fall depth (mm) on a 1000 mm pothole at 20 km/h / forward speed lost on a 60 mm deep, 600 mm pothole at 20 km/h. One parameter changed at a time from the baseline.}\label{tab:Esensnofork}
+\begin{tabular}{@{}p{52mm}rrrr@{}}
+\toprule
+Setting & 10/10 & 12/10 & 12/12 & 14/10 \\
+\midrule
+baseline & 70 / 52.5\% & 80 / 40.6\% & 80 / 41.0\% & 80 / 29.4\% \\
+stiffer tyre ($\tau$ 0.015 s) & 60 / 69.9\% & 70 / 52.4\% & 70 / 52.9\% & 80 / 36.2\% \\
+softer tyre ($\tau$ 0.035 s) & 70 / 42.2\% & 80 / 33.7\% & 80 / 33.4\% & 90 / 26.0\% \\
+weaker bracing (1000 N m/rad) & 70 / 52.7\% & 80 / 41.0\% & 80 / 42.9\% & 90 / 29.9\% \\
+stronger bracing (3000 N m/rad) & 70 / 51.5\% & 80 / 38.7\% & 80 / 40.0\% & 80 / 26.2\% \\
+\bottomrule
+\end{tabular}
+\end{table}

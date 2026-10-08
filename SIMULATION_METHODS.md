@@ -455,7 +455,10 @@ stiffer (40 kN/m) springs, and damping ratios 0.15 and 0.5.
 Criterion, fixed before running: for the current 10/10 scooter at 20 km/h on "common"
 potholes (20, 30, 40 mm deep; 300 and 600 mm long; an assumption about which potholes
 are common), simulated handlebar peaks (10 ms windows, like the phone) should fall in
-roughly **1–3 g**, consistent with the measured 1.0–2.8 g (median 1.19 g). Both the
+roughly **1–3 g**, consistent with the measured impacts: 1.0–2.97 g for 99 of 100
+impacts over three rides (median 1.27 g; one at 6.28 g). Ride 1 alone: 1.0–2.8 g,
+median 1.19 g; the reference was updated when Part A grew to three rides (2026-10-08),
+the criterion was not. Both the
 original and the suspension model are evaluated (`consistency.csv`,
 `fig_consistency.png`).
 
@@ -517,7 +520,23 @@ pothole ones; read them as comparisons between wheel configurations.
 
 **Jolt sizes are not validated for bumps.** Sharp bumps give large simulated handlebar
 peaks even with the fork (10/10, 600 mm, 20 km/h: 3.6 g at 20 mm, 8.4 g at 40 mm), above
-the measured 1–2.8 g. The ride did not label bumps, so there is nothing to compare with.
+the measured 1–2.97 g. The rides did not label bumps, so there is nothing to compare with.
+
+### 4.11 Key-frame figures for print (`--keyframes`)
+
+The animations cannot be printed, so `build_keyframes()` redraws selected runs as rows of
+still frames (`outputs/scooter_sim/keyframes/`, copied into `paper/figures/` by
+`scripts/paper_part_a.py`). One row per wheel configuration, one column per moment in
+`KEYFRAME_TIMES` (−0.25, 0, +0.15, +0.3, +0.5 s), all relative to the moment the front
+wheel reaches the pothole's far edge (front-wheel centre within half a radius of the
+edge), so the rows can be compared column by column. The frames are drawn by
+`draw_scene()`, the same function the GIFs use (refactored out of `animate()`; the GIF
+drawing is unchanged). Each falling row is labelled with the time the fall criterion
+(pitch or lean limit) is reached; a column after the simulation stopped shows the last
+frame, marked. Sets (`KEYFRAME_SETS`, potholes only; road bumps are not in the paper):
+80 × 600 mm at 15 km/h with suspension, sharp edges (10/10, 12/10, 12/12) and 50 mm
+sloped edges (10/10, 12/10, 14/10). Fall criterion reached at +0.15 s and +0.42 s for
+10/10; no other row falls (`keyframes_runs.csv`).
 
 ### 4.10 Animation page
 
@@ -580,8 +599,8 @@ Recorded so the paper's methods and any reviewer questions can be answered hones
 | Short potholes | No falls for 300 mm potholes, consistent with the geometry model's time-to-fall limit |
 | Determinism | Full rerun of the main sweep and sensitivity analysis reproduced all outcomes exactly |
 | Sensitivity | The comparison between configurations (12/10 = 12/12; larger front delays the fall) held under all five settings; absolute fall depths for 10/10 moved between 60 and 70 mm |
-| Consistency with measurements, **no suspension: failed** | 4.9–9.8 g on the common potholes, against 1–2.8 g measured: about 3–5× too harsh |
-| Consistency with measurements, **with suspension: partial pass** | 300 mm long potholes: 1.9–2.4 g (**inside** the measured range). 600 mm long: 4.2–5.7 g (about twice too high) |
+| Consistency with measurements, **no suspension: failed** | 4.9–9.8 g on the common potholes, against 1–2.97 g measured (99 of 100 impacts, three rides): about 3–5× too harsh |
+| Consistency with measurements, **with suspension: partial pass** | 300 mm long potholes: 1.9–2.4 g (**inside** the measured range). 600 mm long: 4.2–5.7 g (about twice too high; only one of 100 measured impacts, 6.28 g, was higher) |
 
 The model has **not been validated** against physical tests. Its results should be
 reported as comparisons between wheel configurations under identical assumptions, not

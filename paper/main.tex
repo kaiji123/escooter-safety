@@ -1,0 +1,93 @@
+% E-scooter pothole impacts and front-wheel size (Oxford): preprint.
+% Build:  latexmk -lualatex main.tex      (from the paper/ folder)
+% Sections live in sections/*.tex; figures in figures/; bibliography = ../references.bib
+% (the project's master bibliography, checked entries only; see ../REFERENCES.md).
+\documentclass[11pt,a4paper]{article}
+
+% ---- Fonts and language (LuaLaTeX: Unicode symbols such as >= and rho typeset directly)
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{Libertinus Serif}
+\setsansfont{Libertinus Sans}
+\setmathfont{Libertinus Math}
+\usepackage[british]{babel}
+
+% ---- Page layout
+\usepackage[margin=25mm]{geometry}
+\usepackage{setspace}
+\setstretch{1.12}
+\usepackage{microtype}
+\usepackage{parskip}
+
+% ---- Tables, figures, lists
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{float}
+\usepackage{pdflscape}          % landscape pages (spot table, Appendix C)
+\usepackage{colortbl}           % light grey table rules (\arrayrulecolor)
+\usepackage{needspace}          % keep table-group headings with their rows
+\usepackage{qrcode}             % QR codes in the spot table, for printed copies
+\usepackage[section]{placeins}   % figures/tables stay within their section
+\usepackage[font=small,labelfont=bf,margin=0pt]{caption}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=4pt}
+% Pandoc-generated tables and lists use these helpers.
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\newcounter{none}   % Pandoc marks uncaptioned longtables with \LTcaptype{none}
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+% ---- Bibliography: author-year, Biber
+\usepackage[style=authoryear,backend=biber,maxcitenames=2,maxbibnames=8,
+            uniquelist=false,giveninits=true,urldate=long,dashed=false]{biblatex}
+\addbibresource{../references.bib}
+% Undated web sources: show "n.d." rather than the access (urldate) year as their date.
+\DeclareLabeldate{\field{date}\field{year}\field{eventdate}\field{origdate}\literal{nodate}}
+
+% ---- Links (last)
+\usepackage{xcolor}
+\definecolor{linkblue}{HTML}{1C5CAB}
+\definecolor{rulegray}{HTML}{E3E2DE}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+\usepackage{xurl}
+
+% ---- Appendix numbering: Figure A1, Table B2, ... (counters restart in each appendix)
+\newcommand{\appendixnumbering}{%
+  \counterwithin*{figure}{section}\counterwithin*{table}{section}%
+  \renewcommand{\thefigure}{\Alph{section}\arabic{figure}}%
+  \renewcommand{\thetable}{\Alph{section}\arabic{table}}}
+
+\title{Pothole impacts on rental e-scooters and the case for a larger front wheel:\\
+       measurements in Oxford and a dynamics model}
+\author{[Author name]\thanks{[MSc programme, university]. Contact: [email].}}
+\date{Draft, \today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent [Abstract: to be written once all sections are final.]
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_measured_impacts}
+\input{sections/03_04_models}
+\input{sections/05_discussion}
+\input{sections/06_statements}
+
+\printbibliography[heading=bibintoc]
+
+\clearpage
+\appendix
+\appendixnumbering
+\input{sections/appendix_overview}
+\input{sections/appendix}
+\input{sections/appendix_bumps}
+\input{sections/appendix_model}
+
+\end{document}

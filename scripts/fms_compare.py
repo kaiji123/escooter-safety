@@ -12,8 +12,10 @@ FixMyStreet data
   bounding box, fetched from fixmystreet.com's map endpoint one road-surface
   category at a time, with a pause between requests. This is a small number of
   requests; for anything larger, ask mySociety for bulk data instead.
-  Saved once to data/fixmystreet/reports.csv (with the fetch date) and reused, so
-  the analysis is reproducible. Use --refresh to download again.
+  Saved once per recording to data/fixmystreet/reports_<recording>.csv (with the fetch
+  date) plus <cache>.bbox.json (the downloaded area), and reused, so the analysis is
+  reproducible. A cache that does not cover the route's area is refused (reports
+  outside it would be silently missing). Use --refresh to download again.
 
 Matching
   An impact is "reported" if a road-surface report made in the RECENT_DAYS before
@@ -27,7 +29,8 @@ Matching
   ROUTE_RADIUS_M of the ridden GPS track. Report dates are submission dates.
 
 Usage
-    python scripts/fms_compare.py --data-dir data/raw/2026-10-03_1830_rec01 --out-dir outputs
+    python scripts/fms_compare.py --data-dir data/raw/2026-10-03_1830_rec01
+    (outputs go to outputs/recordings/<recording folder>/ unless --out-dir is given)
 """
 
 import argparse
@@ -124,8 +127,26 @@ def _parse_list(list_html, fetched):
     return out
 
 
+def _bbox_file(cache_path):
+    return cache_path.with_suffix(".bbox.json")
+
+
 def fetch_reports(bbox, cache_path, refresh=False):
+    """Reports in bbox (w, s, e, n), from the cache if it covers bbox, else downloaded.
+    The downloaded area is stored next to the cache (<cache>.bbox.json); a cache whose
+    area does not cover the requested bbox is refused, because reports outside it would
+    silently be missing and those impacts would look unreported."""
     if cache_path.exists() and not refresh:
+        side = _bbox_file(cache_path)
+        if not side.exists():
+            raise SystemExit(f"{cache_path} has no {side.name}: its area is unknown. "
+                             f"Use --refresh (or another --fms-cache) to download.")
+        cw, cs, ce, cn = json.loads(side.read_text())["bbox"]
+        w, s_, e, n = bbox
+        tol = 1e-4
+        if w < cw - tol or s_ < cs - tol or e > ce + tol or n > cn + tol:
+            raise SystemExit(f"{cache_path} covers {cw:.4f},{cs:.4f},{ce:.4f},{cn:.4f} but this route "
+                             f"needs {w:.4f},{s_:.4f},{e:.4f},{n:.4f}. Use --refresh or another --fms-cache.")
         return pd.read_csv(cache_path, parse_dates=["created", "fetched"])
     fetched = dt.datetime.now().replace(microsecond=0)
     w, s, e, n = bbox
@@ -151,6 +172,9 @@ def fetch_reports(bbox, cache_path, refresh=False):
     df["url"] = "https://www.fixmystreet.com/report/" + df["report_id"].astype(str)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(cache_path, index=False)
+    _bbox_file(cache_path).write_text(json.dumps(
+        {"bbox": [round(v, 4) for v in bbox], "fetched": fetched.isoformat(),
+         "categories": list(FMS_CATEGORIES)}, indent=2))
     return pd.read_csv(cache_path, parse_dates=["created", "fetched"])
 
 
@@ -482,11 +506,16 @@ the surface the rider met; one opened after the ride cannot have been known at t
 def main():
     ap = argparse.ArgumentParser(description="Compare measured impacts with FixMyStreet reports")
     ap.add_argument("--data-dir", type=Path, default=Path("data/raw/2026-10-03_1830_rec01"))
-    ap.add_argument("--out-dir", type=Path, default=Path("outputs"))
-    ap.add_argument("--fms-cache", type=Path, default=Path("data/fixmystreet/reports.csv"))
+    ap.add_argument("--out-dir", type=Path, default=None)
+    ap.add_argument("--fms-cache", type=Path, default=None,
+                    help="default: data/fixmystreet/reports_<recording folder>.csv")
     ap.add_argument("--roads-cache", type=Path, default=Path("data/osm_study_roads.json"))
     ap.add_argument("--refresh", action="store_true", help="download FixMyStreet data again")
     args = ap.parse_args()
+    if args.out_dir is None:          # default: outputs/recordings/<recording folder>
+        args.out_dir = Path("outputs/recordings") / args.data_dir.name
+    if args.fms_cache is None:        # one cache per recording (its own route's area)
+        args.fms_cache = Path("data/fixmystreet") / f"reports_{args.data_dir.name}.csv"
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     res = im.analyse(args.data_dir)
@@ -512,6 +541,7 @@ def main():
                on_route, hs, sens, fetched)
     imp.to_csv(args.out_dir / "impacts_vs_fms.csv", index=False)
     on_route.to_csv(args.out_dir / "fms_reports_on_route.csv", index=False)
+    sens.to_csv(args.out_dir / "fms_match_rates.csv", index=False)   # impacts vs route baseline per radius
 
     print(f"{len(reports)} road-surface reports in area; "
           f"{len(on_route)} recent (<= {RECENT_DAYS} d before ride) on route")

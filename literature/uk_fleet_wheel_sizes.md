@@ -84,7 +84,16 @@ DOCUMENTATION.md 6.6). Combine this with the planned valve check (pneumatic vs h
   Italy and Norway" (Morley 2024). Voiager 8 "to be introduced in selected cities in
   Finland, France, Germany, Norway, Spain and Sweden" (Electrive 2025). Neither list
   includes the UK.
-- Which Voi model runs in London: **not found**. See DOCUMENTATION.md section 12.4.
+- Which Voi model runs in London: **not found** (searched again 2026-10-08). Checked:
+  Voiager 5 launch coverage names Liverpool, Bristol and Bath, not London (road.cc
+  2022-06-09: "magic wheels" = "a larger front wheel, increased tread depth and greater
+  shock absorption", no sizes; Zag Daily 2022-06-08: "larger front wheel with increased
+  tyre tread depth", no sizes); TfL's Phase 2 launch (25 Sept 2023) describes safety
+  requirements, not models; Voi's London launch blog is JavaScript-only (not readable
+  automatically); a June 2024 trade article (Traffic Technology Today) on Voi possibly
+  leaving London names no model. Resolution route: read the front tyre sidewall of an
+  Oxford Voiager 5, or ask Voi support (the user has a support channel). See
+  DOCUMENTATION.md 12.4.
 - The argument built on this is in DOCUMENTATION.md section 12.
 
 ## Bibliography (Harvard; all accessed 7 October 2026)

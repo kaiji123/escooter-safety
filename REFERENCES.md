@@ -143,6 +143,31 @@ doi:10.1016/j.jbiomech.2004.02.031.
 Apple Inc. (n.d.) *CMAcceleration*, Apple Developer Documentation. Available at:
 https://developer.apple.com/documentation/coremotion/cmacceleration (accessed 7 October 2026).
 
+### Literature search for introduction and discussion (2026-10-08)
+
+Metadata from Crossref/OpenAlex; content checked against each abstract (Semantic
+Scholar, OpenAlex or PubMed). Cite each only for the "use for" column.
+
+| Key | Use for | Checked against | Do **not** use for |
+|-----|---------|-----------------|--------------------|
+| paudel2025 | Experimental tests of 8 small-wheeled e-scooters/e-bikes: small-wheel compact devices less stable than larger-wheeled ones; risks in obstacle interaction; recommends minimum 14 in wheels, front suspension, turn lights, mirrors | Abstract and highlights (OpenAlex) | Pothole-specific results (not reported in the abstract); rental scooters |
+| nathania2026 | Systematic review (PRISMA, Haddon matrix): falls are the most common e-scooter accident type and are multifactorial (human, vehicle, environment) | Abstract | Any percentage for road-surface causes (none in abstract) |
+| fournier2023 | Multibody model of e-scooter falls from wheel-curb collision, compared with a crash test; 162 scenarios; high head-injury risk | Abstract | Potholes |
+| leoni2022 | Instrumented tests of 7 e-scooters in Milan; stability and comfort metrics mapped to vehicle specifications | Abstract | Wheel-size effects (not stated in abstract) |
+| eriksson2008 | Pothole Patrol: vehicle-mounted accelerometers and GPS detect potholes; >90% of reported spots had anomalies | Abstract | Phones or scooters (used dedicated in-car sensors on taxis) |
+| zang2018 | Bicycle-mounted smartphone GPS + accelerometer: roughness (IRI) correlated with professional instruments; pothole/hump recognition | Abstract | E-scooters |
+| cicchino2021 | 105 injured e-scooter riders, Washington DC, 2019: injuries on the road about twice as likely to be AIS 2+ as elsewhere (RR 1.96) | PubMed abstract | **"67% of falls due to bad roads"**: a search-engine summary attached this to the study; it is **not** in the abstract |
+| anke2025 | Survey and focus groups of regular riders: infrastructure hazards are among the hazards riders perceive; actions for maintenance and vehicle design | Abstract | Measured exposure |
+| lee2024fall | IMU-based pre-impact fall detection while riding e-scooters (20 participants, worn IMU) | Abstract | Phone on handlebar |
+| dft2026factsheet | GB 2025: 10 e-scooter riders killed, about 410 seriously injured; 384 of 1,377 e-scooter collisions involved no other vehicle (28%); e-scooter casualties among the most under-reported | GOV.UK factsheet (published 30 July 2026) | Road-surface contributory factors (not in the factsheet) |
+| roadcc2022voiager5 | Voiager 5 UK launch (Liverpool, Bristol, Bath, June 2022); "larger front wheel, increased tread depth and greater shock absorption" | Article text | Wheel size in inches (not given) |
+| tfl2023launch | London Phase 2 launched 25 Sept 2023 with Dott, Lime and Voi; strict safety requirements | Press release (search summary + earlier TfL sources) | Which model Voi runs in London (not stated) |
+
+Considered and not used: Salgado et al. 2024, *Legal Medicine* (car-to-scooter collisions,
+not falls); Chen et al. 2025 (gaze behaviour); Swifty Scooters' pothole tests (8 in vs
+16 in wheels, 36/54/72 mm deep; found on the company blog, commercial and not peer
+reviewed: mention only as industry material, if at all).
+
 ## 2. Software
 
 | Software | Version used | Used in |
@@ -153,6 +178,12 @@ https://developer.apple.com/documentation/coremotion/cmacceleration (accessed 7 
 | SciPy | 1.17.1 | `find_peaks` (impact detection, step peaks), `linkage`/`fcluster` (hotspots), `spearmanr`, `welch`, `butter`/`sosfiltfilt` (walking detection) |
 | Matplotlib | 3.11.2 | All figures; `FuncAnimation` for the simulation animations |
 | Pillow | 12.3.0 | GIF encoding of the animations (Matplotlib `PillowWriter`) |
+| MiKTeX / LuaHBTeX | 25.12 / 1.24.0 | Typesetting the paper (`paper/main.tex`, built by `paper/build.py`) |
+| biblatex / Biber | 3.21 / 2.21 | Paper bibliography (author-year) from `references.bib` |
+| qrcode (LaTeX package) | 1.51 | QR codes in Table C1 (Street View links for printed copies) |
+| Pandoc | 3.12 | One-time conversion of the Markdown drafts to LaTeX (`scripts/md_to_latex.py`) |
+| PyMuPDF | 1.28.2 | Rendering PDF pages to check layout; reading link targets |
+| zxing-cpp | 3.1.1 | Decoding the printed QR codes to verify each one (all 29 correct at 150 dpi) |
 | MuJoCo | 3.14.0 | Dynamics simulation |
 | folium (with branca) | 0.20.0 (0.8.2) | Impact and FixMyStreet maps |
 | Leaflet | 1.9.3 (bundled by folium); 1.9.4 (Street View page, from cdnjs) | All HTML maps |
@@ -215,11 +246,13 @@ Chrono/PyChrono (https://projectchrono.org), PyBullet (https://pybullet.org), Op
 
 | Source | Used for | Licence / terms |
 |--------|----------|-----------------|
-| OpenStreetMap via Overpass API | Study road geometry (`data/osm_study_roads.json`) | ODbL; attribute "© OpenStreetMap contributors" |
+| OpenStreetMap via Overpass API | Study road geometry (`data/osm_study_roads.json`); paper map background (`data/osm_paper_basemap.json`, downloaded 2026-10-08) | ODbL; attribute "© OpenStreetMap contributors" (shown on the paper map and in its caption) |
 | Esri World Light Gray Canvas (Base + Reference) | Map background tiles | Esri terms; attribution shown on maps |
-| FixMyStreet (mySociety) | Road-surface reports (`data/fixmystreet/reports.csv`) | mySociety terms; cite as below |
-| Google Maps URLs (Street View panorama links) | Links in `streetview_check.html`; no images downloaded | Google Maps terms |
-| Mapillary | Alternative imagery links | Mapillary terms |
+| FixMyStreet (mySociety) | Road-surface reports (`data/fixmystreet/reports_<recording>.csv`, one per ride's area) | mySociety terms; cite as below |
+| Google Maps URLs (Street View panorama and map links) | Links in `streetview_check.html` and `spot_links` (`SPOT_CHECK.md`); no API key ("You don't need a Google API key to use Maps URLs"; checked 2026-10-08); no images downloaded | Google Maps terms |
+| Mapillary | Alternative imagery links in both spot lists | Images CC BY-SA 4.0 (Mapillary help centre; licence changed from CC BY-NC on 29 April 2014) |
+| KartaView | Imagery coverage check, 2026-10-08: 5 photos near spot P1, from 2017 and 2021 | CC BY-SA 4.0 |
+| Panoramax | Imagery coverage check, 2026-10-08: no photos in the study area | Open licences per instance |
 
 Esri (n.d.) *World Light Gray Base* and *World Light Gray Reference* [map services]. Sources:
 Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS user community. Available at:
@@ -228,9 +261,16 @@ https://doc.arcgis.com/en/data-appliance/2022/maps/world-light-gray-base.htm
 Google (n.d.) *Maps URLs*, Google Maps Platform documentation. Available at:
 https://developers.google.com/maps/documentation/urls/get-started
 
-Mapillary (n.d.) *Mapillary* [street-level imagery]. Available at: https://www.mapillary.com
+Mapillary (n.d.) *Mapillary* [street-level imagery, CC BY-SA 4.0]. Available at: https://www.mapillary.com
 
-mySociety (2026) *FixMyStreet* [online reporting service]. Data downloaded 2026-10-03.
+KartaView (n.d.) *KartaView* [open street-level imagery, formerly OpenStreetCam]. Available at:
+https://kartaview.org (API queried 2026-10-08)
+
+Panoramax (n.d.) *Panoramax* [open street-level imagery]. Available at: https://panoramax.fr
+(meta-catalogue API queried 2026-10-08)
+
+mySociety (2026) *FixMyStreet* [online reporting service]. Data downloaded 2026-10-03
+(ride 1 area) and 2026-10-08 (ride 2 and ride 3 areas).
 Available at: https://www.fixmystreet.com
 
 Olbricht, R. (n.d.) *Overpass API*. Endpoints used: https://overpass-api.de/api/interpreter
@@ -274,6 +314,17 @@ https://storage.mfn.se/5e105080-042c-419c-83f0-a36340ad0e0e/vnv-globals-portfoli
 
 Future Transport News (n.d.) [Voiager 5 launch article, cited in DOCUMENTATION.md 6.1]
 **[to verify: title and URL not recorded]**
+
+Voi Technology (2026a) Customer support, personal communication to the author, 3 October
+2026 (support chat). Confirmed that the scooter ridden for recording 1 (3 October 2026,
+vehicle ID SZ22) was a Voiager 5. Key `voi2026support_rec01`.
+
+Voi Technology (2026b) Customer support, personal communication to the author, 8 October
+2026 (support chat). Confirmed that the scooters ridden for recordings 2 and 3 (7 October
+2026, vehicle IDs UPAR and BTLZ) were Voiager 5. Key `voi2026support_rec0203`.
+
+Both: **model only**; wheel sizes were not part of the confirmations. The records (chat
+screenshots) are kept by the author, not published; ask Voi before quoting them.
 
 Levy Electric (n.d.) *Voiager 5* [fleet specification]. Available at:
 https://fleets.levyelectric.com/vehicles/voi-voiager-5 (aggregator; secondary)

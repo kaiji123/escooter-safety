@@ -1,0 +1,275 @@
+{
+  "per_ride_and_pooled": [
+    {
+      "recording": "2026-10-03_1830_rec01",
+      "km_ridden": 2.89,
+      "min_moving": 9.6,
+      "impacts": 40,
+      "per_km": 13.8,
+      "median_g": 1.19,
+      "max_g": 2.8,
+      "ge_1_5g": 6,
+      "wobble": 13
+    },
+    {
+      "recording": "2026-10-07_1037_rec02",
+      "km_ridden": 1.48,
+      "min_moving": 5.9,
+      "impacts": 39,
+      "per_km": 26.4,
+      "median_g": 1.34,
+      "max_g": 2.87,
+      "ge_1_5g": 15,
+      "wobble": 11
+    },
+    {
+      "recording": "2026-10-07_1338_rec03",
+      "km_ridden": 1.71,
+      "min_moving": 6.3,
+      "impacts": 21,
+      "per_km": 12.3,
+      "median_g": 1.67,
+      "max_g": 6.28,
+      "ge_1_5g": 11,
+      "wobble": 8
+    },
+    {
+      "recording": "pooled (all)",
+      "km_ridden": 6.08,
+      "min_moving": 21.8,
+      "impacts": 100,
+      "per_km": 16.4,
+      "median_g": 1.27,
+      "max_g": 6.28,
+      "ge_1_5g": 32,
+      "wobble": 32
+    }
+  ],
+  "pooled": {
+    "impacts": 100,
+    "median_g": 1.27,
+    "iqr_g": [
+      1.13,
+      1.73
+    ],
+    "p95_g": 2.68,
+    "max_g": 6.28,
+    "n_le_2_97": 99,
+    "n_gt_3": 1,
+    "n_ge_1_5": 32,
+    "n_ge_2": 12,
+    "n_wobble": 32,
+    "n_ge_1_5_and_wobble": 12,
+    "spearman_speed_vs_g": {
+      "rho": -0.48,
+      "p": 0.0
+    },
+    "severity_bands": {
+      "1.0-1.5 g": 68,
+      "1.5-2.0 g": 20,
+      "2.0-2.5 g": 4,
+      "> 2.5 g": 8
+    }
+  },
+  "spots": {
+    "total": 33,
+    "tier_counts": {
+      "1": 10,
+      "2": 10,
+      "3": 13
+    },
+    "tier1": [
+      {
+        "spot": "P1",
+        "rides_hitting": 3,
+        "impacts": 6,
+        "max_g": 2.24,
+        "road": "Marston Road",
+        "fms_recent_within_25m": false,
+        "fms_nearest_recent_m": 60.1,
+        "fms_state": "Closed"
+      },
+      {
+        "spot": "P2",
+        "rides_hitting": 3,
+        "impacts": 6,
+        "max_g": 1.47,
+        "road": "Marston Road",
+        "fms_recent_within_25m": false,
+        "fms_nearest_recent_m": 43.6,
+        "fms_state": "Closed"
+      },
+      {
+        "spot": "P3",
+        "rides_hitting": 2,
+        "impacts": 19,
+        "max_g": 2.25,
+        "road": "Other roads",
+        "fms_recent_within_25m": true,
+        "fms_nearest_recent_m": 4.9,
+        "fms_state": "Closed"
+      },
+      {
+        "spot": "P4",
+        "rides_hitting": 2,
+        "impacts": 10,
+        "max_g": 6.28,
+        "road": "Other roads",
+        "fms_recent_within_25m": true,
+        "fms_nearest_recent_m": 8.1,
+        "fms_state": "Fixed"
+      },
+      {
+        "spot": "P5",
+        "rides_hitting": 2,
+        "impacts": 9,
+        "max_g": 1.79,
+        "road": "Marston Road",
+        "fms_recent_within_25m": false,
+        "fms_nearest_recent_m": 121.0,
+        "fms_state": "Closed"
+      },
+      {
+        "spot": "P6",
+        "rides_hitting": 2,
+        "impacts": 4,
+        "max_g": 1.85,
+        "road": "Other roads",
+        "fms_recent_within_25m": true,
+        "fms_nearest_recent_m": 8.1,
+        "fms_state": "Closed"
+      },
+      {
+        "spot": "P7",
+        "rides_hitting": 2,
+        "impacts": 3,
+        "max_g": 1.17,
+        "road": "Marston Road",
+        "fms_recent_within_25m": true,
+        "fms_nearest_recent_m": 7.9,
+        "fms_state": "Closed"
+      },
+      {
+        "spot": "P8",
+        "rides_hitting": 2,
+        "impacts": 2,
+        "max_g": 2.8,
+        "road": "Other roads",
+        "fms_recent_within_25m": false,
+        "fms_nearest_recent_m": 38.3,
+        "fms_state": "Closed"
+      },
+      {
+        "spot": "P9",
+        "rides_hitting": 2,
+        "impacts": 2,
+        "max_g": 2.03,
+        "road": "Marston Road",
+        "fms_recent_within_25m": false,
+        "fms_nearest_recent_m": 125.1,
+        "fms_state": "Fixed"
+      },
+      {
+        "spot": "P10",
+        "rides_hitting": 2,
+        "impacts": 2,
+        "max_g": 1.34,
+        "road": "Marston Road",
+        "fms_recent_within_25m": false,
+        "fms_nearest_recent_m": 87.0,
+        "fms_state": "Closed"
+      }
+    ],
+    "tier1_without_recent_fms_25m": 6
+  },
+  "fms_25m": {
+    "Ride 1": {
+      "impacts_reported": 2,
+      "pct_impacts_reported": 5.0,
+      "pct_route_baseline": 14.3
+    },
+    "Ride 2": {
+      "impacts_reported": 12,
+      "pct_impacts_reported": 30.8,
+      "pct_route_baseline": 32.7
+    },
+    "Ride 3": {
+      "impacts_reported": 9,
+      "pct_impacts_reported": 42.9,
+      "pct_route_baseline": 34.3
+    }
+  },
+  "fms_pooled_reported_25m": 23,
+  "by_road": [
+    {
+      "road": "Marston Road",
+      "2026-10-03_1830_rec01 km": 0.95,
+      "2026-10-03_1830_rec01 per km": 11.6,
+      "2026-10-07_1037_rec02 km": 0.82,
+      "2026-10-07_1037_rec02 per km": 15.8,
+      "2026-10-07_1338_rec03 km": 0.75,
+      "2026-10-07_1338_rec03 per km": 9.3,
+      "pooled km": 2.52,
+      "pooled impacts": 31,
+      "pooled per km": 12.3
+    },
+    {
+      "road": "Headington Road",
+      "2026-10-03_1830_rec01 km": 0.0,
+      "2026-10-03_1830_rec01 per km": NaN,
+      "2026-10-07_1037_rec02 km": 0.02,
+      "2026-10-07_1037_rec02 per km": NaN,
+      "2026-10-07_1338_rec03 km": 0.0,
+      "2026-10-07_1338_rec03 per km": NaN,
+      "pooled km": 0.02,
+      "pooled impacts": 1,
+      "pooled per km": NaN
+    },
+    {
+      "road": "Old Road",
+      "2026-10-03_1830_rec01 km": 0.24,
+      "2026-10-03_1830_rec01 per km": 8.2,
+      "2026-10-07_1037_rec02 km": 0.0,
+      "2026-10-07_1037_rec02 per km": NaN,
+      "2026-10-07_1338_rec03 km": 0.0,
+      "2026-10-07_1338_rec03 per km": NaN,
+      "pooled km": 0.24,
+      "pooled impacts": 2,
+      "pooled per km": 8.3
+    },
+    {
+      "road": "Morrell Avenue",
+      "2026-10-03_1830_rec01 km": 0.98,
+      "2026-10-03_1830_rec01 per km": 12.2,
+      "2026-10-07_1037_rec02 km": 0.04,
+      "2026-10-07_1037_rec02 per km": NaN,
+      "2026-10-07_1338_rec03 km": 0.03,
+      "2026-10-07_1338_rec03 per km": NaN,
+      "pooled km": 1.05,
+      "pooled impacts": 15,
+      "pooled per km": 14.3
+    },
+    {
+      "road": "Other roads",
+      "2026-10-03_1830_rec01 km": 0.72,
+      "2026-10-03_1830_rec01 per km": 21.0,
+      "2026-10-07_1037_rec02 km": 0.6,
+      "2026-10-07_1037_rec02 per km": 36.7,
+      "2026-10-07_1338_rec03 km": 0.93,
+      "2026-10-07_1338_rec03 per km": 15.1,
+      "pooled km": 2.25,
+      "pooled impacts": 51,
+      "pooled per km": 22.7
+    }
+  ],
+  "map_impacts_hidden_by_trim": 6,
+  "map_trim_m": 200.0,
+  "speed_fig_impacts_in_big_spots": 29,
+  "spots_hidden_for_privacy": [
+    "P9",
+    "P16",
+    "P30",
+    "P31"
+  ],
+  "spots_listed_in_appendix": 29
+}

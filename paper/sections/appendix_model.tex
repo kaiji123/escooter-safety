@@ -1,0 +1,99 @@
+\section{Further model results}\label{app:model}
+
+These figures give the full results behind the tables and text of the model sections. All come from the same planar model or geometry model with assumed parameters (Table~\ref{tab:4}); they compare wheel configurations and are not real-world thresholds. ``With fork'' is the main model of the Voiager 5; ``no fork'' is the rigid version kept for comparison.
+
+\subsection{Geometry model}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/geom_schematic.png}
+\caption{Geometry model schematic: a 10 in and a 12 in rigid wheel at the far edge of the same 60 mm deep, 600 mm long pothole, drawn sunk to full depth for illustration. The larger wheel meets the edge at a shallower angle $\theta$.}\label{fig:E1}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/geom_impact_velocity.png}
+\caption{Geometry model: front-wheel edge impact velocity against pothole depth by wheel diameter (600 mm long, 20 km/h).}\label{fig:E2}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/geom_by_length.png}
+\caption{Geometry model: edge impact velocity by pothole depth and length, 20 km/h. Short potholes limit how far the wheel can drop at speed.}\label{fig:E3}
+\end{figure}
+
+\FloatBarrier
+\subsection{Main sweep}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/sweep_lean_fork.png}
+\caption{Main sweep, with front suspension (main model): peak forward lean of the rider by pothole depth and length at 20 km/h; X marks a fall. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Eleanfork}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/sweep_speedloss_fork.png}
+\caption{Main sweep, with front suspension (main model): forward speed lost crossing the pothole. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Espeedfork}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/sweep_handlebar_fork.png}
+\caption{Main sweep, with front suspension (main model): simulated handlebar peak acceleration. Absolute values are consistent with the rides only for short potholes with the fork (Figure~\ref{fig:consistency}). Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Egfork}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/sweep_lean_nofork.png}
+\caption{Main sweep, without suspension: peak forward lean of the rider by pothole depth and length at 20 km/h; X marks a fall. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Eleannofork}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/sweep_speedloss_nofork.png}
+\caption{Main sweep, without suspension: forward speed lost crossing the pothole. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Espeednofork}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/sweep_handlebar_nofork.png}
+\caption{Main sweep, without suspension: simulated handlebar peak acceleration. Absolute values are consistent with the rides only for short potholes with the fork (Figure~\ref{fig:consistency}). Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Egnofork}
+\end{figure}
+
+\FloatBarrier
+\subsection{Front/rear ratio study}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/ratio_first_fall_fork.png}
+\caption{Ratio study, with front suspension: shallowest pothole depth (10 mm steps) at which the model fell, by front/rear diameter and speed; ``none'' = no fall up to 100 mm. No ``too large'' front wheel appeared in this planar model, which omits steering, frame geometry and cost. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Eratiofork}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/ratio_rear_wheel_fork.png}
+\caption{Ratio study, with front suspension: rear-wheel behaviour on a 600 mm pothole at 20 km/h (dip into the pothole, lift off the road, speed lost at the rear crossing). With the fork the configurations differ little, and the rear wheel is lifted by at most about 25 mm. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Erearfork}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/ratio_first_fall_nofork.png}
+\caption{Ratio study, without suspension: shallowest pothole depth (10 mm steps) at which the model fell, by front/rear diameter and speed; ``none'' = no fall up to 100 mm. No ``too large'' front wheel appeared in this planar model, which omits steering, frame geometry and cost. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Erationofork}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/ratio_rear_wheel_nofork.png}
+\caption{Ratio study, without suspension: rear-wheel behaviour on a 600 mm pothole at 20 km/h (dip into the pothole, lift off the road, speed lost at the rear crossing). With small front wheels the rear is lifted clear; with large ones it drops in and gives a second jolt, which caused no falls here. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Erearnofork}
+\end{figure}
+
+\FloatBarrier
+\subsection{Soft pothole edges}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{sim/soft_edges_fork.png}
+\caption{Sloped (raised-cosine) pothole edges, with front suspension, profile contact model: speed lost and handlebar peak for 10/10 (600 mm, 20 km/h), and falls of 81 runs per configuration by edge width. The profile contact's absolute accelerations are too high (no tyre enveloping) and are used only for comparison between edge widths. Planar model with assumed parameters (Table~\ref{tab:4}); relative comparison of wheel configurations only, not real-world thresholds.}\label{fig:Eedges}
+\end{figure}
+\input{sections/appendix_model_tables}
