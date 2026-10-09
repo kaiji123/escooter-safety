@@ -300,7 +300,9 @@ Figure~\ref{fig:5} shows one such case as still frames: the 80 mm deep, 600 mm l
 wheels the front wheel drops into the hole and strikes the far edge, and the scooter
 pitches forward about it; the fall criterion is reached 0.15 s after the front wheel
 reaches the edge. With a 12 in front wheel, alone or with a 12 in rear wheel, the
-scooter rolls out with almost identical motion.
+scooter rolls out with almost identical motion (maximum chassis pitch 13--14°,
+speed loss 71--72\%). With a 14 in front wheel it rolls out with less pitch
+(7°) and less speed loss (56\%).
 
 \begin{figure}
 \centering
@@ -378,13 +380,15 @@ Sloped edges reduced falls (10/10: 8 to 4 from sharp to 100 mm edges). At every 
 width, the configurations with a larger front wheel fell less often than the current
 scooter, and 12/10 stayed within one fall of 12/12. Figure~\ref{fig:6} shows the same 80 × 600 mm
 pothole with 50 mm sloped edges: the current scooter still pitches over, more slowly
-(fall criterion at 0.42 s), while 12 in and 14 in front wheels roll through.
+(fall criterion at 0.42 s), while 12 in and 14 in front wheels roll through. As with
+sharp edges, 12/10 and 12/12 move almost identically (maximum chassis pitch 16°, speed
+loss 50\%); 14/10 pitches less (11°, speed loss 44\%).
 
 \begin{figure}
 \centering
 {\includegraphics[width=\linewidth]{fig_b6_keyframes_edge50.png}}
 \caption{As Figure~\ref{fig:5}, but each pothole edge slopes over 50 mm (raised-cosine profile,
-custom tyre contact; section 3.4), with 10/10, 12/10 and 14/10 wheels. Jolt sizes from
+custom tyre contact; section 3.4). Jolt sizes from
 this contact model are not used as results; fall outcomes are.}\label{fig:6}
 \end{figure}
 
@@ -392,16 +396,34 @@ this contact model are not used as results; fall outcomes are.}\label{fig:6}
 
 % outputs/scooter_sim/ratio/, outputs/scooter_sim/suspension/ratio/
 
-In the ratio study, falls kept decreasing as the front wheel grew. Without suspension,
-the 10/10, 12/10, 14/10, 16/10, 16/8, 20/10 and 20/8 configurations fell in 15, 14, 11,
-9, 9, 1 and 1 of 81 runs; with suspension, in 9, 6, 1, 1, 1, 0 and 0. No front/rear ratio
-up to 2.5 made falls more likely. With very large front wheels the front impact no
-longer lifts the rear, so the rear wheel drops into the pothole and causes a second
-jolt: the largest rear-crossing speed loss at 20 km/h (no suspension, runs without a
-fall) rose from 19\% for 10/10 to 27\% for 20/10 and 33\% for 20/8. This second jolt caused
-no falls in the model, but it would affect comfort and control. Because the planar model
-cannot represent steering, frame geometry, weight or cost, these results support a
-moderate increase in front wheel size (12--14 in) rather than the largest possible wheel.
+The ratio study asked whether a front wheel can be too large relative to the rear. It
+repeated the main sweep (81 runs per configuration) for front/rear diameter ratios from
+1.0 (10/10) to 2.5 (20/8); the full results are in Appendix~\ref{app:ratio}. Falls kept
+decreasing as the front wheel grew (Table~\ref{tab:9}): from 15 of 81 runs for 10/10 to 1
+for 20/10 and 20/8 without suspension, and from 9 to none with suspension. No ratio up
+to 2.5 made falls more likely: with a larger front wheel the shallowest depth causing a
+fall stayed the same or rose, in 10 mm steps (Figures~\ref{fig:Eratiofork} and~\ref{fig:Erationofork}).
+
+\input{sections/ratio_fall_counts}
+
+Very large front wheels did change what the rear wheel does (Figures~\ref{fig:Erearfork}
+and~\ref{fig:Erearnofork}). With a small front wheel, the front impact lifts the rear so
+that it skips over the pothole. With a very large front wheel it no longer does, so the
+rear wheel drops into the pothole and causes a second jolt: without suspension, the
+largest speed loss at the rear crossing (20 km/h, runs without a fall) rose from 19\% for
+10/10 to 27\% for 20/10 and 33\% for 20/8. With suspension the configurations differed
+little. This second jolt caused no falls in the model, but it would affect comfort and
+control.
+
+In this model a larger front wheel was never worse: falls kept decreasing up to the
+largest front wheel tested (20 in). With front suspension, however, most of the reduction
+was reached by 14/10 (from 9 to 1 of 81 runs), and larger front wheels added little. The
+model cannot represent steering, frame geometry, weight or cost, all of which limit how
+large a front wheel can practically be, and the rear-wheel jolt above would affect
+comfort. We therefore suggest a moderate increase (12--14 in), in line with wheels already
+in use: the Voiager 7 has a 12 in front wheel \autocite{startups2024voiager7}, and London's
+tender requires a front wheel of at least 11 in \autocite{tfl2022tender}. This limit is a
+judgement based on factors outside the model, not a result of it.
 
 \subsection{Consistency with the measured rides}\label{consistency-with-the-measured-rides}
 

@@ -1,4 +1,91 @@
-% Introduction (to be written: background, prior work, research question, contributions).
+% Introduction. Argument agreed 2026-10-07 (DOCUMENTATION.md 12); sources checked in
+% REFERENCES.md ("Literature search ...", 2026-10-08). Each citation is used only for what
+% the "use for" column there allows.
+% DEPENDS ON: the Voiager 5 front wheel being 10 in (reported, not measured; 12.4).
 \section{Introduction}\label{sec:intro}
 
-[To be written.]
+\subsection{Background}
+
+Rental e-scooters are ridden on British roads under trials authorised by the Department
+for Transport (DfT). They are the only e-scooters that may legally be used on
+public roads; privately owned e-scooters may be ridden only on private land with the
+landowner's permission \autocite{dft2026users}. The design of every legal e-scooter on a
+British road is therefore set by a small number of rental operators, within the vehicle
+rules of the national trials and of the local areas that host them.
+
+In 2025, 10 e-scooter riders were killed and about 410 seriously injured in reported road
+collisions in Great Britain, and 384 of the 1,377 reported collisions involving an
+e-scooter (28\%) involved no other vehicle \autocite{dft2026factsheet}. A recent systematic review found falls to be the most common
+type of e-scooter accident, with human, vehicle and environmental factors all contributing
+\autocite{nathania2026}. Riders themselves name infrastructure hazards among the risks they
+perceive \autocite{anke2025}, and in a study of injured riders in Washington, DC, injuries
+sustained on the road were about twice as likely to be of moderate or greater severity as
+those sustained elsewhere \autocite{cicchino2021}.
+
+Small wheels are a plausible part of the vehicle side of this problem. A wheel that drops into
+a pothole meets the far edge at a steeper angle the smaller it is, and the front wheel of a
+scooter both steers and takes the first impact. Using a multibody model of an e-scooter with
+10~in wheels, \textcite{posirisuk2022} found that 3~cm deep potholes caused no falls, while
+6~cm deep potholes caused falls in 41 of 60 simulated cases, with the rider pitching forward
+over the handlebar. Other models have examined falls caused by striking a kerb
+\autocite{fournier2023}, and experimental tests of small-wheeled personal vehicles found
+compact, small-wheeled devices less stable than those with larger wheels; their authors
+recommend wheels of at least 14~in and front suspension \autocite{paudel2025}. Instrumented
+tests have related e-scooter stability and comfort to vehicle specifications
+\autocite{leoni2022}, and vibration and comfort on e-scooters have been measured and modelled
+\autocite{canomoreno2022,ventura2024,vacamichilena2026}. Smartphones and other low-cost
+sensors have also been used to map potholes and road roughness from moving vehicles
+\autocite{eriksson2008,zang2018}.
+
+\subsection{The regulatory gap}
+
+The national trial guidance sets no minimum wheel size. Its stability tests include riding
+through a depression 1~m long and 5~cm deep with vertical walls \autocite{dft2024guidance}.
+London's trial goes further: since November 2022, its rental e-scooters must have a front
+wheel of at least 11~in and a rear wheel of at least 9~in \autocite{tfl2022tender}, and
+Transport for London describes its vehicle standards, including larger wheels, as going
+beyond the national ones \autocite{tfl2023press}. Outside London no such rule applies, so a
+scooter whose front wheel is below London's minimum may still be deployed elsewhere.
+
+The Voi Voiager 5, the model ridden in this study in Oxford \autocite{voi2026support_rec01,
+voi2026support_rec0203,occ_trial}, is such a case. Its wheels are reported as 10~in
+\autocite{levy_voiager5,alsalkini2023}; no published source gives the front and rear sizes
+separately, and we treat 10~in front and rear as an assumption throughout. The model was
+introduced in 2022 with a larger front wheel, deeper tyre tread and greater shock
+absorption than its predecessor \autocite{roadcc2022voiager5}, and was still being deployed in new trial areas in
+2025 \autocite{essex2025voi}. Voi's later Voiager 7 has a 12~in front tyre
+\autocite{startups2024voiager7}. So Voi has already started using bigger front wheels
+on its newer scooters, but outside London nothing requires older models to be replaced. Voi is not
+breaking any rule by using the Voiager 5 there, because no wheel-size rule exists outside London.
+
+\subsection{Research question and contributions}
+
+This paper asks whether pothole impacts on the Voiager 5 reach levels associated with loss of
+stability, and whether a larger front wheel would reduce them. It tests a specific
+hypothesis that could turn out to be false:
+
+\begin{quote}
+Because the front wheel both steers and takes the peak load at impact, enlarging the front
+wheel alone gives most of the stability benefit of enlarging both wheels.
+\end{quote}
+
+If the hypothesis held, a front-wheel minimum such as London's would capture most of the
+benefit of larger wheels, at lower cost than enlarging both. If it failed, for example
+because the rear wheel's impact also caused falls, a front-only rule would be insufficient.
+
+The work has two parts. \textbf{Part A} (Section~\ref{measuring-what-riders-experience-on-the-road})
+measures what a rider experiences: three legal rides on Voiager 5 scooters in Oxford, recorded
+with a handlebar-mounted smartphone, give the number, size and location of sudden vertical
+impacts, which are compared with public pothole reports. The recording method itself is checked,
+including whether it can tell riding from walking. \textbf{Part B}
+(Sections~\ref{methods-modelling-the-effect-of-wheel-size}
+and~\ref{results-what-a-larger-front-wheel-would-change}) uses a geometry model and a planar
+dynamics model of scooter and rider to compare the current wheels with a larger front wheel
+alone and with larger wheels front and rear. The measured impacts provide a consistency check
+for the model, not a validation.
+
+Compared with earlier work, the contributions are: measurement of discrete impacts on a rental
+e-scooter in ordinary use, rather than comfort vibration; repeated impacts at the same places
+across rides, compared with what the public had reported; and a direct test of whether a
+larger front wheel alone performs like larger wheels front and rear. Section~\ref{sec:discussion}
+discusses what the results do and do not show and what they suggest for trial rules.

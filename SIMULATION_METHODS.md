@@ -534,8 +534,8 @@ edge), so the rows can be compared column by column. The frames are drawn by
 drawing is unchanged). Each falling row is labelled with the time the fall criterion
 (pitch or lean limit) is reached; a column after the simulation stopped shows the last
 frame, marked. Sets (`KEYFRAME_SETS`, potholes only; road bumps are not in the paper):
-80 × 600 mm at 15 km/h with suspension, sharp edges (10/10, 12/10, 12/12) and 50 mm
-sloped edges (10/10, 12/10, 14/10). Fall criterion reached at +0.15 s and +0.42 s for
+80 × 600 mm at 15 km/h with suspension, sharp edges (10/10, 12/10, 12/12, 14/10) and 50 mm
+sloped edges (10/10, 12/10, 12/12, 14/10). Fall criterion reached at +0.15 s and +0.42 s for
 10/10; no other row falls (`keyframes_runs.csv`).
 
 ### 4.10 Animation page

@@ -820,9 +820,11 @@ KEYFRAME_TIMES = (-0.25, 0.0, 0.15, 0.3, 0.5)
 # (file stem, depth_mm, length_mm, speed_kmh, suspension, edge_mm or None, [(front, rear, label)])
 KEYFRAME_SETS = [
     ("keyframes_susp_80x600_15kmh", 80, 600, 15.0, True, None,
-     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (12, 12, "12/12 in")]),
+     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (12, 12, "12/12 in"),
+      (14, 10, "14/10 in")]),
     ("keyframes_susp_edge50_80x600_15kmh", 80, 600, 15.0, True, 50,
-     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (14, 10, "14/10 in")]),
+     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (12, 12, "12/12 in"),
+      (14, 10, "14/10 in")]),
 ]
 # Road bumps (exploratory appendix of the paper, decided 2026-10-08). Time 0 = front wheel
 # reaching the bump's leading face; later columns, because the rear strike comes later.

@@ -5,6 +5,7 @@ Writes, into the paper:
   paper/sections/appendix_model_tables.tex  (Appendix E: fall thresholds without the fork,
       sensitivity analysis)
   paper/sections/appendix_bump_tables.tex   (Appendix D: bump fall thresholds)
+  paper/sections/ratio_fall_counts.tex      (main text Table 9: ratio-study fall counts)
 and, NOT in the paper (they repeat figures, captions or public data), into
 paper/supplement/ for a supplement or the data deposit: recent FixMyStreet reports,
 full geometry table, consistency values, key-frame runs, ratio and soft-edge thresholds.
@@ -99,6 +100,26 @@ def model_tables():
             f"outputs/scooter_sim/{sub}sensitivity.csv"))
 
     return "\n".join(parts)
+
+
+def ratio_count_table():
+    """Main-text Table 9: falls per configuration in the ratio study, both models. The
+    Appendix E figures show first-fall depths, not counts, so this repeats no figure."""
+    nofork = fall_counts(SIM / "ratio" / "ratio_results.csv")
+    fork = fall_counts(SIM / "suspension" / "ratio" / "ratio_results.csv")
+    runs = pd.read_csv(SIM / "ratio" / "ratio_results.csv").groupby(["front_in", "rear_in"]).size()
+    assert runs.nunique() == 1, "unequal runs per configuration"
+    # same order as the figures: rear 10 in by front size, then rear 8 in
+    order = sorted(nofork.index, key=lambda c: (-int(c.split("/")[1]), int(c.split("/")[0])))
+    rows = [[c, f"{int(c.split('/')[0]) / int(c.split('/')[1]):.1f}", str(nofork[c]), str(fork[c])]
+            for c in order]
+    return table(
+        f"Front/rear ratio study: runs meeting the fall criteria (of {runs.iloc[0]} per "
+        "configuration). Planar model with assumed parameters (Table~\\ref{tab:4}); relative "
+        "comparison of wheel configurations only.", "tab:9",
+        ["Front/rear (in)", "Ratio", "Without suspension", "With suspension"], rows, "lrrr",
+        "outputs/scooter_sim/ratio/ratio_results.csv, "
+        "outputs/scooter_sim/suspension/ratio/ratio_results.csv")
 
 
 def ratio_edge_tables():
@@ -287,6 +308,7 @@ if __name__ == "__main__":
     (SECTIONS / "appendix_impact_list.tex").write_text(impact_list(), encoding="utf-8")
     (SECTIONS / "appendix_model_tables.tex").write_text(model_tables(), encoding="utf-8")
     (SECTIONS / "appendix_bump_tables.tex").write_text(bump_tables(), encoding="utf-8")
+    (SECTIONS / "ratio_fall_counts.tex").write_text(ratio_count_table(), encoding="utf-8")
     # not in the paper (they repeat figures, captions or public data): for a supplement/deposit
     SUPP.mkdir(exist_ok=True)
     (SUPP / "fms_reports.tex").write_text(fms_report_list(), encoding="utf-8")

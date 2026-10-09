@@ -177,7 +177,11 @@ with uncertainties (DOCUMENTATION.md 6.8), never as findings about real scooters
       %LOCALAPPDATA%/Programs/MiKTeX, auto-installs packages; reports undefined refs,
       missing glyphs, overfull boxes). Bibliography = ../references.bib directly. Check pages
       visually (pymupdf renders PDF pages). Figures are generated at print width (~7 in).
-      Placeholders: author name/affiliation, abstract, Introduction, Discussion, Conclusion.
+      Introduction, Discussion, Conclusion drafted 2026-10-08 (01_introduction.tex,
+      05_discussion.tex; depend on the reported 10 in front, see header comments).
+      Author: Kai Yi Ji (given 2026-10-08). Abstract written 2026-10-08.
+      No affiliation/contact footnote (removed 2026-10-08: hobby project, so no university
+      name that could imply endorsement).
       Started 2026-10-07: `paper/part_b_methods_results.md`
       (Part B methods + results, Pandoc citations from references.bib; every number taken
       from outputs/, source file noted in HTML comments). Next: Part A methods/results,
@@ -296,7 +300,8 @@ Forest Hill / Shotover; the study bounding box in `scripts/impact_report.py` exc
 - `scripts/paper_tables.py`: appendix summary tables from outputs/ CSVs
   In the paper: appendix_model_tables.tex = E1-E3 (no-fork thresholds, sensitivity),
   appendix_bump_tables.tex = D3-D4, appendix_impact_list.tex = all 100 impacts without
-  coordinates. Removed from the paper 2026-10-08 (user agreed: they repeat figures,
+  coordinates, ratio_fall_counts.tex = main-text Table 9 (ratio-study fall counts; the
+  appendix figures show depths, not counts). Removed from the paper 2026-10-08 (user agreed: they repeat figures,
   captions or public data) but still generated into paper/supplement/: FMS report list,
   geometry/consistency/key-frame tables, ratio and soft-edge thresholds. Back matter:
   paper/sections/06_statements.tex (ethics, data availability; DOI TBD).
