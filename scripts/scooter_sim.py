@@ -75,7 +75,8 @@ TYRE_TIMECONST = 0.025
 
 # ---- Scenario ----
 CONFIGS = [  # (label, front diameter in, rear diameter in)
-    ("10/10 in (current, Voiager 5)", 10, 10),
+    ("10/10 in (small-wheel reference)", 10, 10),
+    ("11/10 in (current, Voiager 5)", 11, 10),   # sidewalls 60/55-8.5 and 60/55-7.5 (11.1/10.1 in)
     ("12/10 in (larger front only)", 12, 10),
     ("12/12 in (larger both)", 12, 12),
     ("14/10 in (larger front only)", 14, 10),
@@ -458,7 +459,8 @@ def simulate(d_front_in, d_rear_in, depth_mm, length_mm, speed_kmh, record=False
 
 
 # --------------------------------------------------------------------------- figures
-RAMP = {"10/10": "#86b6ef", "12/10": "#2a78d6", "12/12": "#eb6834", "14/10": "#0d366b"}
+RAMP = {"10/10": "#9ec5f4", "11/10": "#5598e7", "12/10": "#2a78d6", "12/12": "#eb6834",
+        "14/10": "#0d366b"}
 INK, MUTED = "#222222", "#6b6b6b"
 
 
@@ -630,7 +632,7 @@ COMMON_LENGTHS_MM = [300, 600]
 
 
 def consistency(out_dir):
-    """Handlebar peaks (10 ms windows, like the phone) for the current 10/10 scooter at
+    """Handlebar peaks (10 ms windows, like the phone) for the current 11/10 scooter at
     20 km/h on common potholes, without and with the front suspension, compared with the
     measured range. Pass = inside roughly 1-3 g."""
     global SUSPENSION
@@ -642,7 +644,7 @@ def consistency(out_dir):
             for d in COMMON_DEPTHS_MM:
                 rows.append({"model": "with front suspension" if susp else "no suspension",
                              "length_mm": w, "depth_mm": d,
-                             "handlebar_peak_g": simulate(10, 10, d, w, 20.0)["handlebar_peak_g"]})
+                             "handlebar_peak_g": simulate(11, 10, d, w, 20.0)["handlebar_peak_g"]})
     SUSPENSION = keep
     df = pd.DataFrame(rows)
     df["within_1_to_3_g"] = df["handlebar_peak_g"].between(1.0, 3.0)
@@ -661,7 +663,7 @@ def consistency(out_dir):
         ax.plot(range(len(sub)), sub["handlebar_peak_g"], color=c, marker=mk, ms=8, lw=0,
                 markeredgecolor="white", label=name)
     ax.set_xticks(range(len(xt)), xt, fontsize=8)
-    ax.set_xlabel("Pothole depth / length · current 10/10 in wheels · 20 km/h")
+    ax.set_xlabel("Pothole depth / length · current 11/10 in wheels (Voiager 5) · 20 km/h")
     ax.set_ylabel("Simulated handlebar peak (g)")
     ax.legend(frameon=False, fontsize=8.5, loc="upper left", bbox_to_anchor=(0, 0.88))
     _style(ax)
@@ -745,21 +747,24 @@ ANIMATION_SETS = [
     # (heading, description, depth_mm, length_mm, speed_kmh, [(front, rear, note)], suspension)
     ("Voiager 5 with its front spring",
      "80 mm deep, 600 mm long, 15 km/h, front suspension modelled (the Voiager 5 has a front spring). "
-     "The current 10 in wheels pitch over; a 12 in front wheel rolls out.",
-     80, 600, 15.0, [(10, 10, "Voiager 5 (rear size assumed)"), (12, 10, "")], True),
+     "Small 10/10 in reference, the Voiager 5's 11/10 in wheels and a 12 in front wheel.",
+     80, 600, 15.0, [(10, 10, "Small-wheel reference"), (11, 10, "Voiager 5 (current)"),
+                     (12, 10, "")], True),
     ("Soft-edged pothole (50 mm sloped edges): current vs larger front wheel",
-     "80 mm deep, 600 mm long, each edge sloping down over 50 mm, 15 km/h, front suspension. The current "
-     "Voiager 5 wheels pitch over; with a 12 in or 14 in front wheel the scooter rolls through.",
-     80, 600, 15.0, [(10, 10, "Voiager 5 (current)", 50), (12, 10, "Larger front wheel", 50),
+     "80 mm deep, 600 mm long, each edge sloping down over 50 mm, 15 km/h, front suspension. Small "
+     "10/10 in reference, the Voiager 5 (11/10 in) and larger front wheels.",
+     80, 600, 15.0, [(10, 10, "Small-wheel reference", 50), (11, 10, "Voiager 5 (current)", 50),
+                     (12, 10, "Larger front wheel", 50),
                      (14, 10, "Larger front wheel", 50)], True),
     ("Soft-edged pothole (100 mm sloped edges): current vs larger front wheel",
-     "90 mm deep, 600 mm long, each edge sloping down over 100 mm, 15 km/h, front suspension. Same result "
-     "with gentler edges: the current wheels pitch over, larger front wheels roll through.",
-     90, 600, 15.0, [(10, 10, "Voiager 5 (current)", 100), (12, 10, "Larger front wheel", 100),
+     "90 mm deep, 600 mm long, each edge sloping down over 100 mm, 15 km/h, front suspension. Gentler "
+     "edges: small 10/10 in reference, the Voiager 5 (11/10 in) and larger front wheels.",
+     90, 600, 15.0, [(10, 10, "Small-wheel reference", 100), (11, 10, "Voiager 5 (current)", 100),
+                     (12, 10, "Larger front wheel", 100),
                      (14, 10, "Larger front wheel", 100)], True),
     ("Same pothole, larger front wheel",
-     "70 mm deep, 1000 mm long, 20 km/h, no suspension. The current wheels pitch over; a 12 in front "
-     "wheel rolls out.",
+     "70 mm deep, 1000 mm long, 20 km/h, no suspension. The small 10/10 in reference wheels "
+     "pitch over; a 12 in front wheel rolls out.",
      70, 1000, 20.0, [(10, 10, ""), (12, 10, "")], False),
     ("When the front wheel is much bigger than the rear",
      "90 mm deep, 1000 mm long, 20 km/h, no suspension. Every fall in the simulations was a forward "
@@ -820,11 +825,11 @@ KEYFRAME_TIMES = (-0.25, 0.0, 0.15, 0.3, 0.5)
 # (file stem, depth_mm, length_mm, speed_kmh, suspension, edge_mm or None, [(front, rear, label)])
 KEYFRAME_SETS = [
     ("keyframes_susp_80x600_15kmh", 80, 600, 15.0, True, None,
-     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (12, 12, "12/12 in"),
-      (14, 10, "14/10 in")]),
+     [(10, 10, "10/10 in\n(reference)"), (11, 10, "11/10 in\n(Voiager 5)"), (12, 10, "12/10 in"),
+      (12, 12, "12/12 in"), (14, 10, "14/10 in")]),
     ("keyframes_susp_edge50_80x600_15kmh", 80, 600, 15.0, True, 50,
-     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (12, 12, "12/12 in"),
-      (14, 10, "14/10 in")]),
+     [(10, 10, "10/10 in\n(reference)"), (11, 10, "11/10 in\n(Voiager 5)"), (12, 10, "12/10 in"),
+      (12, 12, "12/12 in"), (14, 10, "14/10 in")]),
 ]
 # Road bumps (exploratory appendix of the paper, decided 2026-10-08). Time 0 = front wheel
 # reaching the bump's leading face; later columns, because the rear strike comes later.
@@ -832,9 +837,11 @@ KEYFRAME_SETS = [
 BUMP_KEYFRAME_TIMES = (-0.2, 0.0, 0.3, 0.6, 0.9)
 BUMP_KEYFRAME_SETS = [
     ("keyframes_bump_box_90x600_20kmh", 90, 600, 20.0, False, "box", "mujoco",
-     [(10, 10, "10/10 in\n(Voiager 5)"), (12, 10, "12/10 in"), (14, 10, "14/10 in")]),
+     [(10, 10, "10/10 in\n(reference)"), (11, 10, "11/10 in\n(Voiager 5)"), (12, 10, "12/10 in"),
+      (14, 10, "14/10 in")]),
     ("keyframes_bump_box_susp_90x300_15kmh", 90, 300, 15.0, True, "box", "mujoco",
-     [(10, 10, "10/10 in\n(Voiager 5)"), (14, 10, "14/10 in"), (10, 14, "10/14 in")]),
+     [(10, 10, "10/10 in\n(reference)"), (11, 10, "11/10 in\n(Voiager 5)"), (14, 10, "14/10 in"),
+      (10, 14, "10/14 in")]),
 ]
 
 
@@ -922,8 +929,9 @@ def build_keyframes(out_dir):
 
 
 # ---- Front/rear wheel-ratio study: what if the front wheel is much bigger? ----
-RATIO_CONFIGS = [(10, 10), (12, 10), (14, 10), (16, 10), (20, 10), (16, 8), (20, 8)]
-RATIO_RAMP = ["#b7d3f6", "#86b6ef", "#5598e7", "#2a78d6", "#1c5cab", "#104281", "#0d366b"]
+RATIO_CONFIGS = [(10, 10), (11, 10), (12, 10), (14, 10), (16, 10), (20, 10), (16, 8), (20, 8)]
+RATIO_RAMP = ["#c6dcf8", "#9ec5f4", "#78abeb", "#5598e7", "#2a78d6", "#1c5cab", "#104281",
+              "#0d366b"]
 
 
 def ratio_study(out_dir):
@@ -1046,10 +1054,10 @@ def edge_study(out_dir, processes=4):
         [f"{f}/{r}" for _, f, r in CONFIGS]]
     falls.to_csv(out_dir / "edge_fall_counts.csv")
 
-    # Figure: front-wheel speed loss and handlebar peak vs depth, 600 mm, 20 km/h, 10/10,
-    # one line per edge width; plus fall counts per configuration and edge width.
+    # Figure: front-wheel speed loss and handlebar peak vs depth, 600 mm, 20 km/h, current
+    # 11/10, one line per edge width; plus fall counts per configuration and edge width.
     fig, axes = plt.subplots(1, 3, figsize=(12, 3.6))
-    sub = df[(df["config"] == "10/10") & (df["length_mm"] == 600) & (df["speed_kmh"] == 20.0)]
+    sub = df[(df["config"] == "11/10") & (df["length_mm"] == 600) & (df["speed_kmh"] == 20.0)]
     for b in EDGE_WIDTHS_MM:
         s_ = sub[sub["edge_width_mm"] == b].sort_values("depth_mm")
         lab = "sharp" if b == 0 else f"{b} mm sloped edges"
@@ -1058,14 +1066,14 @@ def edge_study(out_dir, processes=4):
     axes[0].set_ylabel("Forward speed lost (%)")
     axes[1].set_ylabel("Handlebar peak (g)")
     for ax in axes[:2]:
-        ax.set_xlabel("Pothole depth (mm) · 600 mm long, 20 km/h, 10/10 in")
+        ax.set_xlabel("Pothole depth (mm) · 600 mm long, 20 km/h, 11/10 in")
         _style(ax)
     axes[0].legend(frameon=False, fontsize=8)
     xs = np.arange(len(EDGE_WIDTHS_MM))
-    bw = 0.2
-    cfg_cols = {"10/10": "#86b6ef", "12/10": "#2a78d6", "12/12": "#eb6834", "14/10": "#0d366b"}
+    bw = 0.8 / len(falls.columns)
     for i, c in enumerate(falls.columns):
-        axes[2].bar(xs + (i - 1.5) * bw, falls[c].values, width=bw - 0.03, color=cfg_cols[c], label=c)
+        axes[2].bar(xs + (i - (len(falls.columns) - 1) / 2) * bw, falls[c].values, width=bw - 0.03,
+                    color=RAMP[c], label=c)
     axes[2].set_xticks(xs, ["sharp" if b == 0 else f"{b} mm" for b in EDGE_WIDTHS_MM])
     axes[2].set_xlabel("Pothole edge")
     axes[2].set_ylabel(f"Falls (of {len(DEPTHS_MM) * len(LENGTHS_MM) * len(SPEEDS_KMH)} runs)")
@@ -1091,7 +1099,7 @@ BUMP_CASES = [
 ]
 # Rear-size check: short sharp bumps, where (with the front fork) the falls come from the
 # rear wheel's strike. Finer 5 mm height steps; rear-larger configurations included.
-BUMP_REAR_CONFIGS = [(10, 10), (12, 10), (14, 10), (10, 12), (12, 12), (10, 14), (14, 14)]
+BUMP_REAR_CONFIGS = [(10, 10), (11, 10), (12, 10), (14, 10), (10, 12), (12, 12), (10, 14), (14, 14)]
 BUMP_REAR_HEIGHTS_MM = list(range(50, 101, 5))
 BUMP_COLS = {"pothole": "#b5b4ae", "sharp bump": "#0d366b",
              "sharp bump (profile contact)": "#5598e7", "round-top hump": "#eb6834"}
@@ -1165,12 +1173,12 @@ def bump_study(out_dir, processes=4):
     groups = ([("pothole", w) for w in LENGTHS_MM] if pot is not None else []) + \
         [("sharp bump", w) for w in LENGTHS_MM] + [("round-top hump", w) for w in (600, 3700)]
     fig, ax = plt.subplots(figsize=(11, 3.8))
-    bw = 0.2
+    bw = 0.8 / len(cfgs)
     for gi, (case, w) in enumerate(groups):
         for i, c in enumerate(cfgs):
             row = cnt[(cnt["case"] == case) & (cnt["length_mm"] == w) & (cnt["config"] == c)]
             n = int(row["falls"].iloc[0]) if len(row) else 0
-            ax.bar(gi + (i - 1.5) * bw, n, width=bw - 0.03, color=RAMP[c],
+            ax.bar(gi + (i - (len(cfgs) - 1) / 2) * bw, n, width=bw - 0.03, color=RAMP[c],
                    label=c if gi == 0 else None)
     n_runs = len(DEPTHS_MM) * len(SPEEDS_KMH)
     ax.set_xticks(range(len(groups)), [f"{c}\n{w} mm" for c, w in groups], fontsize=8)
@@ -1188,7 +1196,7 @@ def bump_study(out_dir, processes=4):
     if pot is not None:
         fig, axes = plt.subplots(1, len(LENGTHS_MM), figsize=(10.5, 3.4), sharey=True)
         for ax, w in zip(axes, LENGTHS_MM):
-            for c in ("10/10", "12/10", "14/10"):
+            for c in ("10/10", "11/10", "12/10", "14/10"):
                 for case, ls in (("sharp bump", "-"), ("pothole", ":")):
                     s_ = both[(both["case"] == case) & (both["config"] == c) & (both["length_mm"] == w)
                               & (both["speed_kmh"] == 20.0)].sort_values("height_mm")
@@ -1226,25 +1234,27 @@ def bump_study(out_dir, processes=4):
 BUMP_ANIMATION_SETS = [
     ("Road bump: sharp-edged, no suspension (exploratory)",
      "90 mm high, 600 mm long idealised sharp-edged bump, 20 km/h, rigid fork. In this run the 10/10 "
-     "model meets the fall criteria after the front-wheel strike; the 12 and 14 in front-wheel models "
+     "reference model meets the fall criteria after the front-wheel strike; the 12 and 14 in front-wheel models "
      "do not.",
-     90, 600, 20.0, "box", "mujoco", [(10, 10, "Current wheel sizes"), (12, 10, "Larger front wheel"),
+     90, 600, 20.0, "box", "mujoco", [(10, 10, "Small-wheel reference"), (11, 10, "Voiager 5 (current)"),
+                                      (12, 10, "Larger front wheel"),
                                       (14, 10, "Larger front wheel")], False),
     ("Road bump with the modelled front spring: falls after the rear-wheel strike (exploratory)",
      "90 mm high, 300 mm short idealised sharp-edged bump, 15 km/h, front suspension. In these runs the "
      "fall criteria are met after the rigid rear wheel strikes the edge. The 10/14 run does not meet "
      "them; this is one of very few such cases and is an open question, not a result about rear wheel "
      "size.",
-     90, 300, 15.0, "box", "mujoco", [(10, 10, "Voiager 5 (current)"), (14, 10, "Larger front wheel only"),
+     90, 300, 15.0, "box", "mujoco", [(10, 10, "Small-wheel reference"), (11, 10, "Voiager 5 (current)"),
+                                      (14, 10, "Larger front wheel only"),
                                       (10, 14, "Larger rear wheel only")], True),
     ("Round-top road hump (3.7 m long, 75 mm high)",
      "Circular-arc hump of the standard UK round-top length, 20 km/h, front suspension. No modelled "
      "round-top hump run up to 100 mm met the fall criteria.",
-     75, 3700, 20.0, "arc", "profile", [(10, 10, "Voiager 5 (current)")], True),
+     75, 3700, 20.0, "arc", "profile", [(11, 10, "Voiager 5 (current)")], True),
     ("Short round speed bump (600 mm long, 100 mm high)",
      "Short circular-arc bump, 15 km/h, front suspension. Fall criteria not met; large modelled speed "
      "loss. Modelled jolt sizes for bumps are not validated.",
-     100, 600, 15.0, "arc", "profile", [(10, 10, "Voiager 5 (current)"), (14, 10, "Larger front wheel")], True),
+     100, 600, 15.0, "arc", "profile", [(11, 10, "Voiager 5 (current)"), (14, 10, "Larger front wheel")], True),
 ]
 
 

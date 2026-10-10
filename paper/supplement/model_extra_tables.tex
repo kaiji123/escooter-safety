@@ -1,14 +1,17 @@
 % outputs/wheel_model/configurations.csv
 \begin{table}[htbp]
 \centering\small
-\caption{Geometry model, all configurations: 600 mm long sharp-edged pothole at 20 km/h. Drop = how far the front wheel falls before reaching the far edge; impact velocity = component into the edge; change = front impact velocity / speed loss relative to the current 10/10. Rigid wheels, no tyre or suspension.}\label{tab:Egeom}
+\caption{Geometry model, all configurations: 600 mm long sharp-edged pothole at 20 km/h. Drop = how far the front wheel falls before reaching the far edge; impact velocity = component into the edge; change = front impact velocity / speed loss relative to the 10/10 reference. Rigid wheels, no tyre or suspension.}\label{tab:Egeom}
 \begin{tabular}{@{}lrrrrrr@{}}
 \toprule
 Configuration & Depth (mm) & Drop (mm) & Front (m/s) & Front loss & Rear (m/s) & Change \\
 \midrule
-10/10 (current) & 30 & 30 & 3.59 & 41.7\% & 3.59 & -- \\
-10/10 (current) & 60 & 57 & 4.64 & 69.8\% & 4.64 & -- \\
-10/10 (current) & 90 & 57 & 4.64 & 69.8\% & 4.64 & -- \\
+10/10 (reference) & 30 & 30 & 3.59 & 41.7\% & 3.59 & -- \\
+10/10 (reference) & 60 & 57 & 4.64 & 69.8\% & 4.64 & -- \\
+10/10 (reference) & 90 & 57 & 4.64 & 69.8\% & 4.64 & -- \\
+11/10 (Voiager 5) & 30 & 30 & 3.44 & 38.3\% & 3.59 & -4.1\% / -8.0\% \\
+11/10 (Voiager 5) & 60 & 57 & 4.48 & 65.1\% & 4.64 & -3.4\% / -6.7\% \\
+11/10 (Voiager 5) & 90 & 57 & 4.48 & 65.1\% & 4.64 & -3.4\% / -6.7\% \\
 12/10 (larger front) & 30 & 30 & 3.31 & 35.5\% & 3.59 & -7.7\% / -14.8\% \\
 12/10 (larger front) & 60 & 57 & 4.34 & 61.0\% & 4.64 & -6.5\% / -12.6\% \\
 12/10 (larger front) & 90 & 57 & 4.34 & 61.0\% & 4.64 & -6.5\% / -12.6\% \\
@@ -25,23 +28,23 @@ Configuration & Depth (mm) & Drop (mm) & Front (m/s) & Front loss & Rear (m/s) &
 % outputs/scooter_sim/consistency.csv
 \begin{table}[htbp]
 \centering\small
-\caption{Consistency check values (Figure~\ref{fig:consistency}): simulated handlebar peak for 10/10 at 20 km/h on assumed common potholes. Criterion fixed before running: 1--3 g.}\label{tab:Econs}
+\caption{Consistency check values (Figure~\ref{fig:consistency}): simulated handlebar peak for the current 11/10 (Voiager 5) at 20 km/h on assumed common potholes. Criterion fixed before running: 1--3 g.}\label{tab:Econs}
 \begin{tabular}{@{}lrrrl@{}}
 \toprule
 Model & Length (mm) & Depth (mm) & Peak (g) & Within 1--3 g \\
 \midrule
-no suspension & 300 & 20 & 4.89 & no \\
-no suspension & 300 & 30 & 6.54 & no \\
-no suspension & 300 & 40 & 6.54 & no \\
-no suspension & 600 & 20 & 7.78 & no \\
-no suspension & 600 & 30 & 9.74 & no \\
-no suspension & 600 & 40 & 9.82 & no \\
-with front suspension & 300 & 20 & 1.88 & yes \\
-with front suspension & 300 & 30 & 2.37 & yes \\
-with front suspension & 300 & 40 & 2.37 & yes \\
-with front suspension & 600 & 20 & 5.68 & no \\
-with front suspension & 600 & 30 & 5.11 & no \\
-with front suspension & 600 & 40 & 4.20 & no \\
+no suspension & 300 & 20 & 5.29 & no \\
+no suspension & 300 & 30 & 6.59 & no \\
+no suspension & 300 & 40 & 6.59 & no \\
+no suspension & 600 & 20 & 7.20 & no \\
+no suspension & 600 & 30 & 7.13 & no \\
+no suspension & 600 & 40 & 8.66 & no \\
+with front suspension & 300 & 20 & 1.86 & yes \\
+with front suspension & 300 & 30 & 2.41 & yes \\
+with front suspension & 300 & 40 & 2.41 & yes \\
+with front suspension & 600 & 20 & 4.92 & no \\
+with front suspension & 600 & 30 & 6.50 & no \\
+with front suspension & 600 & 40 & 4.32 & no \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -55,17 +58,21 @@ with front suspension & 600 & 40 & 4.20 & no \\
 Figure & Config. & Fall & Fall time (s) & Speed lost & Max pitch (deg) & Max lean (deg) \\
 \midrule
 Fig.~\ref{fig:5} & 10/10 & yes & 0.15 & 100.0\% & 80.1 & 14.0 \\
+Fig.~\ref{fig:5} & 11/10 & yes & 0.59 & 79.9\% & 80.0 & 18.6 \\
 Fig.~\ref{fig:5} & 12/10 & no &  & 70.9\% & 12.8 & 18.2 \\
 Fig.~\ref{fig:5} & 12/12 & no &  & 71.7\% & 13.7 & 18.2 \\
 Fig.~\ref{fig:5} & 14/10 & no &  & 56.0\% & 6.6 & 15.9 \\
 Fig.~\ref{fig:6} & 10/10 & yes & 0.42 & 61.6\% & 80.0 & 13.6 \\
+Fig.~\ref{fig:6} & 11/10 & no &  & 53.6\% & 22.3 & 19.1 \\
 Fig.~\ref{fig:6} & 12/10 & no &  & 50.0\% & 15.7 & 18.9 \\
 Fig.~\ref{fig:6} & 12/12 & no &  & 49.9\% & 15.9 & 19.0 \\
 Fig.~\ref{fig:6} & 14/10 & no &  & 43.5\% & 11.0 & 15.9 \\
 Fig.~\ref{fig:D1} & 10/10 & yes & 0.32 & 81.4\% & 80.1 & 15.2 \\
+Fig.~\ref{fig:D1} & 11/10 & yes & 0.55 & 68.2\% & 80.0 & 17.6 \\
 Fig.~\ref{fig:D1} & 12/10 & no &  & 62.2\% & 23.3 & 20.9 \\
 Fig.~\ref{fig:D1} & 14/10 & no &  & 48.7\% & 13.6 & 14.1 \\
 Fig.~\ref{fig:D2} & 10/10 & yes & 0.76 & 82.4\% & 80.1 & 14.8 \\
+Fig.~\ref{fig:D2} & 11/10 & yes & 0.73 & 82.1\% & 80.0 & 14.7 \\
 Fig.~\ref{fig:D2} & 14/10 & yes & 0.75 & 84.0\% & 80.0 & 15.7 \\
 Fig.~\ref{fig:D2} & 10/14 & no &  & 72.9\% & 13.4 & 17.5 \\
 \bottomrule

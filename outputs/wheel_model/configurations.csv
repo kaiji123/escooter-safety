@@ -1,10 +1,13 @@
 configuration,depth_mm,front_v_n_ms,front_speed_loss_pct,rear_v_n_ms,front_drop_mm,front_v_n_change_pct,front_speed_loss_change_pct
-"Current (10/10 in, Voiager 5)",30,3.59,41.66,3.59,30.0,0.0,0.0
-"Current (10/10 in, Voiager 5)",60,4.64,69.79,4.64,57.19,0.0,0.0
-"Current (10/10 in, Voiager 5)",90,4.64,69.79,4.64,57.19,0.0,0.0
-"Larger front only (12/10 in, Voiager 7-style)",30,3.31,35.5,3.59,30.0,-7.7,-14.81
-"Larger front only (12/10 in, Voiager 7-style)",60,4.34,60.97,4.64,57.19,-6.53,-12.63
-"Larger front only (12/10 in, Voiager 7-style)",90,4.34,60.97,4.64,57.19,-6.53,-12.63
+Small-wheel reference (10/10 in),30,3.59,41.66,3.59,30.0,0.0,0.0
+Small-wheel reference (10/10 in),60,4.64,69.79,4.64,57.19,0.0,0.0
+Small-wheel reference (10/10 in),90,4.64,69.79,4.64,57.19,0.0,0.0
+"Current (11/10 in, Voiager 5)",30,3.44,38.34,3.59,30.0,-4.08,-7.98
+"Current (11/10 in, Voiager 5)",60,4.48,65.12,4.64,57.19,-3.4,-6.69
+"Current (11/10 in, Voiager 5)",90,4.48,65.12,4.64,57.19,-3.4,-6.69
+Larger front only (12/10 in),30,3.31,35.5,3.59,30.0,-7.7,-14.81
+Larger front only (12/10 in),60,4.34,60.97,4.64,57.19,-6.53,-12.63
+Larger front only (12/10 in),90,4.34,60.97,4.64,57.19,-6.53,-12.63
 Larger front only (14/10 in),30,3.09,30.9,3.59,30.0,-13.88,-25.84
 Larger front only (14/10 in),60,4.08,53.99,4.64,57.19,-12.05,-22.64
 Larger front only (14/10 in),90,4.08,53.99,4.64,57.19,-12.05,-22.64

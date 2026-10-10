@@ -1,9 +1,8 @@
-% Discussion and conclusion. Argument agreed 2026-10-07 (DOCUMENTATION.md 12); wording
-% rules 12.3 (say "outside London", name examples, "suggests", "reported 10 in", no claim
-% that any operator breaks a rule).
-% DEPENDS ON: the Voiager 5 front wheel being 10 in (reported, not measured). If the Oxford
-% Voiager 5's front tyre turns out to be >= 11 in, revise the regulatory-gap paragraphs and
-% recommendations (DOCUMENTATION.md 12.4).
+% Discussion and conclusion. Argument agreed 2026-10-07 (DOCUMENTATION.md 12), revised
+% 2026-10-09 after the author's tyre photographs showed the Voiager 5 is 11/10 in (front
+% 60/55-8.5, rear 60/55-7.5), i.e. at London's 11 in front minimum, not below it. Wording
+% rules 12.3: say "outside London", name examples, "suggests", no claim that any operator
+% breaks a rule. No Voiager 7 wheel-size claims (not measured; user's instruction 2026-10-09).
 \section{Discussion}\label{sec:discussion}
 
 \subsection{Main findings}
@@ -16,22 +15,31 @@ The recording method itself held up: the motion sensors sampled at a steady rate
 gaps, and the walk at the end of one recording was separated from riding to within the
 minute-level precision of the available references (Appendix~B).
 
-In the model, a larger front wheel reduced falls. With the Voiager 5's front suspension, the
-current 10/10 configuration fell in 9 of 81 runs, a 12~in front wheel in 6, and a 14~in front
-wheel in 1 (Table~\ref{tab:7}). The hypothesis survived the test that could have refuted it:
-enlarging the front wheel alone (12/10) gave the same number of falls and the same falling
-depths as enlarging both wheels (12/12) in every case of the main sweep, with and without
-suspension, and in 8 of the 9 settings of the sensitivity analysis with suspension (the
-exception, more fork damping, differed by one 10~mm step; Section~\ref{sensitivity}). The mechanism in the model is that the front-edge impact lifts
-the rear of the scooter, so that the rear wheel largely skips the pothole. All modelled
-pothole falls were forward pitch-overs about the front wheel, the mechanism also reported by
-\textcite{posirisuk2022}. With sloped pothole edges, a larger front wheel still
-reduced falls at every edge width, and 12/10 stayed within one fall of 12/12
-(Table~\ref{tab:8}).
+The Voiager 5 that was ridden has, from its tyre markings, an 11.1~in front wheel and a
+10.1~in rear wheel (Figure~\ref{fig:tyres}). In the model with its front suspension, this
+11/10 configuration fell in 9 of 81 runs, the same number and at the same depths as a
+10/10 reference, while a 12~in front wheel fell in 6 and a 14~in front wheel in 1
+(Table~\ref{tab:7}). In this model, then, the benefit of a larger front wheel began above the
+Voiager 5's current size. The difference between 10 and 11~in may be smaller than the
+model's 10~mm depth resolution can show, so ``no benefit'' should be read as ``no benefit
+detected''.
 
-Suspension mattered as much as wheel size. Without it, falls were more frequent for every
-configuration (15, 14, 14 and 11 of 81 runs), and the suspended model's handlebar
-accelerations matched the measured range on short potholes where the rigid model's did not
+The hypothesis survived the test that could have refuted it: enlarging the front wheel
+alone (12/10) gave the same number of falls and the same falling depths as enlarging both
+wheels (12/12) in every case of the main sweep, with and without suspension, and in 8 of
+the 9 settings of the sensitivity analysis with suspension (the exception, more fork
+damping, differed by one 10~mm step; Section~\ref{sensitivity}). The mechanism in the model
+is that the front-edge impact lifts the rear of the scooter, so that the rear wheel largely
+skips the pothole. All but one of the modelled pothole falls were forward pitch-overs
+started by the front-wheel impact, the mechanism also reported by \textcite{posirisuk2022};
+the exception, one 11/10 run, was credited to the rear wheel only because the rear dipped
+5.8~mm, just over the 5~mm attribution rule. With sloped pothole edges, 12 and 14~in front
+wheels fell no more often than the Voiager 5 at any edge width, and 12/10 stayed within one
+fall of 12/12 (Table~\ref{tab:8}).
+
+Suspension also mattered. Without it, falls were more frequent for every configuration (15,
+15, 14, 14 and 11 of 81 runs), and the suspended model's handlebar accelerations matched the
+measured range on short potholes where the rigid model's did not
 (Section~\ref{consistency-with-the-measured-rides}). This agrees with the recommendation of
 \textcite{paudel2025} that small-wheeled vehicles should have both larger wheels and front
 suspension.
@@ -60,52 +68,59 @@ The front-only hypothesis was tested on potholes. In an exploratory extension to
 sharp-edged bumps (Appendix~\ref{app:bumps}), larger front wheels again reduced falls in the
 rigid model, but with the front spring the few modelled bump falls followed the strike of the
 rigid rear wheel. Whether a front-only rule covers every kind of obstacle is therefore an open
-question. Finally, the wheel sizes of the Voiager 5 are reported, not measured, and no source
-separates front and rear; if its front wheel were larger than the reported 10~in, the
-baseline of the model would shift, although the comparison between configurations would not.
+question. Finally, the wheel sizes come from the sidewall markings of a Voiager 5, the
+model ridden, and are nominal sizes of new tyres; worn tyres under load are slightly
+smaller.
 
 \subsection{Implications for trial vehicle rules}
 
-The national trial rules set no minimum wheel size, while London requires a front wheel of at
-least 11~in \autocite{dft2024guidance,tfl2022tender}. A scooter with a reported 10~in front
-wheel, below London's minimum, remains in service outside London, as in Oxford, and was
-deployed in a new trial area in 2025 \autocite{essex2025voi}. Within the limits above, the
-model suggests that a larger front wheel delays pothole falls and that, for potholes, a
-front-wheel minimum captures the benefit of larger wheels without requiring both wheels to be
-enlarged. Because only trial rental scooters are legal on public roads, a small number of
-actors can act on this:
+The national trial guidance and the legal definition of a trial e-scooter set no minimum
+wheel size, while London requires a front wheel of at least 11~in
+\autocite{dft2024guidance,si2020_663,tfl2022tender}. The Voiager 5 in service in Oxford meets
+London's minimum, by about 2.5~mm. Outside London, the national rules do not require even
+that; whether individual trial areas set their own wheel-size conditions in their
+contracts, as London does, was not checked. Within the
+limits above, the model suggests two things: that a larger front wheel delays pothole falls,
+and that a front wheel at London's 11~in minimum did not fall less often than a 10~in one,
+whereas 12 and 14~in front wheels did. For potholes, a front-wheel minimum also captured the
+benefit of larger wheels without requiring both wheels to be enlarged. Because only trial
+rental scooters are legal on public roads, a small number of actors can act on this:
 
 \begin{enumerate}
-\item \textbf{The Department for Transport} could add a front-wheel minimum, such as London's,
-  to the national trial vehicle requirements, and consider whether its 5~cm stability test is
-  deep enough to separate wheel sizes: in the model, no configuration fell in a 5~cm deep
-  pothole, so a test at that depth would not have shown the differences in falls between them.
-\item \textbf{Operators}, when renewing fleets outside London, could prioritise models with a
-  larger front wheel and front suspension. Voi's own newer models already have larger front
-  wheels \autocite{roadcc2022voiager5,startups2024voiager7}.
+\item \textbf{The Department for Transport} could add a front-wheel minimum to the national
+  trial vehicle requirements, at least London's, and consider whether a larger one (12~in
+  or more, with front suspension) would be justified once physically tested. It could also
+  consider whether its 5~cm stability test is deep enough to separate wheel sizes: in the
+  model, no configuration fell in a 5~cm deep pothole, so a test at that depth would not
+  have shown the differences in falls between them.
+\item \textbf{Transport for London} could review whether its 11~in front-wheel minimum is
+  sufficient, since in this model a front wheel at that size fell as often as a 10~in one.
+\item \textbf{Operators}, when renewing fleets, could prioritise models with a front wheel
+  larger than 11~in and with front suspension.
 \item \textbf{Local authorities hosting trials}, such as Oxfordshire County Council, could ask for
-  London-equivalent vehicle standards when awarding or extending trial contracts, and could use
-  repeated impacts at the same places as one input to road inspection.
+  at least London-equivalent vehicle standards when awarding or extending trial contracts,
+  and could use repeated impacts at the same places as one input to road inspection.
 \item \textbf{Research groups with test facilities} could test front-wheel size on instrumented
   scooters over pothole-shaped obstacles; this is the step needed to confirm or refute the model.
 \end{enumerate}
 
 \subsection{Future work}
 
-The most useful next steps are: measuring the front and rear tyre sizes of the Voiager 5
-directly; recording more rides, riders and phones with the same method, under an ethics
-approval if other riders are involved; measuring the depth of the defects at repeatedly hit
-spots so that the model can be validated rather than checked for consistency; extending the
-model to three dimensions with steering; and physical tests of the kind described above.
+The most useful next steps are: recording more rides, riders and phones with the same method, under an ethics approval if
+other riders are involved; measuring the depth of the defects at repeatedly hit spots so that
+the model can be validated rather than checked for consistency; refining the model's depth
+resolution around the 10--12~in front sizes; extending the model to three dimensions with
+steering; and physical tests of the kind described above.
 
 \section{Conclusion}\label{sec:conclusion}
 
 A smartphone on the handlebar of a rental e-scooter recorded frequent, repeated vertical
-impacts on ordinary Oxford roads, often at places with no recent public report. A dynamics
-model of the Voiager 5 suggests that a larger front wheel reduces pothole falls and that
-enlarging the front wheel alone gives the same benefit as enlarging both, a hypothesis the
-model could have refuted but did not. These are results from three rides and an unvalidated
-model, not proof that current scooters are unsafe or that larger wheels prevent falls. They
-are, however, consistent with London's existing front-wheel rule and with the direction
-operators have already taken, and they justify both extending a front-wheel minimum to
-trials outside London and testing it physically.
+impacts on ordinary Oxford roads, often at places with no recent public report. The
+Voiager 5 ridden has an 11~in front wheel, at London's minimum. A dynamics model of it
+suggests that this front wheel falls in potholes about as often as a 10~in one, that 12 and
+14~in front wheels reduce pothole falls, and that enlarging the front wheel alone gives the
+same benefit as enlarging both, a hypothesis the model could have refuted but did not. These
+are results from three rides and an unvalidated model, not proof that current scooters are
+unsafe or that larger wheels prevent falls. They do justify extending a front-wheel
+minimum to trials outside London, asking whether London's 11~in minimum is high enough, and
+testing larger front wheels physically.

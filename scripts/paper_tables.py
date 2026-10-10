@@ -21,7 +21,16 @@ import pandas as pd
 SIM = Path("outputs/scooter_sim")
 SECTIONS = Path("paper/sections")
 SUPP = Path("paper/supplement")      # generated, not included in main.tex
-CONFIGS = ["10/10", "12/10", "12/12", "14/10"]
+CONFIGS = ["10/10", "11/10", "12/10", "12/12", "14/10"]
+# Column headings: 11/10 is the Voiager 5 that was ridden (tyre sidewalls 60/55-8.5 front,
+# 60/55-7.5 rear, photographed 2026-10-09); 10/10 is a smaller reference, not the ridden scooter.
+HEAD = {"10/10": "10/10 (ref.)", "11/10": "11/10 (V5)"}
+CFG_NOTE = ("11/10 (V5) = the Voi Voiager 5 that was ridden; 10/10 (ref.) = smaller "
+            "reference wheels.")
+
+
+def heads(cfgs):
+    return [HEAD.get(c, c) for c in cfgs]
 NONE = "--"
 
 
@@ -77,8 +86,8 @@ def model_tables():
     rows.append(["\\textbf{Falls (of 81 runs)}"] + [f"\\textbf{{{n[c]}}}" for c in CONFIGS])
     parts.append(table(
         "Shallowest pothole depth (mm) causing a fall, model without suspension "
-        "(counterpart of Table~\\ref{tab:7}).", "tab:Enofork",
-        ["Length, speed"] + CONFIGS, rows, "lrrrr",
+        "(counterpart of Table~\\ref{tab:7}). " + CFG_NOTE, "tab:Enofork",
+        ["Length, speed"] + heads(CONFIGS), rows, "l" + "r" * len(CONFIGS),
         "outputs/scooter_sim/fall_thresholds.csv, sim_results.csv"))
 
     # --- sensitivity, both models
@@ -95,8 +104,8 @@ def model_tables():
         parts.append(table(
             f"Sensitivity analysis, {tag}: first fall depth (mm) on a 1000 mm pothole at "
             f"20 km/h / forward speed lost on a 60 mm deep, 600 mm pothole at 20 km/h. "
-            f"One parameter changed at a time from the baseline.", label,
-            ["Setting"] + CONFIGS, rows, "p{52mm}rrrr",
+            f"One parameter changed at a time from the baseline. " + CFG_NOTE, label,
+            ["Setting"] + heads(CONFIGS), rows, "p{40mm}" + "r" * len(CONFIGS),
             f"outputs/scooter_sim/{sub}sensitivity.csv"))
 
     return "\n".join(parts)
@@ -155,8 +164,8 @@ def ratio_edge_tables():
         rows += rr
     parts.append(table(
         "Soft pothole edges (profile contact, with front suspension): shallowest depth (mm) "
-        "causing a fall, by edge width. Fall counts are in Table~\\ref{tab:8}.", "tab:Eedges",
-        ["Edge", "Length, speed"] + CONFIGS, rows, "llrrrr",
+        "causing a fall, by edge width. Fall counts are in Table~\\ref{tab:8}. " + CFG_NOTE,
+        "tab:Eedges", ["Edge", "Length, speed"] + heads(CONFIGS), rows, "ll" + "r" * len(CONFIGS),
         "outputs/scooter_sim/suspension/soft_edges/edge_fall_thresholds.csv"))
     return "\n".join(parts)
 
@@ -168,11 +177,11 @@ def bump_tables():
         b = pd.read_csv(SIM / sub / "bumps" / "bump_fall_thresholds.csv")
         rows = threshold_rows(b, CONFIGS, prefix=lambda r: r["case"])
         if not rows:
-            rows = [["\\multicolumn{6}{l}{No falls in any case.}"]]
+            rows = [[f"\\multicolumn{{{2 + len(CONFIGS)}}}{{l}}{{No falls in any case.}}"]]
         parts.append(table(
             f"Bumps, model {tag}: lowest bump height (mm) causing a fall. Exploratory; not "
-            f"validated against measurements.", label, ["Obstacle", "Length, speed"] + CONFIGS,
-            rows, "llrrrr", f"outputs/scooter_sim/{sub}bumps/bump_fall_thresholds.csv"))
+            f"validated against measurements. " + CFG_NOTE, label,
+            ["Obstacle", "Length, speed"] + heads(CONFIGS), rows, "ll" + "r" * len(CONFIGS), f"outputs/scooter_sim/{sub}bumps/bump_fall_thresholds.csv"))
     return "\n".join(parts)
 
 
@@ -180,8 +189,9 @@ def extra_model_tables():
     """Geometry configurations, consistency check values and the key-frame runs."""
     parts = []
     g = pd.read_csv("outputs/wheel_model/configurations.csv")
-    short = {"Current (10/10 in, Voiager 5)": "10/10 (current)",
-             "Larger front only (12/10 in, Voiager 7-style)": "12/10 (larger front)",
+    short = {"Small-wheel reference (10/10 in)": "10/10 (reference)",
+             "Current (11/10 in, Voiager 5)": "11/10 (Voiager 5)",
+             "Larger front only (12/10 in)": "12/10 (larger front)",
              "Larger front only (14/10 in)": "14/10 (larger front)",
              "Larger both (12/12 in)": "12/12 (larger both)"}
     rows = [[short.get(r.configuration, r.configuration), f"{r.depth_mm:.0f}", f"{r.front_drop_mm:.0f}", f"{r.front_v_n_ms:.2f}",
@@ -191,8 +201,8 @@ def extra_model_tables():
     parts.append(table(
         "Geometry model, all configurations: 600 mm long sharp-edged pothole at 20 km/h. Drop = "
         "how far the front wheel falls before reaching the far edge; impact velocity = component "
-        "into the edge; change = front impact velocity / speed loss relative to the current "
-        "10/10. Rigid wheels, no tyre or suspension.", "tab:Egeom",
+        "into the edge; change = front impact velocity / speed loss relative to the 10/10 "
+        "reference. Rigid wheels, no tyre or suspension.", "tab:Egeom",
         ["Configuration", "Depth (mm)", "Drop (mm)", "Front (m/s)", "Front loss", "Rear (m/s)", "Change"],
         rows, "lrrrrrr", "outputs/wheel_model/configurations.csv"))
     c = pd.read_csv(SIM / "consistency.csv")
@@ -200,7 +210,7 @@ def extra_model_tables():
              "yes" if r.within_1_to_3_g else "no"] for r in c.itertuples()]
     parts.append(table(
         "Consistency check values (Figure~\\ref{fig:consistency}): simulated handlebar peak for "
-        "10/10 at 20 km/h on assumed common potholes. Criterion fixed before running: 1--3 g.",
+        "the current 11/10 (Voiager 5) at 20 km/h on assumed common potholes. Criterion fixed before running: 1--3 g.",
         "tab:Econs", ["Model", "Length (mm)", "Depth (mm)", "Peak (g)", "Within 1--3 g"],
         rows, "lrrrl", "outputs/scooter_sim/consistency.csv"))
     k = pd.read_csv(SIM / "keyframes/keyframes_runs.csv")

@@ -25,6 +25,9 @@ benefit of larger wheels.
 - Ride 1 alone: 40 impacts over 2.9 km; one spot hit on three passes (near 51.7522, -1.2377).
 - Across rides: 10 spots hit on 2+ rides, 2 on all three (Marston Road).
 - Remaining desk work: Street View check (`outputs/combined/spot_links.csv`, SPOT_CHECK.md).
+  2026-10-10: user chose to REMOVE all visual-check text from the paper (no "planned"/
+  "pending" wording). Appendix C is now just "Impact spots with links to street-level
+  imagery" (Table C1). If the check is ever done, it would need adding back.
 
 **Road bumps: in the paper as Appendix D (user reversed the earlier "not in the paper"
 decision on 2026-10-08).** Exploratory only; sources SIMULATION_METHODS 3.15/4.9,
@@ -47,10 +50,14 @@ DOCUMENTATION.md section 12, use it for the paper's intro and conclusion)
   London (Oxford; Essex 2025). The model suggests a larger front delays falls -> extend a
   front-wheel minimum to all trials. Plus a call for physical testing.
 - Say "outside London", not "rural"; name examples, never claim fleet numbers.
-- Voiager 5 sizes: use the reported 10/10 as a stated assumption (user's decision; no
-  company email for now).
-- OPEN: which Voi model runs in London. If it's the Voiager 5, the 10 in reports and the
-  thesis must be revisited (DOCUMENTATION.md 12.4).
+- REVISED 2026-10-09 (tyre photos): Voiager 5 = 11/10 (front 60/55-8.5 = 11.1 in, rear
+  60/55-7.5 = 10.1 in), i.e. it just meets London's 11 in front minimum. Paper thesis now:
+  national trials set no minimum (extend one to all trials), and in the model an 11 in front
+  fell as often as 10 in (9 of 81 with fork) while 12 in (6) and 14 in (1) fell less, so ask
+  whether 11 in is high enough. 10/10 is kept only as a "smaller reference", never as the
+  ridden scooter (user's instruction). NO Voiager 7 wheel-size claims or "Voiager 7-style"
+  labels (its tyres were not measured; user's instruction 2026-10-09).
+- London Voi model question no longer decisive (DOCUMENTATION.md 12.4, resolved).
 - Only rental scooters in official trials are legal on UK roads (private e-scooters only
   on private land with permission), so operators and DfT trial rules set the design of
   every legal e-scooter. Recommendations therefore go to a small number of actors.
@@ -77,13 +84,25 @@ sizes over a pothole-shaped step, phone recording. Not part of the current paper
   scripts/scooter_sim.py, rerun all `--suspension` experiments and `--consistency`,
   and update SIMULATION_METHODS.md and DOCUMENTATION.md 6.6.
 - No official Voi CAD is published; fan models are illustration only.
+- 2026-10-09 OWN OBSERVATION (user photos, `tyre-images/IMG_8174-8183.jpeg`, all FRONT wheel,
+  taken 21:43-21:47): front tyre sidewall reads **60/55-8.5** -> nominal OD 216 + 2x33 =
+  ~282 mm = **~11.1 in**, NOT 10 in. Also "CY-329-12" (pattern code, likely Chaoyang),
+  max load 75 kg, 4 ply rating, TWI -> likely pneumatic (no valve seen). Rear (rear.jpeg):
+  60/55-7.5 = ~10.1 in -> Voiager 5 ~ 11/10. Photographed scooter verified by the user as a Voiager 5 (2026-10-10); the paper no longer
+  lists confirming the ridden scooters' tyres as future work (user's decision). This contradicts the
+  10 in reports for the front and puts the V5 front at (nominally) London's 11 in minimum:
+  the regulatory-gap thesis and the "10/10 = Voiager 5" baseline were revised in the paper
+  on 2026-10-09 (11/10 added to every simulation; see "11/10 (Voiager 5) results").
 
 ### Open tasks
 - [x] Geometry model and figures (`scripts/wheel_geometry.py`)
 - [x] Confirm Voi model: SZ22 is a Voiager 5
 - [ ] Voiager 5 tyre type: pneumatic or honeycomb? (look for a valve) (user)
-- [ ] Voiager 5 front AND rear tyre sidewall sizes (user, parked scooter). If the front is
+- [x] Voiager 5 front AND rear tyre sidewall sizes (user, parked scooter). If the front is
       larger, the "10/10 = Voiager 5" sim baseline must be relabelled.
+      FRONT DONE 2026-10-09: 60/55-8.5 (~11.1 in). REAR DONE 2026-10-09 (`tyre-images/rear.jpeg`,
+      22:23, closed disc hub with screws): 60/55-7.5 -> 190.5 + 66 = ~257 mm = ~10.1 in.
+      So Voiager 5 ~ 11/10 (front larger), not 10/10. Same scooter as the front photos? unknown.
 - [x] Dynamics model in MuJoCo (`scripts/scooter_sim.py`, done 2026-10-03)
 - [x] Front suspension option (`--suspension`): consistency partial pass (300 mm
       potholes 1.9-2.4 g = in measured range; 600 mm 4.2-5.7 g = ~2x high). This is
@@ -131,6 +150,14 @@ with uncertainties (DOCUMENTATION.md 6.8), never as findings about real scooters
 - GPS reported speed under-reads walking (3.0 vs >= 4.6 km/h from positions), sometimes
   riding (4/6 segments, 0.2-3.2 km/h); 12 s GPS lag at walk onset. May affect the 7 km/h
   impact gate (not quantified).
+
+### 11/10 (Voiager 5) results, added 2026-10-09 (all studies rerun; old runs reproduced exactly)
+- Configs now 10/10 (ref.), 11/10 (V5), 12/10, 12/12, 14/10; ratio study adds 11/10 (8 configs).
+- Falls with fork 9/9/6/6/1; no fork 15/15/14/14/11. 11/10 = 10/10 thresholds with fork in
+  every case. One 11/10 fall (90x1000, 25 km/h, fork) is "rear" by the 5 mm rule (dip 5.8 mm).
+- Soft edges 11/10: 8/7/5/4 (sharp->100 mm). Sharp bumps no fork 22/18/13/14/4, fork 1/2/2/1/2.
+- Consistency (11/10): fork 300 mm 1.86-2.41 g (pass), 600 mm 4.3-6.5 g; no fork 5.3-8.7 g.
+- Tyre figure: `scripts/tyre_figure.py` -> paper/figures/fig_tyres.png (Figure 1).
 
 ### Simulation results with suspension (outputs/scooter_sim/suspension/)
 - Falls in main sweep (81 runs each): 10/10 9, 12/10 6, 12/12 6, 14/10 1 (vs 15/14/14/11
@@ -234,6 +261,9 @@ leoni2022, eriksson2008, zang2018, cicchino2021, anke2025, lee2024fall, dft2026f
 (GB 2025: 10 riders killed, ~410 serious; 28% single-vehicle; heavy under-reporting; no
 road-surface factors). Do NOT cite "67% of DC falls due to bad roads" (not in Cicchino).
 Swifty pothole tests exist (company blog): commercial, not peer reviewed.
+2026-10-10: "no national minimum wheel size" verified in the full DfT guidance text and in
+SI 2020/663 (key si2020_663). PACTS 2022 report reportedly recommends front >= 12 in, rear
+>= 10 in for private e-scooters: [to verify], PDF not found, not yet cited (REFERENCES.md).
 London Voi model: still not found 2026-10-08; decisive check = Oxford V5 front tyre size
 (sidewall) or ask Voi support (DOCUMENTATION.md 12.4).
 `literature/wheel_size_industry_cases.md`: industry cases of bigger wheels (Voi, Lime,

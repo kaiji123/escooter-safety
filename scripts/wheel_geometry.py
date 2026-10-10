@@ -26,9 +26,10 @@ Absolute peak accelerations need tyre stiffness and suspension, which this model
 does not include; compare wheel sizes relative to each other.
 
 Wheel sizes: nominal size taken as tyre outer diameter (10 in = 254 mm).
-Baseline: Voi Voiager 5, 10 in front (Levy fleet spec, pneumatic, front spring).
-Voiager 7: 12 in front tyre ("a size increase from its predecessors"); rear not
-stated, assumed 10 in here. CONFIRM which model runs in Oxford.
+Current vehicle: Voi Voiager 5 (the model ridden in Oxford), 11/10 in, from the author's
+photographs of the tyre sidewalls (2026-10-09): front 60/55-8.5 (~11.1 in), rear 60/55-7.5
+(~10.1 in). The 10 in reported by the Levy fleet spec is kept as a small-wheel reference.
+12/10 is a generic larger-front configuration (no Voi model measured at that size).
 
 Usage
     python scripts/wheel_geometry.py --out-dir outputs/wheel_model
@@ -48,12 +49,13 @@ INCH = 0.0254
 
 # Scooter configurations compared: (label, front diameter in, rear diameter in)
 CONFIGS = [
-    ("Current (10/10 in, Voiager 5)", 10, 10),
-    ("Larger front only (12/10 in, Voiager 7-style)", 12, 10),
+    ("Small-wheel reference (10/10 in)", 10, 10),
+    ("Current (11/10 in, Voiager 5)", 11, 10),
+    ("Larger front only (12/10 in)", 12, 10),
     ("Larger front only (14/10 in)", 14, 10),
     ("Larger both (12/12 in)", 12, 12),
 ]
-DIAMETERS_IN = [8, 10, 12, 14, 16]       # for the wheel-size sweep
+DIAMETERS_IN = [8, 10, 11, 12, 14, 16]       # for the wheel-size sweep
 SPEED_KMH = 20.0                         # rider's measured cruising speed (~18-22 km/h)
 SPEEDS_KMH = [15.0, 20.0, 25.0]          # sensitivity (UK rental limit is 15.5 mph ~ 25 km/h)
 DEPTHS_MM = np.arange(0, 121, 1.0)       # pothole depth sweep
@@ -62,7 +64,7 @@ KEY_DEPTHS_MM = [30, 60, 90]             # depths used in the Imperial simulatio
 KEY_WIDTH_MM = 600
 
 # Sequential blue ramp: darker = larger wheel (wheel size is an ordered magnitude)
-RAMP = {8: "#9ec5f4", 10: "#5598e7", 12: "#2a78d6", 14: "#1c5cab", 16: "#0d366b"}
+RAMP = {8: "#c6dcf8", 10: "#9ec5f4", 11: "#5598e7", 12: "#2a78d6", 14: "#1c5cab", 16: "#0d366b"}
 INK, MUTED = "#222222", "#6b6b6b"
 
 
@@ -141,9 +143,9 @@ def fig_by_depth(df, metric, ylabel, path, width_mm=KEY_WIDTH_MM):
     fig, ax = plt.subplots(figsize=(6.6, 3.8))
     for D in DIAMETERS_IN:
         s = sub[sub["diameter_in"] == D]
-        lw = 2.6 if D in (10, 12) else 1.6
+        lw = 2.6 if D in (11, 12) else 1.6
         ax.plot(s["depth_mm"], s[metric], color=RAMP[D], lw=lw)
-        tag = {10: " (Voiager 5)", 12: " (Voiager 7 front)"}.get(D, "")
+        tag = {11: " (Voiager 5 front)"}.get(D, "")
         ax.annotate(f"{D} in{tag}", (s["depth_mm"].iloc[-1], s[metric].iloc[-1]),
                     xytext=(4, 0), textcoords="offset points", va="center",
                     fontsize=8.5, color=INK)
@@ -160,11 +162,11 @@ def fig_by_depth(df, metric, ylabel, path, width_mm=KEY_WIDTH_MM):
 
 
 def fig_by_width(df, path):
-    """Normal impact velocity vs depth, small multiples by pothole length, 10 vs 12 in."""
+    """Normal impact velocity vs depth, small multiples by pothole length, 10, 11, 12, 16 in."""
     fig, axes = plt.subplots(1, len(WIDTHS_MM), figsize=(10, 3.2), sharey=True)
     sub = df[df["speed_kmh"] == SPEED_KMH]
     for ax, w in zip(axes, WIDTHS_MM):
-        for D in (10, 12, 16):
+        for D in (10, 11, 12, 16):
             s = sub[(sub["width_mm"] == w) & (sub["diameter_in"] == D)]
             ax.plot(s["depth_mm"], s["v_n_ms"], color=RAMP[D], lw=2, label=f"{D} in")
         ax.set_title(f"{w} mm long", fontsize=9.5, color=INK, loc="left")
@@ -178,10 +180,11 @@ def fig_by_width(df, path):
 
 
 def fig_schematic(path, depth_mm=60, width_mm=KEY_WIDTH_MM):
-    """Side view: 10 in and 12 in wheels resting in the same pothole at the far edge."""
-    fig, axes = plt.subplots(1, 2, figsize=(9, 3.2), sharey=True)
+    """Side view: 10, 11 (Voiager 5 front) and 12 in wheels resting in the same pothole at the
+    far edge."""
+    fig, axes = plt.subplots(1, 3, figsize=(12, 3.2), sharey=True)
     d, w = depth_mm / 1000, width_mm / 1000
-    for ax, D in zip(axes, (10, 12)):
+    for ax, D in zip(axes, (10, 11, 12)):
         R = D * INCH / 2
         h = wheel_drop_m(R, d, w)  # static drop, no speed limit, for illustration
         th = np.arccos((R - h) / R)

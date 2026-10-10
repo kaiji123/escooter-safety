@@ -1,21 +1,26 @@
 setting,config,first_fall_mm_1000mm_20kmh,speed_loss_pct_60x600_20kmh
 baseline,10/10 in,70,52.5
+baseline,11/10 in,70,47.4
 baseline,12/10 in,80,40.6
 baseline,12/12 in,80,41.0
 baseline,14/10 in,80,29.4
 stiffer tyre (tau 0.015 s),10/10 in,60,69.9
+stiffer tyre (tau 0.015 s),11/10 in,70,60.4
 stiffer tyre (tau 0.015 s),12/10 in,70,52.4
 stiffer tyre (tau 0.015 s),12/12 in,70,52.9
 stiffer tyre (tau 0.015 s),14/10 in,80,36.2
 softer tyre (tau 0.035 s),10/10 in,70,42.2
+softer tyre (tau 0.035 s),11/10 in,80,38.1
 softer tyre (tau 0.035 s),12/10 in,80,33.7
 softer tyre (tau 0.035 s),12/12 in,80,33.4
 softer tyre (tau 0.035 s),14/10 in,90,26.0
 weaker bracing (1000 N m/rad),10/10 in,70,52.7
+weaker bracing (1000 N m/rad),11/10 in,80,47.9
 weaker bracing (1000 N m/rad),12/10 in,80,41.0
 weaker bracing (1000 N m/rad),12/12 in,80,42.9
 weaker bracing (1000 N m/rad),14/10 in,90,29.9
 stronger bracing (3000 N m/rad),10/10 in,70,51.5
+stronger bracing (3000 N m/rad),11/10 in,70,45.7
 stronger bracing (3000 N m/rad),12/10 in,80,38.7
 stronger bracing (3000 N m/rad),12/12 in,80,40.0
 stronger bracing (3000 N m/rad),14/10 in,80,26.2

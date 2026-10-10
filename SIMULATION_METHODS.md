@@ -81,8 +81,8 @@ A bigger wheel has a smaller θ for the same pothole, so every quantity falls.
 
 | Parameter | Values |
 |---|---|
-| Wheel diameters | 8, 10, 12, 14, 16 in (nominal size taken as tyre outer diameter; 10 in = 254 mm) |
-| Configurations | 10/10 (Voiager 5), 12/10 (Voiager 7-style front), 14/10, 12/12 |
+| Wheel diameters | 8, 10, 11, 12, 14, 16 in (nominal size taken as tyre outer diameter; 10 in = 254 mm) |
+| Configurations | 10/10 (smaller reference), 11/10 (current, Voiager 5; tyre photos 2026-10-09), 12/10, 14/10, 12/12. No configuration is labelled as a Voiager 7 (its tyres were not measured). |
 | Speeds | 15, 20 (main), 25 km/h |
 | Depths | 0–120 mm in 1 mm steps |
 | Lengths | 150, 300, 600 (main), 1000 mm |
@@ -92,7 +92,7 @@ A bigger wheel has a smaller θ for the same pothole, so every quantity falls.
 
 `outputs/wheel_model/`: `wheel_sweep.csv` (all combinations), `configurations.csv`
 (front and rear wheel metrics per configuration at the key depths, with % change from
-10/10), and four figures (schematic, impact velocity, speed loss, pothole length).
+the 10/10 reference), and four figures (schematic, impact velocity, speed loss, pothole length).
 
 The schematic uses the static case (no time limit on the drop), labelled as such.
 
@@ -370,7 +370,7 @@ wheel stopped dead at some point) instead.
 
 | Factor | Levels |
 |---|---|
-| Wheel configuration (front/rear, in) | 10/10 (current, Voiager 5 assumed), 12/10, 12/12, 14/10 |
+| Wheel configuration (front/rear, in) | 10/10 (smaller reference), 11/10 (current, Voiager 5), 12/10, 12/12, 14/10 |
 | Pothole depth | 20–100 mm in 10 mm steps |
 | Pothole length | 300, 600, 1000 mm |
 | Speed | 15, 20, 25 km/h |
@@ -397,8 +397,8 @@ at 20 km/h, and the speed loss on a 60 × 600 mm pothole at 20 km/h
 
 ### 4.3 Front/rear ratio study (`--ratio`)
 
-Configurations 10/10, 12/10, 14/10, 16/10, 20/10, 16/8 and 20/8 (front/rear diameter
-ratios 1.0 to 2.5), over the same depth, length and speed grid: 7 × 81 = **567 runs**.
+Configurations 10/10, 11/10, 12/10, 14/10, 16/10, 20/10, 16/8 and 20/8 (front/rear diameter
+ratios 1.0 to 2.5), over the same depth, length and speed grid: 8 × 81 = **648 runs**.
 Outputs in `outputs/scooter_sim/ratio/`.
 
 ### 4.4 Wheel-mass check
@@ -452,7 +452,8 @@ stiffer (40 kN/m) springs, and damping ratios 0.15 and 0.5.
 
 ### 4.7 Consistency check (`--consistency`)
 
-Criterion, fixed before running: for the current 10/10 scooter at 20 km/h on "common"
+Criterion, fixed before running: for the current scooter (11/10 since 2026-10-09; 10/10
+before) at 20 km/h on "common"
 potholes (20, 30, 40 mm deep; 300 and 600 mm long; an assumption about which potholes
 are common), simulated handlebar peaks (10 ms windows, like the phone) should fall in
 roughly **1–3 g**, consistent with the measured impacts: 1.0–2.97 g for 99 of 100
@@ -496,8 +497,8 @@ Cases (`BUMP_CASES`), each × the four configurations × heights 20–100 mm (10
 | round-top hump | arc | profile | 600, 3700 | 216 |
 
 plus a **rear-size check** (`BUMP_REAR_CONFIGS`): 300 mm sharp bump, MuJoCo contact,
-heights 50–100 mm in 5 mm steps, 3 speeds, configurations 10/10, 12/10, 14/10, 10/12,
-12/12, 10/14, 14/14 (231 runs). It was added after the few suspended-model bump falls
+heights 50–100 mm in 5 mm steps, 3 speeds, configurations 10/10, 11/10, 12/10, 14/10, 10/12,
+12/12, 10/14, 14/14 (264 runs). It was added after the few suspended-model bump falls
 were all met after the rear wheel's strike (DOCUMENTATION.md 6.8). It is a small,
 exploratory check (one length; differences near the 5 mm grid resolution), not a test of
 whether rear size improves stability.
@@ -519,7 +520,7 @@ but not when it drops into a hole. Bump fall counts are therefore less certain t
 pothole ones; read them as comparisons between wheel configurations.
 
 **Jolt sizes are not validated for bumps.** Sharp bumps give large simulated handlebar
-peaks even with the fork (10/10, 600 mm, 20 km/h: 3.6 g at 20 mm, 8.4 g at 40 mm), above
+peaks even with the fork (600 mm, 20 km/h, 20–40 mm, all five configurations: 3.3–8.5 g), above
 the measured 1–2.97 g. The rides did not label bumps, so there is nothing to compare with.
 
 ### 4.11 Key-frame figures for print (`--keyframes`)
@@ -534,9 +535,10 @@ edge), so the rows can be compared column by column. The frames are drawn by
 drawing is unchanged). Each falling row is labelled with the time the fall criterion
 (pitch or lean limit) is reached; a column after the simulation stopped shows the last
 frame, marked. Sets (`KEYFRAME_SETS`, potholes only; road bumps are not in the paper):
-80 × 600 mm at 15 km/h with suspension, sharp edges (10/10, 12/10, 12/12, 14/10) and 50 mm
-sloped edges (10/10, 12/10, 12/12, 14/10). Fall criterion reached at +0.15 s and +0.42 s for
-10/10; no other row falls (`keyframes_runs.csv`).
+80 × 600 mm at 15 km/h with suspension, sharp edges and 50 mm sloped edges, rows 10/10,
+11/10, 12/10, 12/12, 14/10. Sharp edges: 10/10 falls at +0.15 s, 11/10 at +0.59 s, no
+other row falls. 50 mm edges: 10/10 falls at +0.42 s, no other row falls
+(`keyframes_runs.csv`).
 
 ### 4.10 Animation page
 
@@ -629,8 +631,10 @@ as predictions of real fall depths or accelerations.
 - **Redesigned frame assumed:** the deck is kept level for every wheel combination.
 - **Fall criteria** are analyst-defined thresholds.
 - **Depth resolution** is 10 mm.
-- **Rear wheel size assumed:** the ridden vehicle (SZ22) is confirmed as a Voiager 5
-  with a 10 in front wheel; its rear wheel size is not published and is assumed 10 in.
+- **Wheel sizes from one photographed scooter:** sidewall codes of one Voiager 5 in Oxford
+  (2026-10-09): front 60/55-8.5 (282 mm, 11.1 in), rear 60/55-7.5 (257 mm, 10.1 in),
+  modelled as 11/10. Nominal sizes of new tyres; the photographed scooter is a Voiager 5, the
+  model ridden (verified by the author, 2026-10-10). The reported 10 in (Levy; Alsalkini 2023) is kept as the 10/10 reference.
 
 ---
 
@@ -682,12 +686,11 @@ open in an image viewer before rerunning, or saving it will fail.
 
 | Parameter | Value | Source |
 |---|---|---|
-| Front wheel, current | 10 in | Voiager 5 spec (Levy); ridden vehicle SZ22 confirmed as a Voiager 5 |
-| Rear wheel, current | 10 in | Reported as 10 in without front/rear distinction (Levy; Alsalkini 2023) |
+| Front wheel, current | 11 in (60/55-8.5, 282 mm nominal) | Author's sidewall photograph, 2026-10-09 (`tyre-images/`); reported 10 in (Levy) kept as reference |
+| Rear wheel, current | 10 in (60/55-7.5, 257 mm nominal) | Author's sidewall photograph, 2026-10-09 |
 | Tyre type | Pneumatic (τ = 0.025 s) | Disputed: Levy says pneumatic, another summary says solid honeycomb; stiffer tyres raise simulated jolts but don't change fall rankings (checked τ = 0.015 and 0.010 s with suspension) |
 | Front fork (optional) | 25 kN/m, damping ratio 0.3, 30 mm travel, preload 50% of sprung weight | Assumed (section 3.12) |
 | Profile contact (optional) | Tyre 80 kN/m, 500 N·s/m; profile sampled every 0.5 mm; edge widths 0–100 mm (raised cosine) | Assumed (section 3.14) |
-| Front wheel, Voiager 7 | 12 in | Voi / press (rear not published) |
 | Scooter mass | 32 kg | Assumed (Voiager 7 reported at 36 kg) |
 | Wheelbase | 0.95 m | Assumed |
 | Deck height (10 in wheels) | 0.16 m | Assumed |

@@ -1,7 +1,8 @@
 % Introduction. Argument agreed 2026-10-07 (DOCUMENTATION.md 12); sources checked in
 % REFERENCES.md ("Literature search ...", 2026-10-08). Each citation is used only for what
 % the "use for" column there allows.
-% DEPENDS ON: the Voiager 5 front wheel being 10 in (reported, not measured; 12.4).
+% Wheel sizes: Voiager 5 = 11/10 in from the author's tyre photographs (2026-10-09,
+% tyre-images/, scripts/tyre_figure.py); the reported 10 in is kept only as a reference.
 \section{Introduction}\label{sec:intro}
 
 \subsection{Background}
@@ -39,29 +40,43 @@ sensors have also been used to map potholes and road roughness from moving vehic
 
 \subsection{The regulatory gap}
 
-The national trial guidance sets no minimum wheel size. Its stability tests include riding
-through a depression 1~m long and 5~cm deep with vertical walls \autocite{dft2024guidance}.
+Neither the national trial guidance \autocite{dft2024guidance} nor the legal definition of a
+trial e-scooter \autocite{si2020_663} sets a minimum wheel size. The guidance's stability
+tests include riding through a depression 1~m long and 5~cm deep with vertical walls.
 London's trial goes further: since November 2022, its rental e-scooters must have a front
 wheel of at least 11~in and a rear wheel of at least 9~in \autocite{tfl2022tender}, and
 Transport for London describes its vehicle standards, including larger wheels, as going
-beyond the national ones \autocite{tfl2023press}. Outside London no such rule applies, so a
-scooter whose front wheel is below London's minimum may still be deployed elsewhere.
+beyond the national ones \autocite{tfl2023press}. Outside London the
+national rules set no wheel size; London's 11~in is the only minimum we found, although we
+did not check the contracts of individual trial areas, which could add their own.
 
 The Voi Voiager 5, the model ridden in this study in Oxford \autocite{voi2026support_rec01,
-voi2026support_rec0203,occ_trial}, is such a case. Its wheels are reported as 10~in
-\autocite{levy_voiager5,alsalkini2023}; no published source gives the front and rear sizes
-separately, and we treat 10~in front and rear as an assumption throughout. The model was
-introduced in 2022 with a larger front wheel, deeper tyre tread and greater shock
-absorption than its predecessor \autocite{roadcc2022voiager5}, and was still being deployed in new trial areas in
-2025 \autocite{essex2025voi}. Voi's later Voiager 7 has a 12~in front tyre
-\autocite{startups2024voiager7}. So Voi has already started using bigger front wheels
-on its newer scooters, but outside London nothing requires older models to be replaced. Voi is not
-breaking any rule by using the Voiager 5 there, because no wheel-size rule exists outside London.
+voi2026support_rec0203,occ_trial}, sits at that minimum. Published sources give its wheels
+as 10~in without separating front and rear \autocite{levy_voiager5,alsalkini2023}, but the
+author's photographs of a parked Voiager 5 in Oxford show a 60/55-8.5 front tyre and a
+60/55-7.5 rear tyre (Figure~\ref{fig:tyres}). Their nominal outer diameters are 282~mm
+(11.1~in) and 257~mm (10.1~in): the front wheel is larger than the rear and meets London's
+11~in minimum by about 2.5~mm. We use these photographed sizes, written 11/10, throughout.
+The model was introduced in 2022 with a larger front wheel, deeper tyre tread and greater
+shock absorption than its predecessor \autocite{roadcc2022voiager5}, and was still being
+deployed in new trial areas in 2025 \autocite{essex2025voi}. The open question is
+whether a front wheel at London's minimum is enough, and what a larger one would change.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig_tyres.png}
+\caption{Tyre sidewall size codes of a Voi Voiager 5 parked in Oxford, photographed by the
+author on 9 October 2026 (crops). Metric code width/aspect ratio-rim diameter; nominal
+outer diameter = rim + 2 $\times$ width $\times$ aspect ratio. The photographed scooter is the
+same model as the three ridden scooters (Voiager 5).}\label{fig:tyres}
+% The author verified that the photographed scooter is a Voiager 5 (2026-10-10).
+\end{figure}
 
 \subsection{Research question and contributions}
 
 This paper asks whether pothole impacts on the Voiager 5 reach levels associated with loss of
-stability, and whether a larger front wheel would reduce them. It tests a specific
+stability, and whether a front wheel larger than its current 11~in would reduce them. It
+tests a specific
 hypothesis that could turn out to be false:
 
 \begin{quote}
@@ -80,8 +95,8 @@ impacts, which are compared with public pothole reports. The recording method it
 including whether it can tell riding from walking. \textbf{Part B}
 (Sections~\ref{methods-modelling-the-effect-of-wheel-size}
 and~\ref{results-what-a-larger-front-wheel-would-change}) uses a geometry model and a planar
-dynamics model of scooter and rider to compare the current wheels with a larger front wheel
-alone and with larger wheels front and rear. The measured impacts provide a consistency check
+dynamics model of scooter and rider to compare the current 11/10 wheels with a smaller
+10/10 reference, with larger front wheels alone and with larger wheels front and rear. The measured impacts provide a consistency check
 for the model, not a validation.
 
 Compared with earlier work, the contributions are: measurement of discrete impacts on a rental

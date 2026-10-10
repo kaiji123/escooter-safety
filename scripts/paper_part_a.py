@@ -276,7 +276,7 @@ def spot_table_tex(spots, hide, path):
     cols = ("Spot & Impacts & Rides & Max g & Road & Open & FixMyStreet (recent) & "
             "Location & Events (recording\\#impact) & Scan \\\\")
     hidden_list = ", ".join(sorted(hide, key=lambda x: int(x[1:])))
-    caption = ("Impact spots for the visual check, most important first, as in the project's "
+    caption = ("Impact spots, most important first, as in the project's "
                "spot list. Links open Google Street View at the spot facing the direction of travel "
                "(tilted towards the road), a Google Maps pin, and Mapillary imagery. On paper, scan the "
                "QR code to open the same Street View, or enter the coordinates in any map. FixMyStreet: nearest "

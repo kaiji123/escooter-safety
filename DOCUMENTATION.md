@@ -344,6 +344,17 @@ development history, verification and how the animations were made) are in
 
 ### 6.1 Voi wheel sizes
 
+**Update 2026-10-09 (supersedes the 10/10 assumption below).** The author photographed the
+tyre sidewalls of a parked Voiager 5 in Oxford (`tyre-images/`, figure via
+`scripts/tyre_figure.py`): front **60/55-8.5** (216 + 2 × 33 = 282 mm, **11.1 in**), rear
+**60/55-7.5** (257 mm, **10.1 in**). The Voiager 5 is therefore 11/10: front larger than the
+rear, at London's 11 in front minimum by about 2.5 mm. Markings (4 ply rating, TWI, max load
+75 kg) suggest pneumatic tyres; no valve was seen. The photographed
+scooter is a Voiager 5, the model ridden (verified by the author, 2026-10-10). All
+simulations were rerun with an 11/10 configuration added (10/10 kept as a smaller
+reference; every earlier run reproduced exactly). No configuration is labelled as a
+Voiager 7: its tyres were not measured (user's instruction).
+
 | Model | Front wheel | Rear wheel | Source |
 |---|---|---|---|
 | Voiager 5 | 10 in, pneumatic, front spring suspension | not stated | Levy fleet spec |
@@ -879,6 +890,13 @@ not to request a company measurement for now.
 - Do not say Voi breaks any rule: outside London no wheel rule applies.
 
 ### 12.4 Open check that can change this section
+
+**Resolved 2026-10-09:** the Oxford Voiager 5's front tyre is 60/55-8.5 (11.1 in), so the
+10 in reports are wrong for the front, and step 5 and the thesis were revised in the paper:
+the Voiager 5 meets London's minimum (just); outside London nothing requires even that; in
+the model an 11 in front fell as often as 10 in (9 of 81 with the fork), while 12 in (6) and
+14 in (1) fell less. Revised thesis: extend a front-wheel minimum to all trials and ask
+whether 11 in is high enough. The text below is kept as the record of the earlier plan.
 Which model Voi runs in London is not known (searched again 2026-10-08, no public source;
 see `literature/uk_fleet_wheel_sizes.md` section 6). The decisive and simpler check is the
 **front tyre size of an Oxford Voiager 5** (sidewall marking), or asking Voi support:

@@ -292,6 +292,24 @@ https://www.moveelectric.com/e-scooters/voi-launches-new-voiager-5-rental-e-scoo
 Department for Transport (2024) *E-scooter trials: guidance for local areas and rental
 operators*, updated 17 January. Available at:
 https://www.gov.uk/government/publications/e-scooter-trials-guidance-for-local-areas-and-rental-operators/e-scooter-trials-guidance-for-local-areas-and-rental-operators
+Checked 2026-10-10 (full page text): no minimum wheel size; "wheel" appears only in the
+mudguard-brake rules and the stability-test procedure; no "diameter" or "inch". Tyres:
+"pneumatic or non-pneumatic", "suitable having regard to the use". Key `dft2024guidance`.
+
+UK Government (2020) *The Electric Scooter Trials and Use of Powered Transporters Order 2020*
+(SI 2020/663). Available at: https://www.legislation.gov.uk/uksi/2020/663. Checked 2026-10-10
+(current version): the definition of "electric scooter" requires two in-line wheels, motor
+<= 500 W, mass <= 55 kg, design speed <= 15.5 mph, handlebars linked to the steered wheel; no
+wheel size. Key `si2020_663`.
+
+PACTS (2022) *The safety of private e-scooters in the UK* (report, March 2022).
+**[to verify: PDF not found; known only from news coverage]** Reportedly recommends, for
+private e-scooters if legalised, a minimum front wheel of 12 in (30.5 cm) and rear of 10 in
+(25.5 cm), so that scooters are easier to control on poor road surfaces. Coverage: Fleet News
+21 March 2022 (https://www.fleetnews.co.uk/news/car-industry-news/2022/03/21/pacts-calls-for-tougher-e-scooter-rules-as-15-riders-killed);
+Boyes Turner (https://www.boyesturner.com/insights/new-recommendations-e-scooter-regulation-and-technical-standards);
+Road Safety GB, 12 April 2022 (https://roadsafetygb.org.uk/?p=17943). Not a rule for rental
+trials. Check the report on the PACTS website before citing; not in references.bib yet.
 
 Department for Transport (2026) *E-scooter trials: guidance for users*, updated 7 July.
 Available at: https://www.gov.uk/guidance/e-scooter-trials-guidance-for-users
@@ -325,6 +343,13 @@ Voi Technology (2026b) Customer support, personal communication to the author, 8
 
 Both: **model only**; wheel sizes were not part of the confirmations. The records (chat
 screenshots) are kept by the author, not published; ask Voi before quoting them.
+
+Author's own observation (2026-10-09, not a citation key): photographs of the tyre sidewalls
+of a parked Voiager 5 in Oxford, `tyre-images/IMG_8174-8183.jpeg` (front) and
+`tyre-images/rear.jpeg` (rear). Front 60/55-8.5 (nominal 282 mm, 11.1 in), rear 60/55-7.5
+(257 mm, 10.1 in). Shown as paper Figure 1 (`scripts/tyre_figure.py`). Contradicts the 10 in
+reported by Levy and Alsalkini 2023 for the front wheel; those are now cited only for the
+10/10 reference configuration. The photographed scooter is a Voiager 5, the model ridden (verified by the author, 2026-10-10).
 
 Levy Electric (n.d.) *Voiager 5* [fleet specification]. Available at:
 https://fleets.levyelectric.com/vehicles/voi-voiager-5 (aggregator; secondary)

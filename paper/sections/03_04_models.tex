@@ -4,7 +4,9 @@
 % Build later with: pandoc part_b_methods_results.md --citeproc --bibliography ../references.bib -o part_b.docx
 % Every number below is taken from outputs/ (paths given in the HTML comments) or from
 % SIMULATION_METHODS.md. Re-check them if any simulation is rerun.
-% Wheel sizes for the Voiager 5 are the reported 10/10 (stated assumption; see DOCUMENTATION.md 12).
+% Wheel sizes: the ridden Voiager 5 = 11/10 (author's tyre photographs, 2026-10-09, Figure fig:tyres);
+% 10/10 = the reported 10 in, kept as a smaller reference only. No configuration is labelled as a
+% Voiager 7 (its tyres were not measured; user's instruction 2026-10-09).
 
 \section{Methods: modelling the effect of wheel size}\label{methods-modelling-the-effect-of-wheel-size}
 
@@ -49,8 +51,9 @@ Meaning
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-10/10 & Current vehicle (Voi Voiager 5, the model of all three ridden scooters as confirmed by Voi customer support \autocite{voi2026support_rec01,voi2026support_rec0203}), using the reported 10 in wheel size \autocite{levy_voiager5,alsalkini2023}; the front/rear split is not published, so equal wheels are assumed \\
-12/10 & Larger front wheel only, as on Voi's Voiager 7 (12 in front) \autocite{startups2024voiager7} \\
+10/10 & Smaller reference \\
+11/10 & \textbf{Current vehicle}: Voi Voiager 5, the model of all three ridden scooters as confirmed by Voi customer support \autocite{voi2026support_rec01,voi2026support_rec0203}, with tyre sizes from the author's photographs (Figure~\ref{fig:tyres}; nominally 11.1/10.1 in, modelled as 11/10) \\
+12/10 & Larger front wheel only \\
 12/12 & Larger wheels front and rear \\
 14/10 & Much larger front wheel only \\
 \end{longtable}
@@ -190,16 +193,17 @@ Runs
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Main sweep & 4 configurations × 9 depths (20--100 mm) × 3 lengths (300, 600, 1000 mm) × 3 speeds (15, 20, 25 km/h); with and without front suspension & 324 each \\
-Sensitivity & Tyre stiffness (τ = 0.015, 0.035 s), rider bracing (1000, 3000 N·m/rad) and, with suspension, fork stiffness (15, 40 kN/m) and damping (ratio 0.15, 0.5), varied one at a time & 5 settings (9 with suspension) × 4 configurations \\
-Front/rear ratio & 7 configurations from 10/10 to 20/8 on the main grid & 567 each \\
-Soft edges & Profile contact with suspension; edge widths 0, 25, 50, 100 mm × main sweep & 1296 \\
-Consistency check & 10/10 at 20 km/h on assumed common potholes (20--40 mm deep, 300 and 600 mm long) & 6 per model (with and without suspension) \\
+Main sweep & 5 configurations × 9 depths (20--100 mm) × 3 lengths (300, 600, 1000 mm) × 3 speeds (15, 20, 25 km/h); with and without front suspension & 405 each \\
+Sensitivity & Tyre stiffness (τ = 0.015, 0.035 s), rider bracing (1000, 3000 N·m/rad) and, with suspension, fork stiffness (15, 40 kN/m) and damping (ratio 0.15, 0.5), varied one at a time & 5 settings (9 with suspension) × 5 configurations \\
+Front/rear ratio & 8 configurations from 10/10 to 20/8 on the main grid & 648 each \\
+Soft edges & Profile contact with suspension; edge widths 0, 25, 50, 100 mm × main sweep & 1620 \\
+Consistency check & Current 11/10 at 20 km/h on assumed common potholes (20--40 mm deep, 300 and 600 mm long) & 6 per model (with and without suspension) \\
 \end{longtable}
 
 The depth grid has a 10 mm resolution, so a reported threshold of ``80 mm'' means a first
 fall somewhere between 70 and 80 mm. All runs are deterministic; rerunning the main sweep
-and sensitivity analysis reproduced every outcome exactly. Analysis used NumPy, pandas
+and sensitivity analysis reproduced every outcome exactly, and when the 11/10 configuration
+was added, every earlier run of the other configurations was reproduced unchanged. Analysis used NumPy, pandas
 and Matplotlib \autocite{harris2020numpy,mckinney2010pandas,hunter2007matplotlib}; animations
 were drawn with Matplotlib and encoded with Pillow \autocite{pillow}.
 
@@ -214,9 +218,10 @@ consistency check, not a validation.
 
 \subsection{Geometry}\label{geometry}
 
-At 20 km/h on a 600 mm long pothole, a 12 in front wheel reduced the edge impact
-velocity by 6.5--7.7\% and the front-wheel speed loss by 12.6--14.8\% compared with a 10 in
-wheel; a 14 in wheel reduced them by 12.1--13.9\% and 22.6--25.8\% (Table~\ref{tab:6}). At speed, wheels barely dropped
+At 20 km/h on a 600 mm long pothole, compared with the 10 in reference wheel, the
+Voiager 5's 11 in front wheel reduced the edge impact velocity by 3.4--4.1\% and the
+front-wheel speed loss by 6.7--8.0\%; a 12 in wheel reduced them by 6.5--7.7\% and
+12.6--14.8\%, and a 14 in wheel by 12.1--13.9\% and 22.6--25.8\% (Table~\ref{tab:6}). At speed, wheels barely dropped
 into short potholes (about 3 mm into a 150 mm pothole at 20 km/h), so long potholes are
 the more dangerous ones.
 
@@ -249,7 +254,8 @@ Depth 60 mm: impact velocity / speed loss
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-10 in & 3.59 m/s / 41.7\% & 4.64 m/s / 69.8\% \\
+10 in (reference) & 3.59 m/s / 41.7\% & 4.64 m/s / 69.8\% \\
+11 in (Voiager 5) & 3.44 m/s / 38.3\% (−4.1\% / −8.0\%) & 4.48 m/s / 65.1\% (−3.4\% / −6.7\%) \\
 12 in & 3.31 m/s / 35.5\% (−7.7\% / −14.8\%) & 4.34 m/s / 61.0\% (−6.5\% / −12.6\%) \\
 14 in & 3.09 m/s / 30.9\% (−13.9\% / −25.8\%) & 4.08 m/s / 54.0\% (−12.1\% / −22.6\%) \\
 \end{longtable}
@@ -269,68 +275,73 @@ Figure~\ref{fig:geom} shows the same comparison over all depths.
 
 % outputs/scooter_sim/suspension/sim_results.csv, fall_thresholds.csv
 
-With front suspension, falls occurred in 9 of 81 runs for the current 10/10
-configuration, 6 for 12/10, 6 for 12/12 and 1 for 14/10 (Table~\ref{tab:7}). No 300 mm long
-pothole caused a fall at any depth up to 100 mm; 600 mm potholes caused falls only at
-15 km/h, where the slower wheel has more time to drop.
+With front suspension, falls occurred in 9 of 81 runs for the current 11/10
+configuration (the Voiager 5), 9 for the 10/10 reference, 6 for 12/10, 6 for 12/12 and 1
+for 14/10 (Table~\ref{tab:7}). The Voiager 5's front wheel, 1~in larger than the reference,
+fell at the same depths as the reference in every case; the first fall was delayed only
+from 12 in. No 300 mm long pothole caused a fall at any depth up to 100 mm; 600 mm
+potholes caused falls only at 15 km/h, where the slower wheel has more time to drop.
 
-\begin{longtable}[]{@{}lllll@{}}
-\caption{Shallowest pothole depth (mm) causing a fall, with front suspension (-- = no fall up to 100 mm). Rows with no falls in any configuration are omitted.}\label{tab:7}\tabularnewline
-\toprule\noalign{}
-Length, speed & 10/10 & 12/10 & 12/12 & 14/10 \\
-\midrule\noalign{}
-\endfirsthead
-\toprule\noalign{}
-Length, speed & 10/10 & 12/10 & 12/12 & 14/10 \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-600 mm, 15 km/h & 80 & 90 & 90 & -- \\
-1000 mm, 15 km/h & 90 & 100 & 100 & -- \\
-1000 mm, 20 km/h & 90 & 90 & 90 & 100 \\
-1000 mm, 25 km/h & 90 & 100 & 100 & -- \\
-\textbf{Falls (of 81 runs)} & \textbf{9} & \textbf{6} & \textbf{6} & \textbf{1} \\
-\end{longtable}
+\begin{table}[htbp]
+\centering
+\caption{Shallowest pothole depth (mm) causing a fall, with front suspension (-- = no fall up to 100 mm). 11/10 = the Voiager 5 that was ridden; 10/10 = smaller reference wheels. Rows with no falls in any configuration are omitted.}\label{tab:7}
+\begin{tabular}{@{}llllll@{}}
+\toprule
+Length, speed & 10/10 (ref.) & 11/10 (V5) & 12/10 & 12/12 & 14/10 \\
+\midrule
+600 mm, 15 km/h & 80 & 80 & 90 & 90 & -- \\
+1000 mm, 15 km/h & 90 & 90 & 100 & 100 & -- \\
+1000 mm, 20 km/h & 90 & 90 & 90 & 90 & 100 \\
+1000 mm, 25 km/h & 90 & 90 & 100 & 100 & -- \\
+\textbf{Falls (of 81 runs)} & \textbf{9} & \textbf{9} & \textbf{6} & \textbf{6} & \textbf{1} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 % outputs/scooter_sim/keyframes/keyframes_runs.csv
 
 Figure~\ref{fig:5} shows one such case as still frames: the 80 mm deep, 600 mm long pothole at
-15 km/h, the shallowest falling depth for the current scooter (Table~\ref{tab:7}). With 10 in
-wheels the front wheel drops into the hole and strikes the far edge, and the scooter
-pitches forward about it; the fall criterion is reached 0.15 s after the front wheel
-reaches the edge. With a 12 in front wheel, alone or with a 12 in rear wheel, the
-scooter rolls out with almost identical motion (maximum chassis pitch 13--14°,
-speed loss 71--72\%). With a 14 in front wheel it rolls out with less pitch
-(7°) and less speed loss (56\%).
+15 km/h, the shallowest falling depth for the current scooter (Table~\ref{tab:7}). With the
+10/10 reference the front wheel drops into the hole and strikes the far edge, and the
+scooter pitches forward about it; the fall criterion is reached 0.15 s after the front
+wheel reaches the edge. The Voiager 5 (11/10) also pitches over, more slowly (fall
+criterion at 0.59 s). With a 12 in front wheel, alone or with a 12 in rear wheel, the
+scooter rolls out with almost identical motion (maximum chassis pitch 13--14°, speed loss
+71--72\%). With a 14 in front wheel it rolls out with less pitch (7°) and less speed loss
+(56\%).
 
 \begin{figure}
 \centering
 {\includegraphics[width=\linewidth]{fig_b5_keyframes_sharp.png}}
-\caption{Key frames from the simulation of the Voiager 5 model with its front spring
-crossing a sharp-edged pothole 80 mm deep and 600 mm long at 15 km/h. Rows: wheel
-configuration (front/rear diameter). Columns: the same moments in each row, relative to
-the front wheel reaching the pothole's far edge; the view follows the front wheel. Blue:
-wheels; black: deck and stem; orange: rider. The rider is pinned to the deck at the
-feet, so scooter and rider rotate together; a real rider would separate from the scooter.
-Planar model with assumed parameters (Table~\ref{tab:4}); one run per configuration, illustrating
-the results of Table~\ref{tab:7}.}\label{fig:5}
+\caption{Key frames from the simulation of the model with its front spring crossing a
+sharp-edged pothole 80 mm deep and 600 mm long at 15 km/h. Rows: wheel configuration
+(front/rear diameter; 11/10 = the Voiager 5 that was ridden, 10/10 = smaller reference).
+Columns: the same moments in each row, relative to the front wheel reaching the pothole's
+far edge; the view follows the front wheel. Blue: wheels; black: deck and stem; orange:
+rider. The rider is pinned to the deck at the feet, so scooter and rider rotate together; a
+real rider would separate from the scooter. Planar model with assumed parameters
+(Table~\ref{tab:4}); one run per configuration, illustrating the results of
+Table~\ref{tab:7}.}\label{fig:5}
 \end{figure}
 
-Every fall in every configuration was a forward pitch-over of scooter and rider about the
-front wheel, started by the front-wheel impact; the rear wheel was lifted clear and never
-entered the pothole before a fall. This matches the mechanism reported by
+All but one of the falls, in every configuration, were forward pitch-overs of scooter
+and rider about the front wheel, started by the front-wheel impact, with the rear wheel
+lifted clear of the pothole. The exception is one 11/10 run (90 mm deep, 1000 mm long,
+25 km/h), in which the rear wheel dipped 5.8 mm into the pothole before the fall
+criterion was met, just over the 5 mm rule for attributing a fall to the rear wheel; it
+was the same forward pitch-over. This matches the mechanism reported by
 \textcite{posirisuk2022}.
 
-The benefit of a 12 in front wheel was modest with suspension: it delayed the first fall
-by 10 mm in three of the four cases above, and speed loss on a 60 × 600 mm pothole at
-20 km/h was 25.5\% against 27.6\% for 10/10. A 14 in front wheel almost eliminated falls in
-the tested range.
+The benefit of a 12 in front wheel over the Voiager 5's 11 in was modest with suspension:
+it delayed the first fall by 10 mm in three of the four cases above, and speed loss on a
+60 × 600 mm pothole at 20 km/h was 25.5\% against 26.8\% for 11/10 (27.6\% for 10/10). A
+14 in front wheel almost eliminated falls in the tested range.
 
-Without suspension, falls were more frequent (15, 14, 14 and 11 of 81 runs for 10/10,
-12/10, 12/12 and 14/10), began at 70--80 mm for the current scooter, and the 12 in front
-wheel delayed the fall by 10 mm on a 1000 mm pothole at 20 km/h (70 → 80 mm). The front
-suspension itself therefore had a large effect, comparable to enlarging the front wheel.
+Without suspension, falls were more frequent (15, 15, 14, 14 and 11 of 81 runs for 10/10,
+11/10, 12/10, 12/12 and 14/10), began at 70--80 mm for the current scooter as for the
+reference, and the 12 in front wheel delayed the fall by 10 mm on a 1000 mm pothole at
+20 km/h (70 → 80 mm). The front suspension itself therefore had a large effect,
+comparable to enlarging the front wheel.
 
 \subsection{A larger front wheel alone performs like larger wheels front and rear}\label{a-larger-front-wheel-alone-performs-like-larger-wheels-front-and-rear}
 
@@ -347,10 +358,12 @@ loss 70.9\% and 71.7\%).
 % outputs/scooter_sim/sensitivity.csv, outputs/scooter_sim/suspension/sensitivity.csv
 
 Without suspension, the 12/10 configuration fell at the same depth as 12/12, and 10 mm
-deeper than 10/10, under all five tyre and bracing settings; the current scooter's
-first fall on a 1000 mm pothole at 20 km/h moved between 60 and 70 mm with tyre
-stiffness. With suspension, 12/10 and 12/12 fell at the same depth in 8 of 9 settings
-(the exception, more fork damping, differed by 10 mm). The ordering of configurations was
+deeper than the 10/10 reference, under all five tyre and bracing settings; the current
+11/10 scooter fell at the same depth as the reference in two settings and 10 mm deeper in
+three (stiffer tyre, softer tyre, weaker bracing), its first fall on a 1000 mm pothole at
+20 km/h lying between 70 and 80 mm. With suspension, 12/10 and 12/12 fell at the same
+depth in 8 of 9 settings (the exception, more fork damping, differed by 10 mm), and 11/10
+fell at the same depth as 10/10 in 8 of 9 (10 mm deeper with the softer tyre). The ordering of configurations was
 therefore robust, but absolute fall depths depend on assumed parameters and should not be
 read as real-world thresholds.
 
@@ -358,29 +371,31 @@ read as real-world thresholds.
 
 % outputs/scooter_sim/suspension/soft_edges/edge_fall_counts.csv
 
-\begin{longtable}[]{@{}lllll@{}}
-\caption{Number of falls (of 81 runs) by edge width, profile contact with suspension.}\label{tab:8}\tabularnewline
+\begin{longtable}[]{@{}llllll@{}}
+\caption{Number of falls (of 81 runs) by edge width, profile contact with suspension. 11/10 = the Voiager 5 that was ridden; 10/10 = smaller reference wheels.}\label{tab:8}\tabularnewline
 \toprule\noalign{}
-Edge width & 10/10 & 12/10 & 12/12 & 14/10 \\
+Edge width & 10/10 (ref.) & 11/10 (V5) & 12/10 & 12/12 & 14/10 \\
 \midrule\noalign{}
 \endfirsthead
 \toprule\noalign{}
-Edge width & 10/10 & 12/10 & 12/12 & 14/10 \\
+Edge width & 10/10 (ref.) & 11/10 (V5) & 12/10 & 12/12 & 14/10 \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-0 mm (sharp) & 8 & 6 & 6 & 4 \\
-25 mm & 8 & 5 & 6 & 4 \\
-50 mm & 7 & 5 & 5 & 4 \\
-100 mm & 4 & 3 & 3 & 2 \\
+0 mm (sharp) & 8 & 8 & 6 & 6 & 4 \\
+25 mm & 8 & 7 & 5 & 6 & 4 \\
+50 mm & 7 & 5 & 5 & 5 & 4 \\
+100 mm & 4 & 4 & 3 & 3 & 2 \\
 \end{longtable}
 
-Sloped edges reduced falls (10/10: 8 to 4 from sharp to 100 mm edges). At every edge
-width, the configurations with a larger front wheel fell less often than the current
-scooter, and 12/10 stayed within one fall of 12/12. Figure~\ref{fig:6} shows the same 80 × 600 mm
-pothole with 50 mm sloped edges: the current scooter still pitches over, more slowly
-(fall criterion at 0.42 s), while 12 in and 14 in front wheels roll through. As with
+Sloped edges reduced falls (11/10: 8 to 4 from sharp to 100 mm edges). At every edge
+width, the configurations with a 12 in or 14 in front wheel fell no more often than the
+current 11/10 scooter, and 14/10 fell less often at every width; 12/10 stayed within one
+fall of 12/12. Figure~\ref{fig:6} shows the same 80 × 600 mm pothole with 50 mm sloped
+edges: the 10/10 reference still pitches over, more slowly (fall criterion at 0.42 s),
+while the Voiager 5 (11/10) and the 12 in and 14 in front wheels roll through; the
+Voiager 5 pitches more than they do (maximum chassis pitch 22°, speed loss 54\%). As with
 sharp edges, 12/10 and 12/12 move almost identically (maximum chassis pitch 16°, speed
 loss 50\%); 14/10 pitches less (11°, speed loss 44\%).
 
@@ -399,8 +414,9 @@ this contact model are not used as results; fall outcomes are.}\label{fig:6}
 The ratio study asked whether a front wheel can be too large relative to the rear. It
 repeated the main sweep (81 runs per configuration) for front/rear diameter ratios from
 1.0 (10/10) to 2.5 (20/8); the full results are in Appendix~\ref{app:ratio}. Falls kept
-decreasing as the front wheel grew (Table~\ref{tab:9}): from 15 of 81 runs for 10/10 to 1
-for 20/10 and 20/8 without suspension, and from 9 to none with suspension. No ratio up
+decreasing as the front wheel grew beyond 11 in (Table~\ref{tab:9}): from 15 of 81 runs for
+10/10 and 11/10 to 1 for 20/10 and 20/8 without suspension, and from 9 to none with
+suspension. No ratio up
 to 2.5 made falls more likely: with a larger front wheel the shallowest depth causing a
 fall stayed the same or rose, in 10 mm steps (Figures~\ref{fig:Eratiofork} and~\ref{fig:Erationofork}).
 
@@ -420,20 +436,22 @@ largest front wheel tested (20 in). With front suspension, however, most of the 
 was reached by 14/10 (from 9 to 1 of 81 runs), and larger front wheels added little. The
 model cannot represent steering, frame geometry, weight or cost, all of which limit how
 large a front wheel can practically be, and the rear-wheel jolt above would affect
-comfort. We therefore suggest a moderate increase (12--14 in), in line with wheels already
-in use: the Voiager 7 has a 12 in front wheel \autocite{startups2024voiager7}, and London's
-tender requires a front wheel of at least 11 in \autocite{tfl2022tender}. This limit is a
-judgement based on factors outside the model, not a result of it.
+comfort. We therefore suggest a moderate increase over the Voiager 5's 11 in front wheel,
+to 12--14 in. London's tender requires a front wheel of at least 11 in
+\autocite{tfl2022tender}, which the Voiager 5 just meets; in this model a front wheel at
+that size fell as often as the 10 in reference. This limit is a judgement based on factors
+outside the model, not a result of it.
 
 \subsection{Consistency with the measured rides}\label{consistency-with-the-measured-rides}
 
 % outputs/scooter_sim/consistency.csv; measured: outputs/combined/impacts_all.csv
 
-With front suspension, simulated handlebar peaks for the current scooter on 300 mm long
-potholes were 1.9--2.4 g, inside the range of 99 of the 100 measured impacts
-(1.0--2.97 g). On 600 mm potholes they were 4.2--5.7 g, about twice that range; only one
-measured impact (6.28 g) was higher, and a single value is not taken as agreement.
-Without suspension they were 4.9--9.8 g, three to five times too high. The suspension model is therefore the more
+With front suspension, simulated handlebar peaks for the current 11/10 scooter on 300 mm
+long potholes were 1.9--2.4 g, inside the range of 99 of the 100 measured impacts
+(1.0--2.97 g). On 600 mm potholes they were 4.3--6.5 g, about 1.5--2.2 times the top of that
+range; the highest exceeds even the single 6.28 g outlier, and one value is not taken as
+agreement. Without suspension they were 5.3--8.7 g, about two to three times the top of
+the range. The suspension model is therefore the more
 faithful representation of the Voiager 5 and is used for the main results, with the
 caveat that its absolute accelerations are reliable only for short potholes.
  Figure~\ref{fig:consistency} shows the comparison.
@@ -441,7 +459,7 @@ caveat that its absolute accelerations are reliable only for short potholes.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{sim/consistency.png}
-\caption{Consistency check: simulated handlebar peaks for the current 10/10 configuration at 20 km/h, with and without front suspension, against the range of 99 of the 100 impacts measured on the three rides (shaded; dotted line: median). Pothole depths on the route were not measured, so this is a consistency check, not a validation.}\label{fig:consistency}
+\caption{Consistency check: simulated handlebar peaks for the current 11/10 configuration (the Voiager 5 that was ridden) at 20 km/h, with and without front suspension, against the range of 99 of the 100 impacts measured on the three rides (shaded; dotted line: median). Pothole depths on the route were not measured, so this is a consistency check, not a validation.}\label{fig:consistency}
 \end{figure}
 
 \subsection{Limitations of the models}\label{limitations-of-the-models}
@@ -452,8 +470,9 @@ caveat that its absolute accelerations are reliable only for short potholes.
   \textbf{Planar:} no steering, handlebar twist, roll or sideways falls. Loss of steering
   control, which a front-wheel impact can also cause, is not represented.
 \item
-  \textbf{Assumed vehicle:} mass, inertias, wheelbase, tyre stiffness, fork and the rear wheel
-  size are not published by Voi.
+  \textbf{Assumed vehicle:} mass, inertias, wheelbase, tyre stiffness and fork are not
+  published by Voi. The wheel sizes come from photographs of a Voiager 5's tyre
+  sidewalls (nominal sizes, rounded to 11/10 in).
 \item
   \textbf{Simple rider:} one rigid body with a fixed spring; no active balance or reaction.
 \item
@@ -461,8 +480,8 @@ caveat that its absolute accelerations are reliable only for short potholes.
   irregular.
 \item
   \textbf{Potholes only:} other obstacles were not part of the main study. An exploratory
-  extension to raised bumps (Appendix~\ref{app:bumps}) found the same benefit of a larger
-  front wheel without suspension, but with the front spring the few modelled bump falls
+  extension to raised bumps (Appendix~\ref{app:bumps}) found fewer falls with larger
+  front wheels without suspension, but with the front spring the few modelled bump falls
   started at the rigid rear wheel, so the front-wheel result may not hold for every type of
   obstacle.
 \item
@@ -472,5 +491,6 @@ caveat that its absolute accelerations are reliable only for short potholes.
 \end{itemize}
 
 Within these limits, the models consistently show that the front wheel determines whether
-the scooter pitches over, and that enlarging the front wheel alone gives the same benefit
-in the model as enlarging both wheels.
+the scooter pitches over, that the Voiager 5's 11 in front wheel behaves almost like the
+10 in reference, and that enlarging the front wheel alone, to 12 in or more, gives the same
+benefit in the model as enlarging both wheels.
